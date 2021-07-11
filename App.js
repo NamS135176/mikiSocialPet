@@ -13,6 +13,8 @@ import { persistStore, persistReducer } from 'redux-persist'
 import { PersistGate } from 'redux-persist/integration/react'
 import { createStore, applyMiddleware } from 'redux'
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { NativeBaseProvider, Box } from 'native-base';
+import { enableScreens } from 'react-native-screens';
 
 import LoginScreen from './src/screens/Login';
 import SignUpScreen from './src/screens/Signup';
@@ -23,6 +25,8 @@ import MainScreen from './src/screens/Main';
 import FirstTimeStep2Screen from './src/screens/FirstTimeStep2Screen';
 import rootSaga from './src/sagas/rootSaga';
 import allReducer from './src/reducers/allReducer';
+import TipsScreen from './src/screens/TipsScreen';
+import MapsScreen from './src/screens/MapsScreen';
 
 const persistConfig = {
   key: 'root',
@@ -41,6 +45,7 @@ function App() {
   return (
     <Provider store={store}>
       <PersistGate loading={null} persistor={persistor}>
+       <NativeBaseProvider>
         <NavigationContainer>
           <Stack.Navigator initialRouteName="Login">
             <Stack.Screen name="Login" component={LoginScreen} options={{ headerShown: false }} />
@@ -50,8 +55,10 @@ function App() {
             <Stack.Screen name="Main" component={MainScreen} options={{ headerShown: false }} />
             <Stack.Screen name="FirstTimeUpdate" component={FirstTimeUpdateScreen} options={{ headerShown: false }} />
             <Stack.Screen name="FirstTimeStep2" component={FirstTimeStep2Screen} options={{ headerShown: false }} />
+            <Stack.Screen name="Tips" component={TipsScreen} options={{ headerShown: false }} />
+            <Stack.Screen name="Maps" component={MapsScreen} options={{ headerShown: false }} />
           </Stack.Navigator>
-        </NavigationContainer>
+        </NavigationContainer></NativeBaseProvider>
       </PersistGate>
     </Provider>
   );
