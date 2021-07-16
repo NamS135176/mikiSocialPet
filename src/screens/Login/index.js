@@ -70,12 +70,11 @@ export default function LoginScreen({ navigation }) {
         const token = await AsyncStorage.getItem('userToken')
         setIsloading(false)
         if (token) {
-              navigation.reset({
-        index: 0,
-        routes: [{name: 'Main'}],
-      });
+            navigation.reset({
+                index: 0,
+                routes: [{ name: 'Main' }],
+            });
         }
-        console.log(token);
     })
 
     useEffect(() => {
@@ -106,7 +105,7 @@ export default function LoginScreen({ navigation }) {
         }
         else {
             setModalVisible(true)
-            fetch('http://obnd.me/signin', {
+            fetch('http://obnd-miki.herokuapp.com/signin', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
@@ -129,20 +128,26 @@ export default function LoginScreen({ navigation }) {
                         //     routes: [{ name: 'FirstTimeUpdate' }],
                         // });
                         console.log(data);
-                        navigation.navigate('FirstTimeUpdate', { token: data.token , username: data.user.account})
+                        navigation.navigate('FirstTimeUpdate', { token: data.token, username: data.user.account })
                     }
                     else {
                         const user = data.user
                         await AsyncStorage.setItem('userToken', data.token)
+                        // console.log(user);
                         dispatch({
-                            type:'SET_USER_INFO',
-                            payload:  {
-                                account:user.account,
+                            type: 'SET_USER_INFO',
+                            payload: {
+                                account: user.account,
                                 displayName: user.displayName,
                                 typePet: user.typePet,
                                 birthDay: user.birthDay,
                                 sex: user.sex,
-                                owner: user.owner
+                                owner: user.owner,
+                                avatar: user.avatar,
+                                coverImage: user.coverImage,
+                                followMe: user.followMe,
+                                followed: user.followed,
+                                liked: user.liked,
                             }
                         })
                         navigation.reset({

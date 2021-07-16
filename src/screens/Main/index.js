@@ -1,12 +1,15 @@
-import React from 'react'
+import React,{useEffect} from 'react'
 import { View, Text, Button } from 'react-native'
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { useSelector } from 'react-redux';
 import userInfo from '../../reducers/userInfo';
 import { Ionicons } from '@expo/vector-icons';
 import { Box, Image } from 'native-base';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import UtilitiesScreen from '../UtilitiesScreen';
+import Profile from '../Profile';
+import PostScreen from '../PostScreen';
+import NotificationScreen from '../NotificationScreen';
+import { useDispatch, useSelector } from 'react-redux';
 
 const Tab = createBottomTabNavigator();
 function HomeScreen({navigation}) {
@@ -17,36 +20,19 @@ function HomeScreen({navigation}) {
     );
 }
 
-function PostScreen() {
-    return (
-        <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-            <Text>Home!</Text>
-        </View>
-    );
-}
 
-function Notifications() {
-    return (
-        <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-            <Text>Settings!</Text>
-        </View>
-    );
-}
-function Profile() {
-    return (
-        <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-            <Button title='Sign Out' onPress={async () => {
-                await AsyncStorage.setItem('userToken', '')
-                navigation.reset({
-                    index: 0,
-                    routes: [{ name: 'Login' }],
-                });
-            }}></Button>
-        </View>
-    );
-}
 
 export default function MainScreen({ navigation }) {
+    const dispatch = useDispatch()
+    const userData = useSelector((state) => {
+        return state.userInfo;
+    });
+    useEffect(() => {
+        dispatch({
+            type:'GET_MY_POST',
+            payload: userData.account
+        })
+    })
     return (
         <Tab.Navigator
             labeled={false}
@@ -101,11 +87,7 @@ export default function MainScreen({ navigation }) {
        
                             return (
                                 <Ionicons name='add-circle' color={color} size={65}></Ionicons>
-                                // <Image
-                                //     alt="slide1"
-                                //     style={{ width: 50, height:50 }}
-                                //     source={require('../../images/BottomNavigation/ic_add_gray.png')}
-                                // />
+                              
                             );
                         
                     },
@@ -113,18 +95,13 @@ export default function MainScreen({ navigation }) {
             />
             <Tab.Screen
                 name="Noti"
-                component={Notifications}
+                component={NotificationScreen}
                 options={{
                     tabBarLabel:"Thông báo",
                     tabBarIcon: ({ color, size }) => {
                       
                             return (
                                 <Ionicons name='heart' color={color} size={30}></Ionicons>
-                                // <Image
-                                //     alt="slide1"
-                                //     style={{ width: 28, height: 25 }}
-                                //     source={require('../../images/BottomNavigation/ic_love_notification_orange.png')}
-                                // />
                             );
                     
                     },
@@ -139,11 +116,6 @@ export default function MainScreen({ navigation }) {
                        
                             return (
                                 <Ionicons name='paw' color={color} size={30}></Ionicons>
-                                // <Image
-                                //     alt="slide1"
-                                //     style={{ width: 30, height: 25 }}
-                                //     source={require('../../images/BottomNavigation/ic_paw_pet_account_orange.png')}
-                                // />
                             );
                       
                     },

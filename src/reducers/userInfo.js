@@ -4,10 +4,16 @@ const initState = {
     typePet: '',
     birthDay:'',
     sex:'',
-    owner:{}
+    owner:{},
+    avatar: '',
+    coverImage: '',
+    followMe: [],
+    followed: [],
+    liked: [],
 };
 
-const userInfo = (data = initState,action) => {
+const userInfo = ( data = initState,action) => {
+    console.log(action.coverImage);
     switch(action.type){
         case 'SET_USER_INFO': {
             return{
@@ -17,7 +23,12 @@ const userInfo = (data = initState,action) => {
                 typePet: action.payload.typePet,
                 birthDay:action.payload.birthDay,
                 sex:action.payload.sex,
-                owner:action.payload.owner
+                owner:action.payload.owner,
+                avatar: action.payload.avatar,
+                coverImage: action.payload.coverImage,
+                followMe: action.payload.followMe,
+                followed: action.payload.followed,
+                liked: action.payload.liked,
             }
         }
         default: return data

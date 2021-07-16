@@ -5,7 +5,7 @@ import DateTimePicker from '@react-native-community/datetimepicker';
 import XDate from './xdate'
 import { useDispatch } from 'react-redux';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-
+import { useSelector } from 'react-redux';
 const styles = StyleSheet.create({
     centeredView: {
         flex: 1,
@@ -50,7 +50,13 @@ const styles = StyleSheet.create({
     }
 });
 
-export default function FirstTimeStep2Screen({ route, navigation }) {
+export default function UpdateStep2({ route, navigation }) {
+
+    const userData = useSelector((state) => {
+        return state.userInfo;
+    });
+
+
     const { petInfo, token, username } = route.params
     const [date, setDate] = useState(new Date());
     const [showPetDate, setShowPetDate] = useState(false)
@@ -140,11 +146,11 @@ export default function FirstTimeStep2Screen({ route, navigation }) {
                                 description: des,
                                 birthDay: new XDate(date).toString("dd/MM/yyyy")
                             },
-                            avatar: '',
-                            coverImage: '',
-                            followMe: [],
-                            followed: [],
-                            liked: [],
+                            avatar: userData.avatar,
+                            coverImage: userData.coverImage,
+                            followMe: userData.followMe,
+                            followed: userData.followed,
+                            liked: userData.liked,
                         }
                     })
                 })

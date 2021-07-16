@@ -27,6 +27,11 @@ import rootSaga from './src/sagas/rootSaga';
 import allReducer from './src/reducers/allReducer';
 import TipsScreen from './src/screens/TipsScreen';
 import MapsScreen from './src/screens/MapsScreen';
+import ListLocScreen from './src/screens/ListLocScreen';
+import TipsDetailScreen from './src/screens/TipsDetailScreen';
+import SettingScreen from './src/screens/SettingScreen';
+import UpdateStep1 from './src/screens/UpdateStep1';
+import UpdateStep2 from './src/screens/UpdateStep2';
 
 const persistConfig = {
   key: 'root',
@@ -57,6 +62,11 @@ function App() {
             <Stack.Screen name="FirstTimeStep2" component={FirstTimeStep2Screen} options={{ headerShown: false }} />
             <Stack.Screen name="Tips" component={TipsScreen} options={{ headerShown: false }} />
             <Stack.Screen name="Maps" component={MapsScreen} options={{ headerShown: false }} />
+            <Stack.Screen name="ListLoc" component={ListLocScreen} options={{ headerShown: false }} />
+            <Stack.Screen name="TipsDetail" component={TipsDetailScreen} options={{ headerShown: false }} />
+            <Stack.Screen name="Setting" component={SettingScreen} options={{ headerShown: false }} />
+            <Stack.Screen name="Step1" component={UpdateStep1} options={{ headerShown: false }} />
+            <Stack.Screen name="Step2" component={UpdateStep2} options={{ headerShown: false }} />
           </Stack.Navigator>
         </NavigationContainer></NativeBaseProvider>
       </PersistGate>

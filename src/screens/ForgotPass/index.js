@@ -105,7 +105,7 @@ export default function ForgotPassScreen({ navigation }) {
         }
         else {
             setModalVisible(true)
-            fetch('https://obnd-miki.herokuapp.com/update', {
+            fetch('https://obnd-miki.herokuapp.com/update-password', {
                 method: 'PUT',
                 headers: {
                     'Content-Type': 'application/json'
@@ -118,6 +118,7 @@ export default function ForgotPassScreen({ navigation }) {
             })
                 .then(res => res.text())
                 .then(result => {
+                    console.log(result);
                     setModalVisible(false)
                     if (result == 'we sent to your e-mail') {
                         setModalSuccessVisible(true)
