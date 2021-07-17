@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { Box, Button, ScrollView, Image, Center, Flex, Text, Pressable } from 'native-base'
+import { Box, Button, ScrollView, Image, Center, Flex, Text, Pressable, SimpleGrid } from 'native-base'
 import AsyncStorage from '@react-native-async-storage/async-storage'
 import { useFonts } from 'expo-font';
 import { useSelector, useDispatch } from 'react-redux';
@@ -96,7 +96,7 @@ export default function Profile({ navigation }) {
             const ref = storage.ref('avatars/' + userData.account + "-avatar");
             const url = await ref.getDownloadURL();
             const token = await AsyncStorage.getItem('userToken')
-            fetch('http://obnd.me/update-account', {
+            fetch('https://obnd-miki.herokuapp.com/update-account', {
                 method: 'PATCH',
                 headers: {
                     'Content-Type': 'application/json',
@@ -140,7 +140,7 @@ export default function Profile({ navigation }) {
             const ref = storage.ref('covers/' + userData.account + "-cover");
             const url = await ref.getDownloadURL();
             const token = await AsyncStorage.getItem('userToken')
-            fetch('http://obnd.me/update-account', {
+            fetch('https://obnd-miki.herokuapp.com/update-account', {
                 method: 'PATCH',
                 headers: {
                     'Content-Type': 'application/json',
@@ -285,10 +285,18 @@ export default function Profile({ navigation }) {
                             </Flex>
                             {
                                 isImg == 1 ? <Box width='100%'>
-                                    {myPost.listMyPost.length == 0 ? <Text style={{fontFamily:'Nunito', padding:25, fontSize:20, textAlign:'center'}}>
+                                    {myPost.listMyPost.length == 0 ? <Text style={{ fontFamily: 'Nunito', padding: 25, fontSize: 20, textAlign: 'center' }}>
                                         Bạn chưa đăng gì, hãy tích cực tham gia các hoạt động nhé!
                                     </Text> :
-                                        <Text>sfdfsdfsdf</Text>
+                                      
+                                            <SimpleGrid marginX={8} marginY={5} columns={3} spacing={3}>
+                                            {myPost.listMyPost.map((_item, index) => {
+                                                return <Pressable  width={Dimensions.get('window').width/4} height={Dimensions.get('window').width/4} margin={2}>
+                                                    <Image borderRadius={20} alt='img' width='100%' height='100%' source={{ uri: _item.imgUrl }}></Image>
+                                                </Pressable>
+                                            })}
+                                        </SimpleGrid>
+                                      
                                     }
                                 </Box> : <></>
                             }

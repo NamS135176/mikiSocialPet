@@ -3,8 +3,9 @@ import { Box, Pressable, Flex, Text, Image, ScrollView, TextArea, Modal } from '
 import { Ionicons } from '@expo/vector-icons'
 import * as ImagePicker from 'expo-image-picker';
 import { useFonts } from 'expo-font';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import { firebaseApp, storage } from '../../commonComponents/FirebaseConfig';
+import Spinner from 'react-native-loading-spinner-overlay'
 export default function PostScreen({ navigation }) {
     const userData = useSelector((state) => {
         return state.userInfo;
@@ -15,12 +16,14 @@ export default function PostScreen({ navigation }) {
         'NunitoExBold': require('../../../assets/fonts/Nunito-ExtraBold.ttf'),
         'NunitoSemi': require('../../../assets/fonts/Nunito-SemiBold.ttf'),
     });
+    const dispatch = useDispatch()
     const [image, setImage] = useState(null)
     const [tags, setTags] = useState([])
     const [displayTag, setDisplayTag] = useState('')
     const [showModal, setShowModal] = useState(false)
     const [modalContent, setModalContent] = useState('')
     const [textContent, setTextContent] = useState('')
+    const [isLoading, setIsLoading] = useState(false)
     const listTag = [
         '#motngaydeptroi',
         '#chuyenchomeo',
@@ -38,7 +41,7 @@ export default function PostScreen({ navigation }) {
             mediaTypes: ImagePicker.MediaTypeOptions.All,
             allowsEditing: true,
             aspect: [1, 1],
-            quality: 0.5,
+            quality: 0.3,
         });
 
         console.log(result);
@@ -52,35 +55,48 @@ export default function PostScreen({ navigation }) {
     const uploadImage = async (uri, imageName) => {
         const res = await fetch(uri);
         const blob = await res.blob();
-        let ref = storage.ref().child('posts/' + imageName)
+        let ref = storage.ref().child('posts/'+imageName)
         return ref.put(blob);
     }
 
     const handleCreatePost = async () => {
+
         if (image == null) {
             setModalContent('Bạn quên chọn một bức ảnh rồi này!')
             setShowModal(true)
         }
-        else if(tags.length==0){
+        else if (tags.length == 0) {
             setModalContent('Hãy chọn cho mình những thẻ thú vị để mọi người dễ dàng theo dõi hơn nhé!')
             setShowModal(true)
         }
-        else{
-            const data = await uploadAvatar(uri, userData.account + "-post-"+Date.now())
-            const ref = storage.ref('posts/' + userData.account + "-post-"+Date.now());
+        else {
+            const gen = Date.now()
+            console.log(gen);
+            setIsLoading(true)
+            const data = await uploadImage(image, userData.account + "-post-" + gen)
+            const ref = storage.ref('posts/' + userData.account + "-post-" + gen);
             const url = await ref.getDownloadURL();
-            fetch('http://obnd.me/post-api/create-post',{
-                method:'POST',
-                headers:{
+            const res = await fetch('https://obnd-miki.herokuapp.com/post-api/create-post', {
+                method: 'POST',
+                headers: {
                     'Content-Type': 'application/json'
                 },
-                body:JSON.stringify({
-                    account:userData.account,
-                    image:image,
+                body: JSON.stringify({
+                    account: userData.account,
+                    image: url,
                     textDescription: textContent,
-                    tags:tags
+                    tags: tags
                 })
             })
+            setIsLoading(false)
+            dispatch({
+                type: 'GET_MY_POST',
+                payload: userData.account
+            })
+            navigation.reset({
+                index: 0,
+                routes: [{ name: 'Main' }],
+            });
         }
     }
 
@@ -90,6 +106,7 @@ export default function PostScreen({ navigation }) {
     else {
         return (
             <Box flex={1} backgroundColor='white' paddingTop={45}>
+                <Spinner visible={isLoading} textStyle={{ color: '#FFF' }} />
                 <Modal isOpen={showModal} onClose={() => setShowModal(false)}>
                     <Modal.Content maxWidth="80%">
                         <Text style={{ fontSize: 20 }}>Ôi bạn ơi!</Text>
@@ -106,7 +123,7 @@ export default function PostScreen({ navigation }) {
                                 paddingVertical: 20,
                                 color: '#2097f3',
                             }}>
-                           OK
+                            OK
                         </Text>
                     </Modal.Content>
                 </Modal>
@@ -134,7 +151,7 @@ export default function PostScreen({ navigation }) {
                 </Box>
                 <ScrollView flex={1}>
                     <Box marginX={5} >
-                        <TextArea onChangeText={(txt) => {setTextContent(txt)}} borderBottomWidth={0} borderTopLeftRadius={20} borderTopRightRadius={20} h={300} borderRadius={0} placeholder="Text Area Placeholder" />
+                        <TextArea onChangeText={(txt) => { setTextContent(txt) }} borderBottomWidth={0} borderTopLeftRadius={20} borderTopRightRadius={20} h={300} borderRadius={0} placeholder="Text Area Placeholder" />
                         <Box paddingY={5} paddingX={3} borderWidth={1} borderColor='#ccc' borderBottomLeftRadius={20} borderBottomRightRadius={20}>
                             <Text style={{ fontFamily: 'Nunito' }}>{
                                 displayTag
