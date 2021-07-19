@@ -2,7 +2,8 @@ import React from 'react'
 import { Box, ScrollView, Text, Flex, Image } from 'native-base'
 import { useFonts } from 'expo-font';
 import { useSelector } from 'react-redux';
-export default function NotificationScreen() {
+import { Pressable } from 'react-native';
+export default function NotificationScreen({navigation}) {
 
     const userData = useSelector((state) => {
         return state.userInfo;
@@ -19,7 +20,7 @@ export default function NotificationScreen() {
     }
     else {
         return (
-            <ScrollView backgroundColor='white'>
+            <ScrollView backgroundColor='white' flex={1}>
                 <Box padding={30}>
                     <Text style={{ paddingTop: 20, fontSize: 35, fontFamily: 'NunitoExBold' }}>Hoạt động</Text>
                 </Box>
@@ -40,7 +41,7 @@ export default function NotificationScreen() {
                     <Text style={{ paddingTop: 20, fontSize: 25, fontFamily: 'NunitoSemi' }}>Hoạt động</Text>
                 </Box>
                 {
-                    userData.followed.map((item, index) => {
+                    userData.followMe.map((item, index) => {
                         return (
                             <Flex alignItems='center' flexDirection='row' paddingX={30} marginTop={30}>
                                 <Image alt='ava' width={50} height={50} borderRadius={25} source={{ uri: item.avatar }}></Image>
@@ -51,6 +52,23 @@ export default function NotificationScreen() {
                 }
                 <Box paddingX={30}>
                     <Text style={{ paddingTop: 20, fontSize: 25, fontFamily: 'NunitoSemi' }}>Lượt thích</Text>
+                </Box>
+                {
+                    userData.liked.map((item, index) => {
+                        return (
+                          <Pressable onPress={()=>{
+                            navigation.navigate('PostDetailSecond', { item: item })
+                          }}>
+                                <Flex alignItems='center' flexDirection='row' paddingX={30} marginTop={30}>
+                                <Image alt='ava' width={50} height={50} borderRadius={25} source={{ uri: userData.avatar }}></Image>
+                                <Text style={{ paddingLeft: 10, fontSize: 20, fontFamily: 'NunitoSemi' }}>Bạn đã like 1 bài viết</Text>
+                            </Flex>
+                          </Pressable>
+                        )
+                    })
+                }
+                <Box paddingBottom={10}>
+
                 </Box>
             </ScrollView>
         )

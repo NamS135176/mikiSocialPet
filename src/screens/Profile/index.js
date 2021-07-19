@@ -35,10 +35,11 @@ export default function Profile({ navigation }) {
     const userData = useSelector((state) => {
         return state.userInfo;
     });
+    console.log(userData);
     const myPost = useSelector((state) => {
         return state.myPost;
     });
-    console.log(myPost);
+    // console.log(myPost);
     // console.log(userData);
     const [cover, setCover] = useState(userData.coverImage)
     const [avatar, setAvatar] = useState(userData.avatar)
@@ -50,7 +51,7 @@ export default function Profile({ navigation }) {
             quality: 0.2,
         });
 
-        console.log(result);
+        // console.log(result);
 
         if (!result.cancelled) {
             setCover(result.uri);
@@ -67,7 +68,7 @@ export default function Profile({ navigation }) {
             quality: 0.3,
         });
 
-        console.log(result);
+        // console.log(result);
 
         if (!result.cancelled) {
             setAvatar(result.uri);
@@ -110,7 +111,7 @@ export default function Profile({ navigation }) {
             })
                 .then(result => result.text())
                 .then(async res => {
-                    console.log(res);
+                    // console.log(res);
                     dispatch({
                         type: "SET_USER_INFO",
                         payload: {
@@ -154,7 +155,7 @@ export default function Profile({ navigation }) {
             })
                 .then(result => result.text())
                 .then(async res => {
-                    console.log(res);
+                    // console.log(res);
                     dispatch({
                         type: "SET_USER_INFO",
                         payload: {
@@ -291,7 +292,7 @@ export default function Profile({ navigation }) {
                                       
                                             <SimpleGrid marginX={8} marginY={5} columns={3} spacing={3}>
                                             {myPost.listMyPost.map((_item, index) => {
-                                                return <Pressable  width={Dimensions.get('window').width/4} height={Dimensions.get('window').width/4} margin={2}>
+                                                return <Pressable onPress={() => {navigation.navigate('PostDetail',{item:_item._id})}} width={Dimensions.get('window').width/4} height={Dimensions.get('window').width/4} margin={2}>
                                                     <Image borderRadius={20} alt='img' width='100%' height='100%' source={{ uri: _item.imgUrl }}></Image>
                                                 </Pressable>
                                             })}

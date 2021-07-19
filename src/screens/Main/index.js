@@ -10,17 +10,9 @@ import Profile from '../Profile';
 import PostScreen from '../PostScreen';
 import NotificationScreen from '../NotificationScreen';
 import { useDispatch, useSelector } from 'react-redux';
+import NewsScreen from '../NewsScreen';
 
 const Tab = createBottomTabNavigator();
-function HomeScreen({navigation}) {
-    return (
-        <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-            <Text onPress={() => {navigation.navigate('Tips')}}>Home!</Text>
-        </View>
-    );
-}
-
-
 
 export default function MainScreen({ navigation }) {
     const dispatch = useDispatch()
@@ -42,18 +34,13 @@ export default function MainScreen({ navigation }) {
             }}>
             <Tab.Screen
                 name="News"
-                component={HomeScreen}
+                component={NewsScreen}
                 options={{
                     tabBarLabel:"News",
                     tabBarIcon: ({ color, size }) => {
                       
                             return (
                                 <Ionicons name='newspaper' color={color} size={30}></Ionicons>
-                                // <Image
-                                //     alt="slide1"
-                                //     style={{ width: 25, height: 25 }}
-                                //     source={require('../../images/BottomNavigation/ic_news_feeds_orange.png')}
-                                // />
                             );
                        
                     },
@@ -68,11 +55,6 @@ export default function MainScreen({ navigation }) {
                       
                             return (
                                 <Ionicons name='grid' color={color} size={30}></Ionicons>
-                                // <Image
-                                //     alt="slide1"
-                                //     style={{ width: 25, height: 25 }}
-                                //     source={require('../../images/BottomNavigation/ic_utilities_orange.png')}
-                                // />
                             );
                        
                     },

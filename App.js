@@ -32,6 +32,10 @@ import TipsDetailScreen from './src/screens/TipsDetailScreen';
 import SettingScreen from './src/screens/SettingScreen';
 import UpdateStep1 from './src/screens/UpdateStep1';
 import UpdateStep2 from './src/screens/UpdateStep2';
+import PostDetailScreen from './src/screens/PostDetail';
+import ProfileUserScreen from './src/screens/ProfileUserScreen';
+import PostDetailSecondScreen from './src/screens/PostDetailSecond';
+import NewsScreen from './src/screens/NewsScreen';
 
 const persistConfig = {
   key: 'root',
@@ -67,6 +71,10 @@ function App() {
             <Stack.Screen name="Setting" component={SettingScreen} options={{ headerShown: false }} />
             <Stack.Screen name="Step1" component={UpdateStep1} options={{ headerShown: false }} />
             <Stack.Screen name="Step2" component={UpdateStep2} options={{ headerShown: false }} />
+            <Stack.Screen name="PostDetail" component={PostDetailScreen} options={{ headerShown: false }} />
+            <Stack.Screen name="ProfileUser" component={ProfileUserScreen} options={{ headerShown: false }} />
+            <Stack.Screen name="PostDetailSecond" component={PostDetailSecondScreen} options={{ headerShown: false }} />
+            <Stack.Screen name="News" component={NewsScreen} options={{ headerShown: false }} />
           </Stack.Navigator>
         </NavigationContainer></NativeBaseProvider>
       </PersistGate>

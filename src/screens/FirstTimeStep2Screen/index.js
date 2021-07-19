@@ -118,7 +118,9 @@ export default function FirstTimeStep2Screen({ route, navigation }) {
                         hobby: hobby,
                         description: des,
                         birthDay: new XDate(date).toString("dd/MM/yyyy")
-                    }
+                    },
+                    avatar: 'https://cdn.pixabay.com/photo/2016/08/08/09/17/avatar-1577909_1280.png',
+                    coverImage: 'https://i.pinimg.com/originals/95/56/f0/9556f0d55126e028a9b63a0bd2909c7d.jpg',
                 })
             })
                 .then(result => result.text())
@@ -140,8 +142,8 @@ export default function FirstTimeStep2Screen({ route, navigation }) {
                                 description: des,
                                 birthDay: new XDate(date).toString("dd/MM/yyyy")
                             },
-                            avatar: '',
-                            coverImage: '',
+                            avatar: 'https://cdn.pixabay.com/photo/2016/08/08/09/17/avatar-1577909_1280.png',
+                            coverImage: 'https://i.pinimg.com/originals/95/56/f0/9556f0d55126e028a9b63a0bd2909c7d.jpg',
                             followMe: [],
                             followed: [],
                             liked: [],

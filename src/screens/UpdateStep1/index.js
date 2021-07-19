@@ -11,6 +11,7 @@ import PetSelector from './components/PetSelector';
 import ModalSelector from 'react-native-modal-selector'
 import DateTimePicker from '@react-native-community/datetimepicker';
 import XDate from './xdate'
+import { useSelector } from 'react-redux';
 
 const styles = StyleSheet.create({
     centeredView: {
@@ -59,13 +60,16 @@ const styles = StyleSheet.create({
 const dogs = [{ label: 'Husky' }, { label: 'Chihuahua' }, { label: 'Shiba' }, { label: 'Bagle' }, { label: 'Bully' }, { label: 'Doberman' }, { label: 'Pitbull' }, { label: 'Pug' },]
 const cats = [{ label: 'Anh lông ngắn' }, { label: 'Anh lông dài' }, { label: 'ALD' }, { label: 'Scotish Fold' }, { label: 'Scotish Straight' }, { label: 'Golden' }, { label: 'Munchkin' }, { label: 'Sphynx' },]
 export default function UpdateStep1({ route, navigation }) {
-    const [displayName, setDisplayName] = useState('')
+    const userData = useSelector((state) => {
+        return state.userInfo;
+    });
+    const [displayName, setDisplayName] = useState(userData.displayName)
     const [isDogSelect, setIsDogSelect] = useState(true)
     const [visibleDogPick, setVisibleDogPick] = useState(false)
     const [visibleCatPick, setVisibleCatPick] = useState(false)
     const [typeDog, setTypeDog] = useState('chọn loại')
     const [typeCat, setTypeCat] = useState('chọn loại')
-    const [sex, setSex] = useState(true)
+    const [sex, setSex] = useState(userData.sex)
     const [date, setDate] = useState(new Date());
     const [showPetDate, setShowPetDate] = useState(false)
     const [modalErrVisible, setModalErrVisible] = useState(false);

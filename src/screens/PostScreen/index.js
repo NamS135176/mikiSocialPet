@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { Box, Pressable, Flex, Text, Image, ScrollView, TextArea, Modal } from 'native-base'
 import { Ionicons } from '@expo/vector-icons'
 import * as ImagePicker from 'expo-image-picker';
@@ -7,6 +7,9 @@ import { useSelector, useDispatch } from 'react-redux';
 import { firebaseApp, storage } from '../../commonComponents/FirebaseConfig';
 import Spinner from 'react-native-loading-spinner-overlay'
 export default function PostScreen({ navigation }) {
+
+    
+
     const userData = useSelector((state) => {
         return state.userInfo;
     });
@@ -151,7 +154,7 @@ export default function PostScreen({ navigation }) {
                 </Box>
                 <ScrollView flex={1}>
                     <Box marginX={5} >
-                        <TextArea onChangeText={(txt) => { setTextContent(txt) }} borderBottomWidth={0} borderTopLeftRadius={20} borderTopRightRadius={20} h={300} borderRadius={0} placeholder="Text Area Placeholder" />
+                        <TextArea onChangeText={(txt) => { setTextContent(txt) }} borderBottomWidth={0} borderTopLeftRadius={20} borderTopRightRadius={20} h={300} borderRadius={0} placeholder="Hãy chia sẻ với mọi người nhé!" />
                         <Box paddingY={5} paddingX={3} borderWidth={1} borderColor='#ccc' borderBottomLeftRadius={20} borderBottomRightRadius={20}>
                             <Text style={{ fontFamily: 'Nunito' }}>{
                                 displayTag
