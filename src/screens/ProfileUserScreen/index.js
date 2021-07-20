@@ -477,7 +477,11 @@ export default function ProfileUserScreen({ route, navigation }) {
                   </Center>
                 </Pressable>
               )}
-              <Pressable onPress={() => {}}>
+              <Pressable
+                onPress={() => {
+                  navigation.navigate('ScreenChat', { user });
+                }}
+              >
                 <Center
                   width={45}
                   height={45}

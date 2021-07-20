@@ -59,7 +59,6 @@ export default function Profile({ navigation }) {
       quality: 0.2,
     });
 
-
     if (!result.cancelled) {
       setCover(result.uri);
       let h = Dimensions.get('window').width / (result.width / result.height);
@@ -74,7 +73,6 @@ export default function Profile({ navigation }) {
       aspect: [1, 1],
       quality: 0.3,
     });
-
 
     if (!result.cancelled) {
       setAvatar(result.uri);
@@ -479,6 +477,7 @@ export default function Profile({ navigation }) {
                       {myPost.listMyPost.map((_item, index) => {
                         return (
                           <Pressable
+                            key={index}
                             onPress={() => {
                               navigation.navigate('PostDetail', {
                                 item: _item._id,

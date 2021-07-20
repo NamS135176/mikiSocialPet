@@ -55,7 +55,12 @@ export default function NewsScreen({ navigation }) {
             <Pressable>
               <Ionicons name="search" size={30} color="black"></Ionicons>
             </Pressable>
-            <Pressable marginLeft={5}>
+            <Pressable
+              onPress={() => {
+                navigation.navigate('ListChat');
+              }}
+              marginLeft={5}
+            >
               <Ionicons
                 name="chatbox-ellipses-outline"
                 size={30}
