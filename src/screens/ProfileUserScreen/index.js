@@ -35,17 +35,18 @@ export default function ProfileUserScreen({ route, navigation }) {
   useEffect(() => {
     setIsLoading(true);
     const getData = async () => {
-      const u = await axios.post('http://obnd.me/get-account', {
+      const u = axios.post('http://obnd.me/get-account', {
         account,
       });
-      const posts = await axios.get(
+      const posts = axios.get(
         `http://obnd-miki.herokuapp.com/post-api/get-post-list-by-account/${account}`
       );
-      console.log('log');
-      console.log(u.data, posts.data);
-      setUser(u.data);
-      setListPost(posts.data);
-      setIsLoading(false);
+
+      Promise.all([u, posts]).then((values) => {
+        setUser(values[0].data);
+        setListPost(values[1].data);
+        setIsLoading(false);
+      });
     };
     getData();
   }, []);
