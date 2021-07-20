@@ -21,8 +21,14 @@
     },
     "android": {
       "adaptiveIcon": {
-        "foregroundImage": "./assets/adaptive-icon.png",
+        "foregroundImage": "./assets/logo.png",
         "backgroundColor": "#FFFFFF"
+      },
+      "package": "com.nams1317.MikiSocialPet",
+      "config":{
+        "googleMaps":{
+          "apiKey": "AIzaSyAg__P98yRdfVzBcEiBTe9mey7KSjhOZtc"
+        }
       }
     },
     "web": {

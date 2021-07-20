@@ -105,7 +105,7 @@ export default function LoginScreen({ navigation }) {
         }
         else {
             setModalVisible(true)
-            fetch('http://obnd-miki.herokuapp.com/signin', {
+            fetch('http://obnd.me/signin', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'

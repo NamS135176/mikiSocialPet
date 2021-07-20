@@ -1,9 +1,9 @@
 import React from 'react'
-import { Box, ScrollView, Text, Flex, Image } from 'native-base'
+import { Box, ScrollView, Text, Flex, Image, Menu } from 'native-base'
 import { useFonts } from 'expo-font';
 import { useSelector } from 'react-redux';
 import { Pressable } from 'react-native';
-export default function NotificationScreen({navigation}) {
+export default function NotificationScreen({ navigation }) {
 
     const userData = useSelector((state) => {
         return state.userInfo;
@@ -30,10 +30,14 @@ export default function NotificationScreen({navigation}) {
                 {
                     userData.followed.map((item, index) => {
                         return (
-                            <Flex alignItems='center' flexDirection='row' paddingX={30} marginTop={30}>
-                                <Image alt='ava' width={50} height={50} borderRadius={25} source={{ uri: userData.avatar }}></Image>
-                                <Text style={{ paddingLeft: 10, fontSize: 20, fontFamily: 'NunitoSemi' }}>{userData.account} đã follow {item.account}</Text>
-                            </Flex>
+                            <Pressable key={index} onPress={() => {
+                                navigation.navigate('ProfileUser', { account: item.account })
+                            }}>
+                                <Flex alignItems='center' flexDirection='row' paddingX={30} marginTop={30}>
+                                    <Image alt='ava' width={50} height={50} borderRadius={25} source={{ uri: item.avatar }}></Image>
+                                    <Text style={{ paddingLeft: 10, fontSize: 20, fontFamily: 'NunitoSemi' }}>Bạn đã follow {item.account}</Text>
+                                </Flex>
+                            </Pressable>
                         )
                     })
                 }
@@ -43,10 +47,15 @@ export default function NotificationScreen({navigation}) {
                 {
                     userData.followMe.map((item, index) => {
                         return (
-                            <Flex alignItems='center' flexDirection='row' paddingX={30} marginTop={30}>
-                                <Image alt='ava' width={50} height={50} borderRadius={25} source={{ uri: item.avatar }}></Image>
-                                <Text style={{ paddingLeft: 10, fontSize: 20, fontFamily: 'NunitoSemi' }}>{item.account} đã follow bạn</Text>
-                            </Flex>
+                            <Pressable  key={index} onPress={() => {
+                                navigation.navigate('ProfileUser', { account: item.account })
+                            }}>
+                                <Flex alignItems='center' flexDirection='row' paddingX={30} marginTop={30}>
+                                    <Image alt='ava' width={50} height={50} borderRadius={25} source={{ uri: item.avatar }}></Image>
+                                    <Text style={{ paddingLeft: 10, fontSize: 20, fontFamily: 'NunitoSemi' }}>{item.account} đã follow bạn</Text>
+                                </Flex>
+                            </Pressable>
+
                         )
                     })
                 }
@@ -56,14 +65,14 @@ export default function NotificationScreen({navigation}) {
                 {
                     userData.liked.map((item, index) => {
                         return (
-                          <Pressable onPress={()=>{
-                            navigation.navigate('PostDetailSecond', { item: item })
-                          }}>
+                            <Pressable  key={index} onPress={() => {
+                                navigation.navigate('PostDetailSecond', { item: item })
+                            }}>
                                 <Flex alignItems='center' flexDirection='row' paddingX={30} marginTop={30}>
-                                <Image alt='ava' width={50} height={50} borderRadius={25} source={{ uri: userData.avatar }}></Image>
-                                <Text style={{ paddingLeft: 10, fontSize: 20, fontFamily: 'NunitoSemi' }}>Bạn đã like 1 bài viết</Text>
-                            </Flex>
-                          </Pressable>
+                                    <Image alt='ava' width={50} height={50} borderRadius={25} source={{ uri: userData.avatar }}></Image>
+                                    <Text style={{ paddingLeft: 10, fontSize: 20, fontFamily: 'NunitoSemi' }}>Bạn đã like 1 bài viết</Text>
+                                </Flex>
+                            </Pressable>
                         )
                     })
                 }

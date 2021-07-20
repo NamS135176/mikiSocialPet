@@ -1,7 +1,7 @@
 
 import { call, put, take, takeLatest } from 'redux-saga/effects';
 const getPostId = async (action) => {
-  const data = await fetch(`http://obnd-miki.herokuapp.com/post-api/get-post/${action.payload}`, {
+  const data = await fetch(`http://obnd.me/post-api/get-post/${action.payload}`, {
     method: "GET",
     headers: {
       "Content-Type": "application/json"

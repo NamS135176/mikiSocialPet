@@ -79,7 +79,7 @@ export default function PostScreen({ navigation }) {
             const data = await uploadImage(image, userData.account + "-post-" + gen)
             const ref = storage.ref('posts/' + userData.account + "-post-" + gen);
             const url = await ref.getDownloadURL();
-            const res = await fetch('https://obnd-miki.herokuapp.com/post-api/create-post', {
+            const res = await fetch('http://obnd.me/post-api/create-post', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'

@@ -12,6 +12,9 @@ import SkeletonContent from 'react-native-skeleton-content';
 import { width } from 'styled-system';
 
 export default function PostDetailSecondScreen({ route, navigation }) {
+    const followPost = useSelector((state) => {
+        return state.followPost;
+    });
     const w = Dimensions.get('window').width;
     const [isLoading, setIsLoading] = useState(false)
     let [fontsLoaded] = useFonts({
@@ -33,7 +36,7 @@ export default function PostDetailSecondScreen({ route, navigation }) {
         currentPost: {}
     })
     useEffect(() => {
-        fetch(`http://obnd-miki.herokuapp.com/post-api/get-post/${item}`, {
+        fetch(`http://obnd.me/post-api/get-post/${item}`, {
             method: "GET",
             headers: {
                 "Content-Type": "application/json"
@@ -46,18 +49,28 @@ export default function PostDetailSecondScreen({ route, navigation }) {
                     currentPost: JSON.parse(data)
                 })
             })
+            .catch(err => {
+                Alert.alert(
+                    "Xin lỗi bạn",
+                    "Bài viết này đã bị xóa hoặc không thể hiển thị đối với bạn!",
+                    [
+                     
+                      { text: "OK", onPress: () => navigation.goBack() }
+                    ]
+                  );
+            })
     }, [])
     // const currentPost = useSelector((state) => {
     //     return state.currentPost;
     // });
-    console.log(currentPost);
+    // console.log(currentPost);
 
     const [commentText, setCommentText] = useState('')
     const handleChangeComment = txt => setCommentText(txt)
     const handlePostComment = async () => {
         if (commentText != "") {
             setIsLoading(true)
-            fetch('http://obnd-miki.herokuapp.com/post-api/update-comment', {
+            fetch('http://obnd.me/post-api/update-comment', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
@@ -72,8 +85,12 @@ export default function PostDetailSecondScreen({ route, navigation }) {
             )
                 .then(res => res.text())
                 .then((result) => {
+                    dispatch({
+                        type: 'GET_FOLLOW_POST',
+                        payload:userData.account
+                    })
                     setIsLoading(false)
-                    fetch(`http://obnd-miki.herokuapp.com/post-api/get-post/${item}`, {
+                    fetch(`http://obnd.me/post-api/get-post/${item}`, {
                         method: "GET",
                         headers: {
                             "Content-Type": "application/json"
@@ -94,7 +111,7 @@ export default function PostDetailSecondScreen({ route, navigation }) {
         if (currentPost.currentPost.ownerId.account == userData.account) {
             navigation.navigate('Profile')
         }
-        else{
+        else {
             navigation.navigate('ProfileUser', { account: currentPost.currentPost.ownerId.account })
         }
     }
@@ -102,7 +119,7 @@ export default function PostDetailSecondScreen({ route, navigation }) {
     const handleReport = () => {
         setShowModal(false)
         Alert.alert('Cảm ơn bạn! Chúng tôi sẽ xem xét báo cáo của bạn.')
-        fetch('http://obnd-miki.herokuapp.com/post-api/update-report', {
+        fetch('http://obnd.me/post-api/update-report', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
@@ -133,8 +150,22 @@ export default function PostDetailSecondScreen({ route, navigation }) {
             }
         })
 
-        setCurrentPost({...currentPost,currentPost: {...currentPost.currentPost,liked: [...currentPost.currentPost.liked, userData.account]}})
-        const data = await fetch('http://obnd-miki.herokuapp.com/post-api/update-like', {
+        setCurrentPost({ ...currentPost, currentPost: { ...currentPost.currentPost, liked: [...currentPost.currentPost.liked, userData.account] } })
+
+        // const thisPost = followPost.listFollowPost.filter(item => {
+        //     return item._id == currentPost.currentPost._id
+        // })
+        // const index = followPost.listFollowPost.indexOf(thisPost[0])
+        // thisPost[0].liked.push({ account: userData.account })
+        // const updated = followPost.listFollowPost
+        // updated[index] = thisPost[0]
+        // console.log(updated);
+        dispatch({
+            type: 'GET_FOLLOW_POST',
+            payload:userData.account
+        })
+
+        const data = await fetch('http://obnd.me/post-api/update-like', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
@@ -145,7 +176,7 @@ export default function PostDetailSecondScreen({ route, navigation }) {
             })
         }
         )
-        const res = await fetch('http://obnd-miki.herokuapp.com/update-like', {
+        const res = await fetch('http://obnd.me/update-like', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
@@ -158,8 +189,12 @@ export default function PostDetailSecondScreen({ route, navigation }) {
         )
     }
     const handleDislike = async () => {
-        const newLiked = userData.liked
-        newLiked.pop()
+        const newLiked = userData.liked.filter(item => {
+            return item == currentPost.currentPost._id
+        })
+        const index = userData.liked.indexOf(newLiked[0])
+        const removeList = userData.liked
+        removeList.splice(index, 1)
         dispatch({
             type: "SET_USER_INFO",
             payload: {
@@ -173,18 +208,35 @@ export default function PostDetailSecondScreen({ route, navigation }) {
                 coverImage: userData.coverImage,
                 followMe: userData.followMe,
                 followed: userData.followed,
-                liked: newLiked
+                liked: removeList
             }
         })
-        const newLikedPost = currentPost.currentPost.liked
-        newLikedPost.pop()
-        setCurrentPost({...currentPost,currentPost: {...currentPost.currentPost,liked: newLikedPost}})
-        // dispatch({
-        //     type: "UPDATE_LIKE",
-        //     payload: {
-        //         post: { ...currentPost.currentPost, liked: newLikedPost }
-        //     }
+        const newLikedPost = currentPost.currentPost.liked.filter(item => {
+            return item == userData.account
+        })
+        const i = currentPost.currentPost.liked.indexOf(newLikedPost[0])
+        const removePost = currentPost.currentPost.liked
+        removePost.splice(i, 1)
+        setCurrentPost({ ...currentPost, currentPost: { ...currentPost.currentPost, liked: removePost } })
+
+        const thisPost = followPost.listFollowPost.filter(item => {
+            return item._id == currentPost.currentPost._id
+        })
+        const id = followPost.listFollowPost.indexOf(thisPost[0])
+        
+        // const removeTarget = thisPost[0].liked.filter(item => {
+        //     return item.account == userData.account
         // })
+        // const idRemove = thisPost[0].liked.indexOf(removeTarget[0])
+        // thisPost[0].liked.splice(idRemove,1)
+        // const updated = followPost.listFollowPost
+        // updated[id] = thisPost[0]
+        // console.log(updated);
+        dispatch({
+            type: 'GET_FOLLOW_POST',
+            payload:userData.account
+        })
+
         const data = await fetch('http://obnd-miki.herokuapp.com/post-api/update-like', {
             method: 'POST',
             headers: {

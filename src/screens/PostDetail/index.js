@@ -46,7 +46,7 @@ export default function PostDetailScreen({ route, navigation }) {
     const handlePostComment = async () => {
         if (commentText != "") {
             setIsLoading(true)
-            fetch('http://obnd-miki.herokuapp.com/post-api/update-comment', {
+            fetch('http://obnd.me/post-api/update-comment', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
@@ -82,7 +82,7 @@ export default function PostDetailScreen({ route, navigation }) {
     const handleReport = () => {
         setShowModal(false)
         Alert.alert('Cảm ơn bạn! Chúng tôi sẽ xem xét báo cáo của bạn.')
-        fetch('http://obnd-miki.herokuapp.com/post-api/update-report', {
+        fetch('http://obnd.me/post-api/update-report', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
@@ -102,7 +102,7 @@ export default function PostDetailScreen({ route, navigation }) {
 
     const handleConfirmDelete = () => {
         setIsLoading(true)
-        fetch('http://obnd-miki.herokuapp.com/post-api/delete-post', {
+        fetch('http://obnd.me/post-api/delete-post', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
@@ -145,7 +145,7 @@ export default function PostDetailScreen({ route, navigation }) {
                 post: { ...currentPost.currentPost, liked: [...currentPost.currentPost.liked, userData.account] }
             }
         })
-        const data = await fetch('http://obnd-miki.herokuapp.com/post-api/update-like', {
+        const data = await fetch('http://obnd.me/post-api/update-like', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
@@ -156,7 +156,7 @@ export default function PostDetailScreen({ route, navigation }) {
             })
         }
         )
-        const res = await fetch('http://obnd-miki.herokuapp.com/update-like', {
+        const res = await fetch('http://obnd.me/update-like', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
@@ -169,8 +169,13 @@ export default function PostDetailScreen({ route, navigation }) {
         )
     }
     const handleDislike = async () => {
-        const newLiked = userData.liked
-        newLiked.pop()
+        const newLiked = userData.liked.filter(item => {
+            return item == currentPost.currentPost._id
+        })
+        const index = userData.liked.indexOf(newLiked[0])
+        const removeList = userData.liked
+        removeList.splice(index,1)
+        
         dispatch({
             type: "SET_USER_INFO",
             payload: {
@@ -184,18 +189,24 @@ export default function PostDetailScreen({ route, navigation }) {
                 coverImage: userData.coverImage,
                 followMe: userData.followMe,
                 followed: userData.followed,
-                liked: newLiked
+                liked: removeList
             }
         })
-        const newLikedPost = currentPost.currentPost.liked
-        newLikedPost.pop()
+        const newLikedPost = currentPost.currentPost.liked.filter(item => {
+            return item == userData.account
+        })
+        const i = currentPost.currentPost.liked.indexOf(newLikedPost[0])
+        const removePost = currentPost.currentPost.liked
+        removePost.splice(i,1)
+        // console.log(removePost);
+        // newLikedPost.pop()
         dispatch({
             type: "UPDATE_LIKE",
             payload: {
-                post: { ...currentPost.currentPost, liked: newLikedPost }
+                post: { ...currentPost.currentPost, liked: removePost }
             }
         })
-        const data = await fetch('http://obnd-miki.herokuapp.com/post-api/update-like', {
+        const data = await fetch('http://obnd.me/post-api/update-like', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
@@ -206,7 +217,7 @@ export default function PostDetailScreen({ route, navigation }) {
             })
         }
         )
-        const res = await fetch('http://obnd-miki.herokuapp.com/update-like', {
+        const res = await fetch('http://obnd.me/update-like', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'

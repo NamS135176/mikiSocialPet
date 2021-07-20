@@ -122,7 +122,7 @@ export default function FirstTimeUpdateScreen({ route, navigation }) {
 
             }
             else {
-                if (typeDog == 'chọn loại') {
+                if (typeCat == 'chọn loại') {
                     setModalErrVisible(true)
                     setModalErrText("Bạn quên chọn loại cho pet rồi kìa!")
                 }

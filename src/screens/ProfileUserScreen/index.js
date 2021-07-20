@@ -8,6 +8,7 @@ import * as ImagePicker from 'expo-image-picker';
 import { Dimensions } from 'react-native';
 import { firebaseApp, storage } from '../../commonComponents/FirebaseConfig';
 import SkeletonContent from 'react-native-skeleton-content';
+import { Alert } from 'react-native';
 export default function ProfileUserScreen({ route, navigation }) {
     const { account } = route.params
     // console.log(account);
@@ -22,7 +23,7 @@ export default function ProfileUserScreen({ route, navigation }) {
     const [isLoading, setIsLoading] = useState(false)
     useEffect(() => {
         setIsLoading(true)
-        fetch('http://obnd-miki.herokuapp.com/get-account', {
+        fetch('http://obnd.me/get-account', {
             method: "POST",
             headers: {
                 "Content-Type": "application/json"
@@ -52,6 +53,7 @@ export default function ProfileUserScreen({ route, navigation }) {
                     })
 
             })
+           
     }, [])
     const [status, setStatus] = useState(1)
     const [isImg, setIsImg] = useState(1)
@@ -71,7 +73,7 @@ export default function ProfileUserScreen({ route, navigation }) {
                 accountFollowed: account
             })
         })
-        setUser({...user, followMe: [...user.followMe, {account: userData.account}]})
+        setUser({ ...user, followMe: [...user.followMe, { account: userData.account }] })
         dispatch({
             type: "SET_USER_INFO",
             payload: {
@@ -85,11 +87,11 @@ export default function ProfileUserScreen({ route, navigation }) {
                 coverImage: userData.coverImage,
                 followMe: userData.followMe,
                 followed: [...userData.followed, {
-                    _id:user._id,
+                    _id: user._id,
                     account: user.account,
                     avatar: user.avatar,
                     displayName: user.displayName,
-                  }],
+                }],
                 liked: userData.liked,
             }
         })
@@ -105,11 +107,21 @@ export default function ProfileUserScreen({ route, navigation }) {
                 accountFollowed: account
             })
         })
-        const newList = user.followMe
-        newList.pop()
-        setUser({...user, followMe: newList})
-        const newListCurrent = userData.followed
-        newListCurrent.pop()
+        const newList = user.followMe.filter(item => {
+            return item.account == userData.account
+        })
+        const index = user.followMe.indexOf(newList[0])
+        const removeList = user.followMe
+        removeList.splice(index, 1)
+        // console.log(removeList);
+        setUser({ ...user, followMe: removeList })
+        const newListCurrent = userData.followed.filter(item => {
+            return item.account == user.account
+        })
+        const i = userData.followed.indexOf(newListCurrent[0])
+        const removeCurrentList = userData.followed
+        removeCurrentList.splice(i, 1)
+        // console.log(removeCurrentList);
         dispatch({
             type: "SET_USER_INFO",
             payload: {
@@ -122,7 +134,7 @@ export default function ProfileUserScreen({ route, navigation }) {
                 avatar: userData.avatar,
                 coverImage: userData.coverImage,
                 followMe: userData.followMe,
-                followed:newListCurrent,
+                followed: removeCurrentList,
                 liked: userData.liked,
             }
         })
@@ -230,24 +242,21 @@ export default function ProfileUserScreen({ route, navigation }) {
                     </Box> :
                         <Box backgroundColor='white' position='relative'>
                             <Image alt='cover' width='100%' height={250} resizeMode='cover' source={{ uri: user.coverImage }}></Image>
-                            <Center marginTop={-75} zIndex={3} >
-                                <Flex flex={1} flexDirection='row' alignItems='center' justifyContent='space-between'>
-                                    {
-                                        user.followMe.filter((item) => {
-                                            return item.account == userData.account
-                                        }).length != 0 ? 
+                            <Flex marginTop={-75} flex={1} flexDirection='row' alignItems='center' justifyContent='space-around'>
+                                {
+                                    user.followMe.filter((item) => {
+                                        return item.account == userData.account
+                                    }).length != 0 ?
                                         <Pressable onPress={handleUnFollow}>
                                             <Box width={100} paddingX={2} borderRadius={20} paddingY={1} backgroundColor='#FFA788'><Text style={{ color: 'white', textAlign: 'center', fontSize: 15, fontFamily: 'NunitoSemi' }}>Hủy</Text></Box>
                                         </Pressable>
-                                            :<Pressable onPress={handleFollow}>
-                                                 <Box width={100} paddingX={2} borderRadius={20} paddingY={1} backgroundColor='#FFA788'><Text style={{ color: 'white', textAlign: 'center', fontSize: 15, fontFamily: 'NunitoSemi' }}>Theo dõi</Text></Box>
-                                            </Pressable>
-                                    }
-                                    <Image marginX={5} borderRadius={75} borderWidth={10} borderColor='white' alt='cover' width={150} height={150} resizeMode='cover' source={{ uri: user.avatar }}></Image>
-                                    <Box width={100} paddingX={2} borderRadius={20} paddingY={1} backgroundColor='#FFA788'><Text style={{ color: 'white', textAlign: 'center', fontSize: 15, fontFamily: 'NunitoSemi' }}>Báo cáo</Text></Box>
-                                </Flex>
-                            </Center>
-
+                                        : <Pressable onPress={handleFollow}>
+                                            <Box width={100} paddingX={2} borderRadius={20} paddingY={1} backgroundColor='#FFA788'><Text style={{ color: 'white', textAlign: 'center', fontSize: 15, fontFamily: 'NunitoSemi' }}>Theo dõi</Text></Box>
+                                        </Pressable>
+                                }
+                                <Image borderRadius={75} borderWidth={10} borderColor='white' alt='cover' width={150} height={150} resizeMode='cover' source={{ uri: user.avatar }}></Image>
+                                <Box width={100} paddingX={2} borderRadius={20} paddingY={1} backgroundColor='#FFA788'><Text style={{ color: 'white', textAlign: 'center', fontSize: 15, fontFamily: 'NunitoSemi' }}>Báo cáo</Text></Box>
+                            </Flex>
                             <Flex zIndex={1} marginTop={-75} flexDirection='row' justifyContent='space-between'>
                                 <Center marginLeft={-10} flex={1} paddingTop={10}>
                                     <Text style={{ fontSize: 25, fontFamily: 'NunitoExBold' }}>
@@ -302,6 +311,13 @@ export default function ProfileUserScreen({ route, navigation }) {
                                             </Center>
                                         </Pressable>
                                 }
+                                <Pressable onPress={() => {
+
+                                }}>
+                                    <Center width={45} height={45} marginX={3} borderRadius={25} backgroundColor='#ddd'>
+                                        <Ionicons name='chatbox-ellipses-outline' size={25} color='#f6f6f6'></Ionicons>
+                                    </Center>
+                                </Pressable>
                             </Flex>
 
                             {
@@ -334,7 +350,7 @@ export default function ProfileUserScreen({ route, navigation }) {
 
                                                 <SimpleGrid marginX={8} marginY={5} columns={3} spacing={3}>
                                                     {listPost.map((_item, index) => {
-                                                        return <Pressable onPress={() => { navigation.navigate('PostDetailSecond', { item: _item._id }) }} width={Dimensions.get('window').width / 4} height={Dimensions.get('window').width / 4} margin={2}>
+                                                        return <Pressable key={index} onPress={() => { navigation.navigate('PostDetailSecond', { item: _item._id }) }} width={Dimensions.get('window').width / 4} height={Dimensions.get('window').width / 4} margin={2}>
                                                             <Image borderRadius={20} alt='img' width='100%' height='100%' source={{ uri: _item.imgUrl }}></Image>
                                                         </Pressable>
                                                     })}
