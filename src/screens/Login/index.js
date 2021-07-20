@@ -119,7 +119,6 @@ export default function LoginScreen({ navigation }) {
                 .then(res => res.text())
                 .then(async result => {
                     setModalVisible(false)
-                    console.log(result);
                     const data = JSON.parse(result)
                     if (data.user.displayName == "") {
                         // await AsyncStorage.setItem('userToken',data.token)
@@ -127,13 +126,11 @@ export default function LoginScreen({ navigation }) {
                         //     index: 0,
                         //     routes: [{ name: 'FirstTimeUpdate' }],
                         // });
-                        console.log(data);
                         navigation.navigate('FirstTimeUpdate', { token: data.token, username: data.user.account })
                     }
                     else {
                         const user = data.user
                         await AsyncStorage.setItem('userToken', data.token)
-                        // console.log(user);
                         dispatch({
                             type: 'SET_USER_INFO',
                             payload: {

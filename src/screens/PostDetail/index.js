@@ -36,10 +36,8 @@ export default function PostDetailScreen({ route, navigation }) {
   const userData = useSelector((state) => {
     return state.userInfo;
   });
-  // console.log(userData);
   const dispatch = useDispatch();
   const { item } = route.params;
-  console.log(item);
   useEffect(() => {
     dispatch({
       type: 'GET_POST',
@@ -49,7 +47,6 @@ export default function PostDetailScreen({ route, navigation }) {
   const currentPost = useSelector((state) => {
     return state.currentPost;
   });
-  console.log(currentPost);
 
   const [commentText, setCommentText] = useState('');
   const handleChangeComment = (txt) => setCommentText(txt);
@@ -209,7 +206,6 @@ export default function PostDetailScreen({ route, navigation }) {
     const i = currentPost.currentPost.liked.indexOf(newLikedPost[0]);
     const removePost = currentPost.currentPost.liked;
     removePost.splice(i, 1);
-    // console.log(removePost);
     // newLikedPost.pop()
     dispatch({
       type: 'UPDATE_LIKE',

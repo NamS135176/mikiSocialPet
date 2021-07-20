@@ -4,8 +4,7 @@ const initState = {
 };
 
 const followPostReducer = ( data = initState,action) => {
-    // console.log(action.coverImage);
-    // console.log(action.type);
+  
     switch(action.type){
         case 'GET_FOLLOW_POST_SUCCESS': {
             return{

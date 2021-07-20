@@ -37,10 +37,8 @@ export default function PostDetailSecondScreen({ route, navigation }) {
   const userData = useSelector((state) => {
     return state.userInfo;
   });
-  // console.log(userData);
   const dispatch = useDispatch();
   const { item } = route.params;
-  console.log(item);
   const [currentPost, setCurrentPost] = useState({
     loading: true,
     currentPost: {},
@@ -70,7 +68,6 @@ export default function PostDetailSecondScreen({ route, navigation }) {
   // const currentPost = useSelector((state) => {
   //     return state.currentPost;
   // });
-  // console.log(currentPost);
 
   const [commentText, setCommentText] = useState('');
   const handleChangeComment = (txt) => setCommentText(txt);
@@ -172,7 +169,6 @@ export default function PostDetailSecondScreen({ route, navigation }) {
     // thisPost[0].liked.push({ account: userData.account })
     // const updated = followPost.listFollowPost
     // updated[index] = thisPost[0]
-    // console.log(updated);
     dispatch({
       type: 'GET_FOLLOW_POST',
       payload: userData.account,
@@ -245,7 +241,6 @@ export default function PostDetailSecondScreen({ route, navigation }) {
     // thisPost[0].liked.splice(idRemove,1)
     // const updated = followPost.listFollowPost
     // updated[id] = thisPost[0]
-    // console.log(updated);
     dispatch({
       type: 'GET_FOLLOW_POST',
       payload: userData.account,
@@ -550,7 +545,6 @@ export default function PostDetailSecondScreen({ route, navigation }) {
           ) : (
             <Box marginX={5} marginTop={-4} paddingBottom={150}>
               {currentPost.currentPost.comments.map((item, index) => {
-                console.log(item);
                 if (index == 0) {
                   return (
                     <Box

@@ -46,12 +46,9 @@ export default function Profile({ navigation }) {
   const userData = useSelector((state) => {
     return state.userInfo;
   });
-  console.log(userData);
   const myPost = useSelector((state) => {
     return state.myPost;
   });
-  // console.log(myPost);
-  // console.log(userData);
   const [cover, setCover] = useState(userData.coverImage);
   const [avatar, setAvatar] = useState(userData.avatar);
   const pickImage = async () => {
@@ -62,7 +59,6 @@ export default function Profile({ navigation }) {
       quality: 0.2,
     });
 
-    // console.log(result);
 
     if (!result.cancelled) {
       setCover(result.uri);
@@ -79,7 +75,6 @@ export default function Profile({ navigation }) {
       quality: 0.3,
     });
 
-    // console.log(result);
 
     if (!result.cancelled) {
       setAvatar(result.uri);
@@ -103,7 +98,6 @@ export default function Profile({ navigation }) {
 
   const handleUpdateAvatar = async () => {
     const uri = await pickAvatar();
-    console.log(uri);
     const form = new FormData();
     form.append('avatar', {
       uri,
@@ -152,7 +146,6 @@ export default function Profile({ navigation }) {
             },
           });
         });
-      // console.log(res);
     }
   };
 
@@ -189,7 +182,6 @@ export default function Profile({ navigation }) {
       })
         .then((result) => result.text())
         .then(async (res) => {
-          // console.log(res);
           dispatch({
             type: 'SET_USER_INFO',
             payload: {
@@ -207,7 +199,6 @@ export default function Profile({ navigation }) {
             },
           });
         });
-      // console.log(res);
     }
   };
 

@@ -72,7 +72,6 @@ export default function FirstTimeUpdateScreen({ route, navigation }) {
     const [modalErrText, setModalErrText] = useState("");
 
     const { token , username} = route.params
-    // console.log(token);
     const onChange = (event, selectedDate) => {
         const currentDate = selectedDate || date;
         setShowPetDate(!showPetDate)
@@ -96,7 +95,6 @@ export default function FirstTimeUpdateScreen({ route, navigation }) {
     }
 
     const handleNext = () => {
-        // console.log(isDogSelect);
         if (displayName == '') {
             setModalErrVisible(true)
             setModalErrText("Bạn quên nhập tên cho pet rồi kìa!")

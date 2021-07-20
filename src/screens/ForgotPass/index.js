@@ -118,7 +118,6 @@ export default function ForgotPassScreen({ navigation }) {
             })
                 .then(res => res.text())
                 .then(result => {
-                    console.log(result);
                     setModalVisible(false)
                     if (result == 'we sent to your e-mail') {
                         setModalSuccessVisible(true)

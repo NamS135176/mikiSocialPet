@@ -22,7 +22,6 @@ import { Alert } from 'react-native';
 import axios from 'axios';
 export default function ProfileUserScreen({ route, navigation }) {
   const { account } = route.params;
-  // console.log(account);
   let [fontsLoaded] = useFonts({
     Gabriola: require('../../../assets/fonts/Gabriola.ttf'),
     Nunito: require('../../../assets/fonts/Nunito-Regular.ttf'),
@@ -114,7 +113,6 @@ export default function ProfileUserScreen({ route, navigation }) {
     const index = user.followMe.indexOf(newList[0]);
     const removeList = user.followMe;
     removeList.splice(index, 1);
-    // console.log(removeList);
     setUser({ ...user, followMe: removeList });
     const newListCurrent = userData.followed.filter((item) => {
       return item.account == user.account;
@@ -122,7 +120,6 @@ export default function ProfileUserScreen({ route, navigation }) {
     const i = userData.followed.indexOf(newListCurrent[0]);
     const removeCurrentList = userData.followed;
     removeCurrentList.splice(i, 1);
-    // console.log(removeCurrentList);
     dispatch({
       type: 'SET_USER_INFO',
       payload: {

@@ -13,7 +13,7 @@ const initState = {
 };
 
 const userInfo = ( data = initState,action) => {
-    console.log(action.coverImage);
+   
     switch(action.type){
         case 'SET_USER_INFO': {
             return{

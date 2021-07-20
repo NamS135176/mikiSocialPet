@@ -54,7 +54,6 @@ export default function PostScreen({ navigation }) {
       quality: 0.3,
     });
 
-    console.log(result);
 
     if (!result.cancelled) {
       setImage(result.uri);
@@ -80,7 +79,6 @@ export default function PostScreen({ navigation }) {
       setShowModal(true);
     } else {
       const gen = Date.now();
-      console.log(gen);
       setIsLoading(true);
       // const data = await uploadImage(image, userData.account + "-post-" + gen)
       // const ref = storage.ref('posts/' + userData.account + "-post-" + gen);
@@ -236,7 +234,6 @@ export default function PostScreen({ navigation }) {
               return (
                 <Pressable
                   onPress={() => {
-                    console.log('dfssdf');
                     if (!tags.includes(item)) {
                       setTags([...tags, item]);
                       setDisplayTag(`${displayTag} ${item}`);

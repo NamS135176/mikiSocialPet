@@ -130,10 +130,8 @@ export default function SignUpScreen({ navigation }) {
             })
                 .then(res => res.text())
                 .then(result => {
-                    console.log(result);
                 if(result == 'Success'){
                              setModalVisible(false)
-                    console.log(result);
                     setModalSuccessVisible(true)
                 }
                 else{
