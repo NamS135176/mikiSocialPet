@@ -10,6 +10,7 @@ const initState = {
   followMe: [],
   followed: [],
   liked: [],
+  roomChat: [],
   time: 0,
 };
 
@@ -30,6 +31,7 @@ const userInfo = (data = initState, action) => {
         followed: action.payload.followed,
         liked: action.payload.liked,
         time: action.payload.time,
+        roomChat: action.payload.roomChat,
       };
     }
     default:

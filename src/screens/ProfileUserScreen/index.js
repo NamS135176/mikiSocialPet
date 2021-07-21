@@ -18,8 +18,12 @@ import * as ImagePicker from 'expo-image-picker';
 import { Dimensions } from 'react-native';
 import { firebaseApp, storage } from '../../commonComponents/FirebaseConfig';
 import SkeletonContent from 'react-native-skeleton-content';
-import { Alert } from 'react-native';
+import { Alert, TouchableOpacity } from 'react-native';
 import axios from 'axios';
+import Modal from 'react-native-modal';
+import * as FileSystem from 'expo-file-system';
+import * as Permissions from 'expo-permissions';
+import * as MediaLibrary from 'expo-media-library';
 export default function ProfileUserScreen({ route, navigation }) {
   const { account } = route.params;
   let [fontsLoaded] = useFonts({
@@ -31,6 +35,8 @@ export default function ProfileUserScreen({ route, navigation }) {
   const [user, setUser] = useState(null);
   const [listPost, setListPost] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
+  const [isModalVisible, setModalVisible] = useState(false);
+  const [showImage, setShowImage] = useState('');
   useEffect(() => {
     setIsLoading(true);
     const getData = async () => {
@@ -55,7 +61,24 @@ export default function ProfileUserScreen({ route, navigation }) {
   const userData = useSelector((state) => {
     return state.userInfo;
   });
-
+  const saveFile = async (fileUri) => {
+    const { status } = await Permissions.askAsync(Permissions.MEDIA_LIBRARY);
+    if (status === 'granted') {
+      const asset = await MediaLibrary.createAssetAsync(fileUri);
+      await MediaLibrary.createAlbumAsync('Download', asset);
+      Alert.alert('Save Image Successfully');
+    }
+  };
+  const downloadImage = () => {
+    let fileUri = FileSystem.documentDirectory + 'robo.jpg';
+    FileSystem.downloadAsync(showImage, fileUri)
+      .then(({ uri }) => {
+        saveFile(uri);
+      })
+      .catch((error) => {
+        console.error(error);
+      });
+  };
   const handleFollow = () => {
     fetch('http://obnd.me/update-followed', {
       method: 'POST',
@@ -107,6 +130,7 @@ export default function ProfileUserScreen({ route, navigation }) {
         accountFollowed: account,
       }),
     });
+
     const newList = user.followMe.filter((item) => {
       return item.account == userData.account;
     });
@@ -142,6 +166,29 @@ export default function ProfileUserScreen({ route, navigation }) {
   } else {
     return (
       <ScrollView backgroundColor="white">
+        <Modal
+          style={{
+            justifyContent: 'center',
+            alignItems: 'center',
+          }}
+          animationIn="slideInUp"
+          coverScreen={true}
+          animationInTiming={2000}
+          backdropOpacity={0.5}
+          onBackdropPress={() => setModalVisible(false)}
+          onSwipeComplete={() => setModalVisible(false)}
+          onBackButtonPress={() => {
+            setModalVisible(false);
+          }}
+          isVisible={isModalVisible}
+        >
+          <TouchableOpacity onPress={downloadImage}>
+            <Image
+              source={{ uri: showImage }}
+              style={{ width: 300, height: 200 }}
+            />
+          </TouchableOpacity>
+        </Modal>
         {isLoading ? (
           <Box backgroundColor="white" position="relative">
             <SkeletonContent
@@ -262,13 +309,21 @@ export default function ProfileUserScreen({ route, navigation }) {
           </Box>
         ) : (
           <Box backgroundColor="white" position="relative">
-            <Image
-              alt="cover"
-              width="100%"
-              height={250}
-              resizeMode="cover"
-              source={{ uri: user.coverImage }}
-            ></Image>
+            <Pressable
+              onPress={() => {
+                setShowImage(user.coverImage);
+                setModalVisible(true);
+              }}
+            >
+              <Image
+                alt="cover"
+                width="100%"
+                height={250}
+                resizeMode="cover"
+                source={{ uri: user.coverImage }}
+              ></Image>
+            </Pressable>
+
             <Flex
               marginTop={-75}
               flex={1}
@@ -321,16 +376,24 @@ export default function ProfileUserScreen({ route, navigation }) {
                   </Box>
                 </Pressable>
               )}
-              <Image
-                borderRadius={75}
-                borderWidth={10}
-                borderColor="white"
-                alt="cover"
-                width={150}
-                height={150}
-                resizeMode="cover"
-                source={{ uri: user.avatar }}
-              ></Image>
+              <Pressable
+                onPress={() => {
+                  setShowImage(user.avatar);
+                  setModalVisible(true);
+                }}
+              >
+                <Image
+                  borderRadius={75}
+                  borderWidth={10}
+                  borderColor="white"
+                  alt="cover"
+                  width={150}
+                  height={150}
+                  resizeMode="cover"
+                  source={{ uri: user.avatar }}
+                ></Image>
+              </Pressable>
+
               <Box
                 width={100}
                 paddingX={2}
@@ -478,8 +541,15 @@ export default function ProfileUserScreen({ route, navigation }) {
                 </Pressable>
               )}
               <Pressable
-                onPress={() => {
-                  navigation.navigate('ScreenChat', { user });
+                onPress={async () => {
+                  const updateRoom = await axios.post(
+                    `http:obnd.me/update-room`,
+                    {
+                      user1: userData.account,
+                      user2: user.account,
+                    }
+                  );
+                  navigation.navigate('ScreenChat', { user: user.account });
                 }}
               >
                 <Center
@@ -594,7 +664,7 @@ export default function ProfileUserScreen({ route, navigation }) {
                         columns={3}
                         spacing={3}
                       >
-                        {listPost.map((_item, index) => {
+                        {listPost.reverse().map((_item, index) => {
                           return (
                             <Pressable
                               key={index}

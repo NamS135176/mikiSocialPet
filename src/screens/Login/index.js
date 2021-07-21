@@ -158,6 +158,7 @@ export default function LoginScreen({ navigation }) {
                 followed: user.followed,
                 liked: user.liked,
                 time: user.time,
+                roomChat: user.roomChat,
               },
             });
             navigation.reset({

@@ -19,7 +19,7 @@ export default function Index({ navigation, route }) {
   });
 
   const { displayName: name, avatar, account, time } = user;
-  const room = route.params.user.account;
+  const room = route.params.user;
 
   const [receiveMessage, setReceiveMessage] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
@@ -68,7 +68,7 @@ export default function Index({ navigation, route }) {
   }, [toggle]);
 
   return (
-    <Box backgroundColor={toggle ? 'white' : 'black'} flex={1}>
+    <Box backgroundColor={toggle ? '#FFA788' : 'black'} flex={1}>
       <Spinner
         //visibility of Overlay Loading Spinner
         visible={isLoading}

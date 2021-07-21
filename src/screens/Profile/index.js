@@ -15,9 +15,13 @@ import { useFonts } from 'expo-font';
 import { useSelector, useDispatch } from 'react-redux';
 import { Ionicons } from '@expo/vector-icons';
 import * as ImagePicker from 'expo-image-picker';
-import { Dimensions } from 'react-native';
+import { Dimensions, TouchableOpacity } from 'react-native';
 import { firebaseApp, storage } from '../../commonComponents/FirebaseConfig';
 import axios from 'axios';
+import Modal from 'react-native-modal';
+import * as FileSystem from 'expo-file-system';
+import * as Permissions from 'expo-permissions';
+import * as MediaLibrary from 'expo-media-library';
 export default function Profile({ navigation }) {
   let [fontsLoaded] = useFonts({
     Gabriola: require('../../../assets/fonts/Gabriola.ttf'),
@@ -49,6 +53,26 @@ export default function Profile({ navigation }) {
   const myPost = useSelector((state) => {
     return state.myPost;
   });
+  const [isModalVisible, setModalVisible] = useState(false);
+  const [showImage, setShowImage] = useState('');
+  const saveFile = async (fileUri) => {
+    const { status } = await Permissions.askAsync(Permissions.MEDIA_LIBRARY);
+    if (status === 'granted') {
+      const asset = await MediaLibrary.createAssetAsync(fileUri);
+      await MediaLibrary.createAlbumAsync('Download', asset);
+      Alert.alert('Save Image Successfully');
+    }
+  };
+  const downloadImage = () => {
+    let fileUri = FileSystem.documentDirectory + 'robo.jpg';
+    FileSystem.downloadAsync(showImage, fileUri)
+      .then(({ uri }) => {
+        saveFile(uri);
+      })
+      .catch((error) => {
+        console.error(error);
+      });
+  };
   const [cover, setCover] = useState(userData.coverImage);
   const [avatar, setAvatar] = useState(userData.avatar);
   const pickImage = async () => {
@@ -205,6 +229,29 @@ export default function Profile({ navigation }) {
   } else {
     return (
       <ScrollView backgroundColor="white">
+        <Modal
+          style={{
+            justifyContent: 'center',
+            alignItems: 'center',
+          }}
+          animationIn="slideInUp"
+          coverScreen={true}
+          animationInTiming={2000}
+          backdropOpacity={0.5}
+          onBackdropPress={() => setModalVisible(false)}
+          onSwipeComplete={() => setModalVisible(false)}
+          onBackButtonPress={() => {
+            setModalVisible(false);
+          }}
+          isVisible={isModalVisible}
+        >
+          <TouchableOpacity onPress={downloadImage}>
+            <Image
+              source={{ uri: showImage }}
+              style={{ width: 300, height: 200 }}
+            />
+          </TouchableOpacity>
+        </Modal>
         <Box backgroundColor="white" position="relative">
           <Pressable
             onPress={handleUpdateCover}
@@ -217,13 +264,20 @@ export default function Profile({ navigation }) {
               <Ionicons name="image" size={30} color="white"></Ionicons>
             </Box>
           </Pressable>
-          <Image
-            alt="cover"
-            width="100%"
-            height={250}
-            resizeMode="cover"
-            source={{ uri: cover }}
-          ></Image>
+          <Pressable
+            onPress={() => {
+              setShowImage(cover);
+              setModalVisible(true);
+            }}
+          >
+            <Image
+              alt="cover"
+              width="100%"
+              height={250}
+              resizeMode="cover"
+              source={{ uri: cover }}
+            ></Image>
+          </Pressable>
 
           <Center marginTop={-75} zIndex={3}>
             <Pressable onPress={handleUpdateAvatar}>
@@ -474,7 +528,7 @@ export default function Profile({ navigation }) {
                     </Text>
                   ) : (
                     <SimpleGrid marginX={8} marginY={5} columns={3} spacing={3}>
-                      {myPost.listMyPost.map((_item, index) => {
+                      {myPost.listMyPost.reverse().map((_item, index) => {
                         return (
                           <Pressable
                             key={index}
