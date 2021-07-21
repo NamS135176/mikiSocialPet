@@ -28,6 +28,10 @@ export default function MainScreen({ navigation }) {
             type: "GET_FOLLOW_POST",
             payload: userData.account
         })
+        dispatch({
+            type: "GET_CURRENT_USER",
+            payload: userData.account
+        })
     })
     return (
         <Tab.Navigator

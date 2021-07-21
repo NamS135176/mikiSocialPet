@@ -20,11 +20,17 @@ const followPostReducer = ( data = initState,action) => {
                 loading:true
             }
         }
-        case 'UPDATE_LIKE_VIEW':{
+        case 'UPDATE_LIKE_VIEW_SUCCESS' : {
             return {
                 ...data,
                 loading:false,
                 listFollowPost: action.payload.listFollowPost
+            }
+        }
+        case 'UPDATE_LIKE_VIEW':{
+            return {
+                ...data,
+                loading:true
             }
         }
         default: return data

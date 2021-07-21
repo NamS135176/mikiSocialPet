@@ -123,22 +123,22 @@ export default function PostDetailScreen({ route, navigation }) {
     }
 
     const handleLike = async () => {
-        dispatch({
-            type: "SET_USER_INFO",
-            payload: {
-                account: userData.account,
-                displayName: userData.displayName,
-                typePet: userData.typePet,
-                birthDay: userData.birthDay,
-                sex: userData.sex,
-                owner: userData.owner,
-                avatar: userData.avatar,
-                coverImage: userData.coverImage,
-                followMe: userData.followMe,
-                followed: userData.followed,
-                liked: [...userData.liked, currentPost.currentPost._id],
-            }
-        })
+        // dispatch({
+        //     type: "SET_USER_INFO",
+        //     payload: {
+        //         account: userData.account,
+        //         displayName: userData.displayName,
+        //         typePet: userData.typePet,
+        //         birthDay: userData.birthDay,
+        //         sex: userData.sex,
+        //         owner: userData.owner,
+        //         avatar: userData.avatar,
+        //         coverImage: userData.coverImage,
+        //         followMe: userData.followMe,
+        //         followed: userData.followed,
+        //         liked: [...userData.liked, currentPost.currentPost._id],
+        //     }
+        // })
         dispatch({
             type: "UPDATE_LIKE",
             payload: {
@@ -169,29 +169,29 @@ export default function PostDetailScreen({ route, navigation }) {
         )
     }
     const handleDislike = async () => {
-        const newLiked = userData.liked.filter(item => {
-            return item == currentPost.currentPost._id
-        })
-        const index = userData.liked.indexOf(newLiked[0])
-        const removeList = userData.liked
-        removeList.splice(index,1)
+        // const newLiked = userData.liked.filter(item => {
+        //     return item == currentPost.currentPost._id
+        // })
+        // const index = userData.liked.indexOf(newLiked[0])
+        // const removeList = userData.liked
+        // removeList.splice(index,1)
         
-        dispatch({
-            type: "SET_USER_INFO",
-            payload: {
-                account: userData.account,
-                displayName: userData.displayName,
-                typePet: userData.typePet,
-                birthDay: userData.birthDay,
-                sex: userData.sex,
-                owner: userData.owner,
-                avatar: userData.avatar,
-                coverImage: userData.coverImage,
-                followMe: userData.followMe,
-                followed: userData.followed,
-                liked: removeList
-            }
-        })
+        // dispatch({
+        //     type: "SET_USER_INFO",
+        //     payload: {
+        //         account: userData.account,
+        //         displayName: userData.displayName,
+        //         typePet: userData.typePet,
+        //         birthDay: userData.birthDay,
+        //         sex: userData.sex,
+        //         owner: userData.owner,
+        //         avatar: userData.avatar,
+        //         coverImage: userData.coverImage,
+        //         followMe: userData.followMe,
+        //         followed: userData.followed,
+        //         liked: removeList
+        //     }
+        // })
         const newLikedPost = currentPost.currentPost.liked.filter(item => {
             return item == userData.account
         })
@@ -399,7 +399,9 @@ export default function PostDetailScreen({ route, navigation }) {
                                     <Flex justifyContent='space-between' alignItems='center' flexDirection='row'>
                                         <Flex flexDirection='row' alignItems='center'>
                                             {
-                                                userData.liked.includes(currentPost.currentPost._id) ?
+                                               currentPost.currentPost.liked.filter(item => {
+                                                return item == userData.account
+                                            }).length != 0 ?
                                                     <Pressable onPress={handleDislike}>
                                                         <Ionicons name='heart' color='red' size={30}></Ionicons>
                                                     </Pressable>

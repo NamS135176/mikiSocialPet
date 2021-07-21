@@ -21,8 +21,18 @@ function* getPostFollow(action) {
   });
 }
 
+function* updateLike(action){
+  yield put({
+    type: 'UPDATE_LIKE_VIEW_SUCCESS',
+    payload: {
+      listFollowPost : action.payload.listFollowPost
+    }
+  });
+}
+
 function* followPostSaga() {
   yield takeLatest('GET_FOLLOW_POST', getPostFollow);
+  yield takeLatest('UPDATE_LIKE_VIEW', updateLike)
 }
 
 export default followPostSaga;

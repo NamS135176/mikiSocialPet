@@ -48,16 +48,17 @@ export default function PostDetailSecondScreen({ route, navigation }) {
                     loading: false,
                     currentPost: JSON.parse(data)
                 })
+                console.log(JSON.parse(data));
             })
             .catch(err => {
                 Alert.alert(
                     "Xin lỗi bạn",
                     "Bài viết này đã bị xóa hoặc không thể hiển thị đối với bạn!",
                     [
-                     
-                      { text: "OK", onPress: () => navigation.goBack() }
+
+                        { text: "OK", onPress: () => navigation.goBack() }
                     ]
-                  );
+                );
             })
     }, [])
     // const currentPost = useSelector((state) => {
@@ -87,7 +88,7 @@ export default function PostDetailSecondScreen({ route, navigation }) {
                 .then((result) => {
                     dispatch({
                         type: 'GET_FOLLOW_POST',
-                        payload:userData.account
+                        payload: userData.account
                     })
                     setIsLoading(false)
                     fetch(`http://obnd.me/post-api/get-post/${item}`, {
@@ -133,38 +134,7 @@ export default function PostDetailSecondScreen({ route, navigation }) {
     }
 
     const handleLike = async () => {
-        dispatch({
-            type: "SET_USER_INFO",
-            payload: {
-                account: userData.account,
-                displayName: userData.displayName,
-                typePet: userData.typePet,
-                birthDay: userData.birthDay,
-                sex: userData.sex,
-                owner: userData.owner,
-                avatar: userData.avatar,
-                coverImage: userData.coverImage,
-                followMe: userData.followMe,
-                followed: userData.followed,
-                liked: [...userData.liked, currentPost.currentPost._id],
-            }
-        })
-
         setCurrentPost({ ...currentPost, currentPost: { ...currentPost.currentPost, liked: [...currentPost.currentPost.liked, userData.account] } })
-
-        // const thisPost = followPost.listFollowPost.filter(item => {
-        //     return item._id == currentPost.currentPost._id
-        // })
-        // const index = followPost.listFollowPost.indexOf(thisPost[0])
-        // thisPost[0].liked.push({ account: userData.account })
-        // const updated = followPost.listFollowPost
-        // updated[index] = thisPost[0]
-        // console.log(updated);
-        dispatch({
-            type: 'GET_FOLLOW_POST',
-            payload:userData.account
-        })
-
         const data = await fetch('http://obnd.me/post-api/update-like', {
             method: 'POST',
             headers: {
@@ -187,30 +157,12 @@ export default function PostDetailSecondScreen({ route, navigation }) {
             })
         }
         )
+        dispatch({
+            type: 'GET_FOLLOW_POST',
+            payload: userData.account
+        })
     }
     const handleDislike = async () => {
-        const newLiked = userData.liked.filter(item => {
-            return item == currentPost.currentPost._id
-        })
-        const index = userData.liked.indexOf(newLiked[0])
-        const removeList = userData.liked
-        removeList.splice(index, 1)
-        dispatch({
-            type: "SET_USER_INFO",
-            payload: {
-                account: userData.account,
-                displayName: userData.displayName,
-                typePet: userData.typePet,
-                birthDay: userData.birthDay,
-                sex: userData.sex,
-                owner: userData.owner,
-                avatar: userData.avatar,
-                coverImage: userData.coverImage,
-                followMe: userData.followMe,
-                followed: userData.followed,
-                liked: removeList
-            }
-        })
         const newLikedPost = currentPost.currentPost.liked.filter(item => {
             return item == userData.account
         })
@@ -219,11 +171,11 @@ export default function PostDetailSecondScreen({ route, navigation }) {
         removePost.splice(i, 1)
         setCurrentPost({ ...currentPost, currentPost: { ...currentPost.currentPost, liked: removePost } })
 
-        const thisPost = followPost.listFollowPost.filter(item => {
-            return item._id == currentPost.currentPost._id
-        })
-        const id = followPost.listFollowPost.indexOf(thisPost[0])
-        
+        // const thisPost = followPost.listFollowPost.filter(item => {
+        //     return item._id == currentPost.currentPost._id
+        // })
+        // const id = followPost.listFollowPost.indexOf(thisPost[0])
+
         // const removeTarget = thisPost[0].liked.filter(item => {
         //     return item.account == userData.account
         // })
@@ -232,10 +184,7 @@ export default function PostDetailSecondScreen({ route, navigation }) {
         // const updated = followPost.listFollowPost
         // updated[id] = thisPost[0]
         // console.log(updated);
-        dispatch({
-            type: 'GET_FOLLOW_POST',
-            payload:userData.account
-        })
+
 
         const data = await fetch('http://obnd-miki.herokuapp.com/post-api/update-like', {
             method: 'POST',
@@ -259,6 +208,10 @@ export default function PostDetailSecondScreen({ route, navigation }) {
             })
         }
         )
+        dispatch({
+            type: 'GET_FOLLOW_POST',
+            payload: userData.account
+        })
     }
     if (!fontsLoaded) {
         return <></>
@@ -394,7 +347,9 @@ export default function PostDetailSecondScreen({ route, navigation }) {
                                     <Flex justifyContent='space-between' alignItems='center' flexDirection='row'>
                                         <Flex flexDirection='row' alignItems='center'>
                                             {
-                                                userData.liked.includes(currentPost.currentPost._id) ?
+                                                currentPost.currentPost.liked.filter(item => {
+                                                    return item == userData.account
+                                                }).length != 0 ?
                                                     <Pressable onPress={handleDislike}>
                                                         <Ionicons name='heart' color='red' size={30}></Ionicons>
                                                     </Pressable>

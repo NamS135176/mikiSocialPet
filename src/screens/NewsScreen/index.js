@@ -27,6 +27,8 @@ export default function NewsScreen({ navigation }) {
     const followPost = useSelector((state) => {
         return state.followPost;
     });
+
+
     if (!fontsLoaded) {
         return <></>
     }
@@ -241,12 +243,91 @@ export default function NewsScreen({ navigation }) {
                                                                             <Flex justifyContent='space-between' alignItems='center' flexDirection='row'>
                                                                                 <Flex flexDirection='row' alignItems='center'>
                                                                                     {
-                                                                                        userData.liked.includes(item._id) ?
-                                                                                            <Pressable>
+                                                                                        item.liked.filter(item => {
+                                                                                            console.log(item);
+                                                                                            return item == userData.account
+                                                                                        }).length != 0 ?
+                                                                                            <Pressable onPress={async () => {
+
+                                                                                                const index = followPost.listFollowPost.indexOf(item)
+                                                                                                // console.log(index);
+                                                                                                const listPost = followPost.listFollowPost
+
+                                                                                                const thisLike = listPost[index].liked.filter(item => {
+                                                                                                    return item.account == userData.account
+                                                                                                })[0]
+                                                                                                const  i = listPost[index].liked.indexOf(thisLike)
+                                                                                                listPost[index].liked.splice(i,1)
+                                                                                                console.log(listPost[index]);
+                                                                                                dispatch({
+                                                                                                    type: "UPDATE_LIKE_VIEW",
+                                                                                                    payload: {
+                                                                                                        listFollowPost: listPost
+                                                                                                    }
+                                                                                                })
+
+                                                                                                const data = await fetch('http://obnd.me/post-api/update-like', {
+                                                                                                    method: 'POST',
+                                                                                                    headers: {
+                                                                                                        'Content-Type': 'application/json'
+                                                                                                    },
+                                                                                                    body: JSON.stringify({
+                                                                                                        id: item._id,
+                                                                                                        account: userData.account
+                                                                                                    })
+                                                                                                }
+                                                                                                )
+                                                                                                const res = await fetch('http://obnd.me/update-like', {
+                                                                                                    method: 'POST',
+                                                                                                    headers: {
+                                                                                                        'Content-Type': 'application/json'
+                                                                                                    },
+                                                                                                    body: JSON.stringify({
+                                                                                                        account: userData.account,
+                                                                                                        idLiked: item._id,
+                                                                                                    })
+                                                                                                }
+                                                                                                )
+                                                                                            }}>
                                                                                                 <Ionicons name='heart' color='red' size={30}></Ionicons>
                                                                                             </Pressable>
                                                                                             :
-                                                                                            <Pressable>
+                                                                                            <Pressable onPress={async () => {
+                                                                                                const index = followPost.listFollowPost.indexOf(item)
+                                                                                                // console.log(index);
+                                                                                                const listPost = followPost.listFollowPost
+
+                                                                                                listPost[index].liked.push(userData.account)
+                                                                                                console.log(listPost[index]);
+                                                                                                dispatch({
+                                                                                                    type: "UPDATE_LIKE_VIEW",
+                                                                                                    payload: {
+                                                                                                        listFollowPost: listPost
+                                                                                                    }
+                                                                                                })
+                                                                                                const data = await fetch('http://obnd.me/post-api/update-like', {
+                                                                                                    method: 'POST',
+                                                                                                    headers: {
+                                                                                                        'Content-Type': 'application/json'
+                                                                                                    },
+                                                                                                    body: JSON.stringify({
+                                                                                                        id: item._id,
+                                                                                                        account: userData.account
+                                                                                                    })
+                                                                                                }
+                                                                                                )
+                                                                                                const res = await fetch('http://obnd.me/update-like', {
+                                                                                                    method: 'POST',
+                                                                                                    headers: {
+                                                                                                        'Content-Type': 'application/json'
+                                                                                                    },
+                                                                                                    body: JSON.stringify({
+                                                                                                        account: userData.account,
+                                                                                                        idLiked: item._id,
+                                                                                                    })
+                                                                                                }
+                                                                                                )
+                                                                                            }}>
                                                                                                 <Ionicons name='heart-outline' color='black' size={30}></Ionicons>
                                                                                             </Pressable>
                                                                                     }
