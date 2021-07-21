@@ -10,7 +10,8 @@ import { Ionicons } from '@expo/vector-icons';
 import Spinner from 'react-native-loading-spinner-overlay';
 import SkeletonContent from 'react-native-skeleton-content';
 import { width } from 'styled-system';
-
+import moment from 'moment';
+import { Share } from 'react-native';
 export default function PostDetailSecondScreen({ route, navigation }) {
     const followPost = useSelector((state) => {
         return state.followPost;
@@ -65,7 +66,25 @@ export default function PostDetailSecondScreen({ route, navigation }) {
     //     return state.currentPost;
     // });
     // console.log(currentPost);
-
+    const onShare = async () => {
+        try {
+            const result = await Share.share({
+                message:
+                    currentPost.currentPost.textDescription,
+            });
+            if (result.action === Share.sharedAction) {
+                if (result.activityType) {
+                    // shared with activity type of result.activityType
+                } else {
+                    // shared
+                }
+            } else if (result.action === Share.dismissedAction) {
+                // dismissed
+            }
+        } catch (error) {
+            alert(error.message);
+        }
+    };
     const [commentText, setCommentText] = useState('')
     const handleChangeComment = txt => setCommentText(txt)
     const handlePostComment = async () => {
@@ -284,7 +303,10 @@ export default function PostDetailSecondScreen({ route, navigation }) {
                                             <Text style={{ width: 70, height: 15, marginTop: 5 }}> </Text>
                                         </SkeletonContent> :
                                             <Text style={{ fontFamily: 'Nunito', fontSize: 15 }}>
-                                                {new XDate(Date.parse(currentPost.currentPost.created_date)).toString('dd/MM/yyyy')}
+                                                {/* {new XDate(Date.parse(currentPost.currentPost.created_date)).toString('dd/MM/yyyy')} */}
+                                                {
+                                                    moment(Date.parse(currentPost.currentPost.created_date)).fromNow()
+                                                }
                                             </Text>
                                     }
 
@@ -364,9 +386,11 @@ export default function PostDetailSecondScreen({ route, navigation }) {
                                             <Ionicons name='chatbox-ellipses-outline' color='black' size={30}></Ionicons>
                                             <Text style={{ fontFamily: "NunitoSemi" }}>{currentPost.currentPost.comments.length}</Text>
                                         </Flex>
-                                        <Flex flexDirection='row' alignItems='center'>
+                                      <Pressable onPress={onShare}>
+                                      <Flex flexDirection='row' alignItems='center'>
                                             <Ionicons name='share-social' color='black' size={30}></Ionicons>
                                         </Flex>
+                                      </Pressable>
                                     </Flex>
                             }
                         </Box>

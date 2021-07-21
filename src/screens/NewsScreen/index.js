@@ -8,6 +8,8 @@ import SkeletonContent from 'react-native-skeleton-content';
 import { Dimensions } from 'react-native';
 import XDate from './xdate'
 import { Alert } from 'react-native';
+import moment from 'moment';
+import { Share } from 'react-native';
 export default function NewsScreen({ navigation }) {
     let [fontsLoaded] = useFonts({
         'Gabriola': require('../../../assets/fonts/Gabriola.ttf'),
@@ -39,7 +41,7 @@ export default function NewsScreen({ navigation }) {
                 <Flex flexDirection='row' justifyContent='space-between' alignItems='center'>
                     <Text style={{ fontSize: 35, fontFamily: "Gabriola" }}>Miki</Text>
                     <Flex flexDirection='row' alignItems='center' justifyContent='flex-end'>
-                        <Pressable>
+                        <Pressable onPress={() => { navigation.navigate('Search') }}>
                             <Ionicons name='search' size={30} color='black'></Ionicons>
                         </Pressable>
                         <Pressable marginLeft={5}>
@@ -191,7 +193,10 @@ export default function NewsScreen({ navigation }) {
                                                                                         {item.ownerId.account}
                                                                                     </Text>
                                                                                     <Text style={{ fontFamily: 'Nunito', fontSize: 15 }}>
-                                                                                        {new XDate(Date.parse(item.created_date)).toString('dd/MM/yyyy')}
+                                                                                        {/* {new XDate(Date.parse(item.created_date)).toString('dd/MM/yyyy')} */}
+                                                                                        {
+                                                                                            moment(Date.parse(item.created_date)).fromNow()
+                                                                                        }
                                                                                     </Text>
                                                                                 </Box>
                                                                             </Flex>
@@ -256,8 +261,8 @@ export default function NewsScreen({ navigation }) {
                                                                                                 const thisLike = listPost[index].liked.filter(item => {
                                                                                                     return item.account == userData.account
                                                                                                 })[0]
-                                                                                                const  i = listPost[index].liked.indexOf(thisLike)
-                                                                                                listPost[index].liked.splice(i,1)
+                                                                                                const i = listPost[index].liked.indexOf(thisLike)
+                                                                                                listPost[index].liked.splice(i, 1)
                                                                                                 console.log(listPost[index]);
                                                                                                 dispatch({
                                                                                                     type: "UPDATE_LIKE_VIEW",
@@ -339,9 +344,30 @@ export default function NewsScreen({ navigation }) {
                                                                                         <Text style={{ fontFamily: "NunitoSemi" }}>{item.comments.length}</Text>
                                                                                     </Flex>
                                                                                 </Pressable>
-                                                                                <Flex flexDirection='row' alignItems='center'>
-                                                                                    <Ionicons name='share-social' color='black' size={30}></Ionicons>
-                                                                                </Flex>
+                                                                                <Pressable onPress={async () => {
+                                                                                    try {
+                                                                                        const result = await Share.share({
+                                                                                            message:
+                                                                                                item.textDescription,
+                                                                                        });
+                                                                                        if (result.action === Share.sharedAction) {
+                                                                                            if (result.activityType) {
+                                                                                                // shared with activity type of result.activityType
+                                                                                            } else {
+                                                                                                // shared
+                                                                                            }
+                                                                                        } else if (result.action === Share.dismissedAction) {
+                                                                                            // dismissed
+                                                                                        }
+                                                                                    } catch (error) {
+                                                                                        alert(error.message);
+                                                                                    }
+                                                                                }}>
+                                                                                    <Flex flexDirection='row' alignItems='center'>
+                                                                                        <Ionicons name='share-social' color='black' size={30}></Ionicons>
+                                                                                    </Flex>
+                                                                                </Pressable>
+
                                                                             </Flex>
                                                                         </Box>
                                                                     </Center>
@@ -358,7 +384,7 @@ export default function NewsScreen({ navigation }) {
                         }
                     </Box>
                 </ScrollView>
-            </Box>
+            </Box >
         )
     }
 }

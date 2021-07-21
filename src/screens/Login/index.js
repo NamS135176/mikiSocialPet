@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useCallback } from 'react';
-import { Button, View, StyleSheet, ActivityIndicator, Modal, Text, ImageBackground, Image, TextInput, ScrollView, KeyboardAvoidingView } from 'react-native';
+import { Button, View, Alert,StyleSheet, ActivityIndicator, Modal, Text, ImageBackground, Image, TextInput, ScrollView, KeyboardAvoidingView } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import SvgUri from 'react-native-svg-uri';
@@ -119,8 +119,10 @@ export default function LoginScreen({ navigation }) {
                 .then(res => res.text())
                 .then(async result => {
                     setModalVisible(false)
-                    console.log(result);
                     const data = JSON.parse(result)
+                    if(data.statas){
+                        Alert.alert("Tài khoản của bạn đã bị khóa! Vui lòng liên hệ quản trị viên.")
+                    }
                     if (data.user.displayName == "") {
                         // await AsyncStorage.setItem('userToken',data.token)
                         // navigation.reset({

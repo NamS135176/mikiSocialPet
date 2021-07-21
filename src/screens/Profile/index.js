@@ -217,14 +217,15 @@ export default function Profile({ navigation }) {
                         </Center>
                     </Flex>
                     <Flex zIndex={1} flexDirection='row' justifyContent='space-between'>
-                        <Center borderRightWidth={2} borderColor='#ccc' marginLeft={-10} flex={1} paddingTop={5}>
+                        <Center paddingLeft={2} borderRightWidth={2} borderColor='#ccc' marginLeft={-10} flex={1} paddingTop={5}>
                             <Text style={{ fontSize: 25, fontFamily: 'NunitoExBold' }}>
                                 {userData.account}
+                                {/* àhgasdhfgsadfhjsfg */}
                             </Text>
 
                         </Center>
-                        <Center borderRightWidth={2} borderColor='#ccc' marginRight={-10} flex={1} paddingTop={5}>
-                            <Text style={{ fontSize: 25, fontFamily: 'NunitoExBold' }}>
+                        <Center paddingLeft={2}  borderColor='#ccc' marginRight={-10} flex={1} paddingTop={5}>
+                            <Text style={{ fontSize: 25, fontFamily: 'NunitoExBold', marginRight:10, flexWrap:'wrap'}}>
                                 {userData.displayName}
                             </Text>
                         </Center>
@@ -292,7 +293,7 @@ export default function Profile({ navigation }) {
                                       
                                             <SimpleGrid marginX={8} marginY={5} columns={3} spacing={3}>
                                             {myPost.listMyPost.map((_item, index) => {
-                                                return <Pressable onPress={() => {navigation.navigate('PostDetail',{item:_item._id})}} width={Dimensions.get('window').width/4} height={Dimensions.get('window').width/4} margin={2}>
+                                                return <Pressable key={index} onPress={() => {navigation.navigate('PostDetail',{item:_item._id})}} width={Dimensions.get('window').width/4} height={Dimensions.get('window').width/4} margin={2}>
                                                     <Image borderRadius={20} alt='img' width='100%' height='100%' source={{ uri: _item.imgUrl }}></Image>
                                                 </Pressable>
                                             })}

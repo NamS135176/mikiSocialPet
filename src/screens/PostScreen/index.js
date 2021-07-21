@@ -6,9 +6,10 @@ import { useFonts } from 'expo-font';
 import { useSelector, useDispatch } from 'react-redux';
 import { firebaseApp, storage } from '../../commonComponents/FirebaseConfig';
 import Spinner from 'react-native-loading-spinner-overlay'
+import { listTag } from '../../hashData/Tags';
 export default function PostScreen({ navigation }) {
 
-    
+
 
     const userData = useSelector((state) => {
         return state.userInfo;
@@ -27,18 +28,7 @@ export default function PostScreen({ navigation }) {
     const [modalContent, setModalContent] = useState('')
     const [textContent, setTextContent] = useState('')
     const [isLoading, setIsLoading] = useState(false)
-    const listTag = [
-        '#motngaydeptroi',
-        '#chuyenchomeo',
-        '#vuice',
-        '#meovodich',
-        '#chotungtang',
-        '#thattuyetvoi',
-        '#chamsoc',
-        '#chiase',
-        '#tips',
-        '#canhbao'
-    ]
+
     const pickImage = async () => {
         let result = await ImagePicker.launchImageLibraryAsync({
             mediaTypes: ImagePicker.MediaTypeOptions.All,
@@ -58,7 +48,7 @@ export default function PostScreen({ navigation }) {
     const uploadImage = async (uri, imageName) => {
         const res = await fetch(uri);
         const blob = await res.blob();
-        let ref = storage.ref().child('posts/'+imageName)
+        let ref = storage.ref().child('posts/' + imageName)
         return ref.put(blob);
     }
 
@@ -161,27 +151,23 @@ export default function PostScreen({ navigation }) {
                             }</Text>
                         </Box>
                     </Box>
-                    <ScrollView padding={5} horizontal={true}>
+                        <Flex padding={5} paddingRight={5} flexDirection='row' flexWrap='wrap'>
                         {
-                            listTag.map(item => {
-                                return (
-                                    <Pressable onPress={() => {
-                                        console.log('dfssdf');
-                                        if (!tags.includes(item)) {
-                                            setTags([...tags, item])
-                                            setDisplayTag(`${displayTag} ${item}`)
-                                        }
-                                    }}>
-                                        <Box marginRight={2} paddingY={2} paddingX={3} borderRadius={10} backgroundColor='#ddd'>
-                                            <Text style={{ fontFamily: 'Nunito' }}>{item}</Text>
-                                        </Box>
-                                    </Pressable>
-                                )
+                            listTag.map((item, index) => {
+                                return <Pressable key={index} onPress={() => {
+                                    console.log('dfssdf');
+                                    if (!tags.includes(item)) {
+                                        setTags([...tags, item])
+                                        setDisplayTag(`${displayTag} ${item}`)
+                                    }
+                                }}>
+                                    <Box marginRight={3} marginBottom={3} paddingX={3} paddingY={2} backgroundColor='#ccc' borderRadius={10} key={index}>
+                                        <Text>{item}</Text>
+                                    </Box>
+                                </Pressable>
                             })
                         }
-
-                    </ScrollView>
-
+                        </Flex>
                 </ScrollView>
             </Box>
         )

@@ -11,7 +11,8 @@ import Spinner from 'react-native-loading-spinner-overlay';
 import SkeletonContent from 'react-native-skeleton-content';
 import { width } from 'styled-system';
 import profileStyles from './profileStyle';
-
+import moment from 'moment';
+import { Share } from 'react-native';
 export default function PostDetailScreen({ route, navigation }) {
     const w = Dimensions.get('window').width;
     const [isLoading, setIsLoading] = useState(false)
@@ -69,12 +70,30 @@ export default function PostDetailScreen({ route, navigation }) {
                 })
         }
     }
-
+    const onShare = async () => {
+        try {
+            const result = await Share.share({
+                message:
+                    currentPost.currentPost.textDescription,
+            });
+            if (result.action === Share.sharedAction) {
+                if (result.activityType) {
+                    // shared with activity type of result.activityType
+                } else {
+                    // shared
+                }
+            } else if (result.action === Share.dismissedAction) {
+                // dismissed
+            }
+        } catch (error) {
+            alert(error.message);
+        }
+    };
     const handleToProfile = () => {
         if (currentPost.currentPost.ownerId.account == userData.account) {
             navigation.navigate('Profile')
         }
-        else{
+        else {
             navigation.navigate('ProfileUser', { account: currentPost.currentPost.ownerId.account })
         }
     }
@@ -112,14 +131,14 @@ export default function PostDetailScreen({ route, navigation }) {
                 id: currentPost.currentPost._id
             })
         })
-        .then(res => res.text())
-        .then(data => {
-            setIsLoading(false)
-            navigation.reset({
-                index: 0,
-                routes: [{ name: 'Main' }],
-            });
-        })
+            .then(res => res.text())
+            .then(data => {
+                setIsLoading(false)
+                navigation.reset({
+                    index: 0,
+                    routes: [{ name: 'Main' }],
+                });
+            })
     }
 
     const handleLike = async () => {
@@ -175,7 +194,7 @@ export default function PostDetailScreen({ route, navigation }) {
         // const index = userData.liked.indexOf(newLiked[0])
         // const removeList = userData.liked
         // removeList.splice(index,1)
-        
+
         // dispatch({
         //     type: "SET_USER_INFO",
         //     payload: {
@@ -197,7 +216,7 @@ export default function PostDetailScreen({ route, navigation }) {
         })
         const i = currentPost.currentPost.liked.indexOf(newLikedPost[0])
         const removePost = currentPost.currentPost.liked
-        removePost.splice(i,1)
+        removePost.splice(i, 1)
         // console.log(removePost);
         // newLikedPost.pop()
         dispatch({
@@ -252,39 +271,42 @@ export default function PostDetailScreen({ route, navigation }) {
 
                         <Box borderColor="#ccc">
                             <Text onPress={handleReport} style={{ padding: 10, fontFamily: "NunitoSemi" }}>Báo cáo bài viết</Text>
-                            <Text style={{ padding: 10, fontFamily: "NunitoSemi" }}>Chỉnh sửa</Text>
+                            <Text onPress={() => {
+                                navigation.navigate('EditPost', { currentPost: currentPost })
+                                setShowModal(false)
+                            }} style={{ padding: 10, fontFamily: "NunitoSemi" }}>Chỉnh sửa</Text>
                             <Text onPress={handleDelete} style={{ padding: 10, fontFamily: "NunitoSemi" }}>Xóa bài viết</Text>
                         </Box>
                     </Box>
                 </Modal>
-                <Modal isOpen={showModalCf} onClose={() => {setShowModalCf(false)}}>
+                <Modal isOpen={showModalCf} onClose={() => { setShowModalCf(false) }}>
                     <Modal.Content maxWidth="80%">
-                        <Text style={{ fontSize: 23, paddingBottom: 20 , fontFamily:"NunitoExBold"}}>Xóa bài viết</Text>
-                        
-                            <Text style={{ paddingRight: 30, paddingTop: 20, paddingBottom: 35, fontFamily:"Nunito" }}>
-                                Bạn có chắc chắn muốn xóa bài viết?
-                            </Text>
-                        
+                        <Text style={{ fontSize: 23, paddingBottom: 20, fontFamily: "NunitoExBold" }}>Xóa bài viết</Text>
+
+                        <Text style={{ paddingRight: 30, paddingTop: 20, paddingBottom: 35, fontFamily: "Nunito" }}>
+                            Bạn có chắc chắn muốn xóa bài viết?
+                        </Text>
+
                         <Flex flexDirection="row" justifyContent="flex-end">
                             <Text
-                              onPress={() => {setShowModalCf(false)}}
+                                onPress={() => { setShowModalCf(false) }}
                                 style={{
                                     textAlign: 'right',
                                     paddingHorizontal: 15,
                                     paddingVertical: 20,
                                     color: '#2097f3',
-                                    fontFamily:"NunitoSemi"
+                                    fontFamily: "NunitoSemi"
                                 }}>
-                               Hủy
+                                Hủy
                             </Text>
                             <Text
-                               onPress={handleConfirmDelete}
+                                onPress={handleConfirmDelete}
                                 style={{
                                     textAlign: 'right',
                                     paddingHorizontal: 15,
                                     paddingVertical: 20,
                                     color: '#2097f3',
-                                    fontFamily:"NunitoSemi"
+                                    fontFamily: "NunitoSemi"
                                 }}>
                                 Xác nhận
                             </Text>
@@ -336,7 +358,10 @@ export default function PostDetailScreen({ route, navigation }) {
                                             <Text style={{ width: 70, height: 15, marginTop: 5 }}> </Text>
                                         </SkeletonContent> :
                                             <Text style={{ fontFamily: 'Nunito', fontSize: 15 }}>
-                                                {new XDate(Date.parse(currentPost.currentPost.created_date)).toString('dd/MM/yyyy')}
+                                                {/* {new XDate(Date.parse(currentPost.currentPost.created_date)).toString('dd/MM/yyyy')} */}
+                                                {
+                                                    moment(Date.parse(currentPost.currentPost.created_date)).fromNow()
+                                                }
                                             </Text>
                                     }
 
@@ -399,9 +424,9 @@ export default function PostDetailScreen({ route, navigation }) {
                                     <Flex justifyContent='space-between' alignItems='center' flexDirection='row'>
                                         <Flex flexDirection='row' alignItems='center'>
                                             {
-                                               currentPost.currentPost.liked.filter(item => {
-                                                return item == userData.account
-                                            }).length != 0 ?
+                                                currentPost.currentPost.liked.filter(item => {
+                                                    return item == userData.account
+                                                }).length != 0 ?
                                                     <Pressable onPress={handleDislike}>
                                                         <Ionicons name='heart' color='red' size={30}></Ionicons>
                                                     </Pressable>
@@ -416,9 +441,11 @@ export default function PostDetailScreen({ route, navigation }) {
                                             <Ionicons name='chatbox-ellipses-outline' color='black' size={30}></Ionicons>
                                             <Text style={{ fontFamily: "NunitoSemi" }}>{currentPost.currentPost.comments.length}</Text>
                                         </Flex>
-                                        <Flex flexDirection='row' alignItems='center'>
+                                       <Pressable onPress={onShare}>
+                                       <Flex flexDirection='row' alignItems='center'>
                                             <Ionicons name='share-social' color='black' size={30}></Ionicons>
                                         </Flex>
+                                       </Pressable>
                                     </Flex>
                             }
                         </Box>

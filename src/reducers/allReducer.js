@@ -3,11 +3,13 @@ import myPostReducer from "./myPostReducer";
 import currentPostReducer from "./currentPost";
 import followPostReducer from "./followPost";
 import currentUserReducer from "./currentUser";
+import postTagReducer from "./postTagReducer";
 import {combineReducers} from 'redux'
 export default combineReducers({
     userInfo:userInfo,
     myPost: myPostReducer,
     currentPost: currentPostReducer,
     followPost: followPostReducer,
-    currentUser: currentUserReducer
+    currentUser: currentUserReducer,
+    postTag:postTagReducer
 });

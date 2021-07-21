@@ -53,7 +53,17 @@ export default function ProfileUserScreen({ route, navigation }) {
                     })
 
             })
-           
+            .catch(err => {
+                Alert.alert(
+                    "Xin lỗi bạn",
+                    "Người dùng này không tồn tại hoặc đã bị khóa!",
+                    [
+
+                        { text: "OK", onPress: () => navigation.goBack() }
+                    ]
+                );
+            })
+
     }, [])
     const [status, setStatus] = useState(1)
     const [isImg, setIsImg] = useState(1)
@@ -276,12 +286,12 @@ export default function ProfileUserScreen({ route, navigation }) {
                                 </Center>
                             </Flex>
                             <Flex zIndex={1} flexDirection='row' justifyContent='space-between'>
-                                <Center borderRightWidth={2} borderColor='#ccc' marginLeft={-10} flex={1} paddingTop={5}>
+                                <Center paddingLeft={2} borderRightWidth={2} borderColor='#ccc' marginLeft={-10} flex={1} paddingTop={5}>
                                     <Text style={{ fontSize: 25, fontFamily: 'NunitoExBold' }}>
                                         {user.account}
                                     </Text>
                                 </Center>
-                                <Center borderRightWidth={2} borderColor='#ccc' marginRight={-10} flex={1} paddingTop={5}>
+                                <Center paddingLeft={2} borderRightWidth={2} borderColor='#ccc' marginRight={-10} flex={1} paddingTop={5}>
                                     <Text style={{ fontSize: 25, fontFamily: 'NunitoExBold' }}>
                                         {user.displayName}
                                     </Text>
