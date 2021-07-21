@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useRef } from 'react';
-import { Box, Text } from 'native-base';
+import { Box, Text, Flex, Pressable } from 'native-base';
 import io from 'socket.io-client';
 import { GiftedChat, Send } from 'react-native-gifted-chat';
 import Spinner from 'react-native-loading-spinner-overlay';
@@ -12,6 +12,8 @@ import * as MediaLibrary from 'expo-media-library';
 
 import { useSelector } from 'react-redux';
 import { Image, TouchableOpacity, Alert } from 'react-native';
+import { Ionicons } from '@expo/vector-icons';
+import moduleName from '';
 export default function Index({ navigation, route }) {
   const user = useSelector((state) => {
     return state.userInfo;
@@ -64,25 +66,8 @@ export default function Index({ navigation, route }) {
         setReceiveMessage((pre) => GiftedChat.append(pre, res));
         setIsLoading(false);
       });
-  }, []);
-  useEffect(() => {
-    navigation.setOptions({
-      title: 'Room: ' + room,
-      headerRight: () => (
-        <ToggleSwitch
-          isOn={toggle}
-          onColor="white"
-          offColor="black"
-          label="Switch mode"
-          labelStyle={{ color: 'black', fontWeight: '900' }}
-          size="medium"
-          onToggle={(isOn) => {
-            setToggle((toggle) => !toggle);
-          }}
-        />
-      ),
-    });
   }, [toggle]);
+
   return (
     <Box backgroundColor={toggle ? 'white' : 'black'} flex={1}>
       <Spinner
@@ -93,6 +78,34 @@ export default function Index({ navigation, route }) {
         //Text style of the Spinner Text
         textStyle={{ color: '#FFF' }}
       />
+      <Flex
+        direction="row"
+        alignItems="center"
+        justify="space-between"
+        style={{
+          marginTop: 20,
+          height: 50,
+          backgroundColor: 'white',
+          paddingHorizontal: 20,
+        }}
+      >
+        <Pressable onPress={() => {}}>
+          <Ionicons name="chevron-back" size={32} color="black" />
+        </Pressable>
+        <Box>
+          <ToggleSwitch
+            isOn={toggle}
+            onColor="white"
+            offColor="black"
+            label="Switch mode"
+            labelStyle={{ color: 'black', fontWeight: '900' }}
+            size="medium"
+            onToggle={(isOn) => {
+              setToggle((toggle) => !toggle);
+            }}
+          />
+        </Box>
+      </Flex>
       <GiftedChat
         isTyping={true}
         renderUsernameOnMessage

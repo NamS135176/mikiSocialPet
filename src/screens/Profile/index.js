@@ -166,7 +166,7 @@ export default function Profile({ navigation }) {
       //   const url = await ref.getDownloadURL();
       const url = 'http://obnd.me:8000/get/' + postA.data;
       const token = await AsyncStorage.getItem('userToken');
-      fetch('https://obnd-miki.herokuapp.com/update-account', {
+      fetch('http://obnd.me/update-account', {
         method: 'PATCH',
         headers: {
           'Content-Type': 'application/json',

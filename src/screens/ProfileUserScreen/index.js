@@ -38,7 +38,7 @@ export default function ProfileUserScreen({ route, navigation }) {
         account,
       });
       const posts = axios.get(
-        `http://obnd-miki.herokuapp.com/post-api/get-post-list-by-account/${account}`
+        `http:obnd.me/post-api/get-post-list-by-account/${account}`
       );
 
       Promise.all([u, posts]).then((values) => {
@@ -57,7 +57,7 @@ export default function ProfileUserScreen({ route, navigation }) {
   });
 
   const handleFollow = () => {
-    fetch('http://obnd-miki.herokuapp.com/update-followed', {
+    fetch('http://obnd.me/update-followed', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -97,7 +97,7 @@ export default function ProfileUserScreen({ route, navigation }) {
     });
   };
   const handleUnFollow = () => {
-    fetch('http://obnd-miki.herokuapp.com/update-followed', {
+    fetch('http://obnd.me/update-followed', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',

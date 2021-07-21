@@ -19,7 +19,7 @@ export default function () {
             uri: result.uri
         });
         try {
-            const res = await fetch('https://obnd-social-pet.herokuapp.com/signin', {
+            const res = await fetch('http://obnd.me/signin', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'

@@ -247,7 +247,7 @@ export default function PostDetailSecondScreen({ route, navigation }) {
     });
 
     const data = await fetch(
-      'http://obnd-miki.herokuapp.com/post-api/update-like',
+      'http://obnd.me/post-api/update-like',
       {
         method: 'POST',
         headers: {
