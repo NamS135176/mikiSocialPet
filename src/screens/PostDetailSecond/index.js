@@ -12,6 +12,7 @@ import SkeletonContent from 'react-native-skeleton-content';
 import { width } from 'styled-system';
 import moment from 'moment';
 import { Share } from 'react-native';
+import 'moment/locale/vi';
 export default function PostDetailSecondScreen({ route, navigation }) {
     const followPost = useSelector((state) => {
         return state.followPost;

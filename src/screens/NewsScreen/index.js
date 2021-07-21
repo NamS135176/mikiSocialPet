@@ -9,6 +9,7 @@ import { Dimensions } from 'react-native';
 import XDate from './xdate'
 import { Alert } from 'react-native';
 import moment from 'moment';
+import 'moment/locale/vi';
 import { Share } from 'react-native';
 export default function NewsScreen({ navigation }) {
     let [fontsLoaded] = useFonts({

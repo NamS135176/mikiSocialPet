@@ -13,6 +13,7 @@ import { width } from 'styled-system';
 import profileStyles from './profileStyle';
 import moment from 'moment';
 import { Share } from 'react-native';
+import 'moment/locale/vi';
 export default function PostDetailScreen({ route, navigation }) {
     const w = Dimensions.get('window').width;
     const [isLoading, setIsLoading] = useState(false)

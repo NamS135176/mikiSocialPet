@@ -6,6 +6,7 @@ import SkeletonContent from 'react-native-skeleton-content';
 import { Dimensions } from 'react-native';
 import { useSelector, useDispatch } from 'react-redux';
 import moment from 'moment';
+import 'moment/locale/vi';
 import { Share } from 'react-native';
 export default function NewsTagScreen({ route, navigation }) {
     const { tag } = route.params
