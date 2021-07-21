@@ -13,7 +13,6 @@ import * as MediaLibrary from 'expo-media-library';
 import { useSelector } from 'react-redux';
 import { Image, TouchableOpacity, Alert } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
-import moduleName from '';
 export default function Index({ navigation, route }) {
   const user = useSelector((state) => {
     return state.userInfo;
@@ -89,7 +88,12 @@ export default function Index({ navigation, route }) {
           paddingHorizontal: 20,
         }}
       >
-        <Pressable onPress={() => {}}>
+        <Pressable
+          onPress={() => {
+            console.log('abc');
+            navigation.goBack();
+          }}
+        >
           <Ionicons name="chevron-back" size={32} color="black" />
         </Pressable>
         <Box>
