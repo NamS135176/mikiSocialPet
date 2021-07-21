@@ -246,20 +246,17 @@ export default function PostDetailSecondScreen({ route, navigation }) {
       payload: userData.account,
     });
 
-    const data = await fetch(
-      'http://obnd.me/post-api/update-like',
-      {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          id: currentPost.currentPost._id,
-          account: userData.account,
-        }),
-      }
-    );
-    const res = await fetch('http://obnd-miki.herokuapp.com/update-like', {
+    const data = await fetch('http://obnd.me/post-api/update-like', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        id: currentPost.currentPost._id,
+        account: userData.account,
+      }),
+    });
+    const res = await fetch('http://obnd.me/update-like', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
