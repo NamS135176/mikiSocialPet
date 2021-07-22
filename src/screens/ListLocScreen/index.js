@@ -5,7 +5,6 @@ import { ScrollView } from 'react-native'
 import { Ionicons } from '@expo/vector-icons'
 export default function ListLocScreen({ route,navigation }) {
     const {type} = route.params
-    console.log(type);
     return (
         <Box paddingTop={10} flex={1} backgroundColor='white'>
             <Pressable onPress={() => { navigation.goBack() }}>

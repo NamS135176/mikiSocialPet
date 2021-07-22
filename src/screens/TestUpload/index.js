@@ -18,9 +18,8 @@ export default function () {
             type: result.type,
             uri: result.uri
         });
-        console.log(datas);
         try {
-            const res = await fetch('https://obnd-social-pet.herokuapp.com/signin', {
+            const res = await fetch('http://obnd.me/signin', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
@@ -40,7 +39,6 @@ export default function () {
             //     },
             //     body: datas
             // })
-            // console.log(res);
         } catch (error) {
             console.log(error);
         }

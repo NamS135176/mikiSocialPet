@@ -63,7 +63,7 @@ export default function FirstTimeStep2Screen({ route, navigation }) {
     const [modalSuccessVisible, setModalSuccessVisible] = useState(false);
     const dispatch = useDispatch();
 
-    console.log(petInfo);
+  
 
     const onChange = (event, selectedDate) => {
         const currentDate = selectedDate || date;
@@ -99,7 +99,7 @@ export default function FirstTimeStep2Screen({ route, navigation }) {
         else {
             setModalVisible(true)
 
-            console.log(token);
+         
             const res = fetch('http://obnd.me/update-account', {
                 method: 'PATCH',
                 headers: {

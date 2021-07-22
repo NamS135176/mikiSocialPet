@@ -4,7 +4,7 @@ const initState = {
 };
 
 const myPostReducer = ( data = initState,action) => {
-    console.log(action.coverImage);
+  
     switch(action.type){
         case 'GET_MY_POST_SUCCESS': {
             return{
