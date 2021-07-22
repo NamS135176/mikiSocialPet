@@ -19,6 +19,7 @@ export default function Index({ navigation, route }) {
   });
 
   const { displayName: name, avatar, account, time } = user;
+  console.log({ displayName: name, avatar, account, time });
   const room = route.params.user;
 
   const [receiveMessage, setReceiveMessage] = useState([]);
