@@ -6,6 +6,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import { Ionicons } from '@expo/vector-icons';
 import * as ImagePicker from 'expo-image-picker';
 import { Dimensions } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 import { firebaseApp, storage } from '../../commonComponents/FirebaseConfig';
 export default function Profile({ navigation }) {
     let [fontsLoaded] = useFonts({
@@ -183,7 +184,8 @@ export default function Profile({ navigation }) {
     }
     else {
         return (
-            <ScrollView backgroundColor='white'>
+        <SafeAreaView flex={1} backgroundColor='white'>
+             <ScrollView backgroundColor='white'>
                 <Box backgroundColor='white' position='relative'>
                     <Pressable onPress={handleUpdateCover} zIndex={100} position='absolute' top={10} left={3}>
                         <Box>
@@ -416,6 +418,7 @@ export default function Profile({ navigation }) {
                 });
             }}>sfsdfdf</Button> */}
             </ScrollView>
+        </SafeAreaView>
         )
     }
 }

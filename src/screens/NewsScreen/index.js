@@ -39,7 +39,7 @@ export default function NewsScreen({ navigation }) {
         return (
             <Box flex={1} paddingTop={45} backgroundColor='white' paddingX={5}>
                 {/* <Spinner visible={followPost.loading} textStyle={{ color: '#FFF' }} /> */}
-                <Flex flexDirection='row' justifyContent='space-between' alignItems='center'>
+                <Flex height={50} flexDirection='row' justifyContent='space-between' alignItems='center'>
                     <Text style={{ fontSize: 35, fontFamily: "Gabriola" }}>Miki</Text>
                     <Flex flexDirection='row' alignItems='center' justifyContent='flex-end'>
                         <Pressable onPress={() => { navigation.navigate('Search') }}>

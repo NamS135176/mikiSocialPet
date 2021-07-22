@@ -4,6 +4,7 @@ import { useFonts } from 'expo-font';
 import { useSelector } from 'react-redux';
 import { Pressable } from 'react-native';
 import SkeletonContent from 'react-native-skeleton-content';
+import { SafeAreaView } from 'react-native-safe-area-context';
 export default function NotificationScreen({ navigation }) {
 
     const userData = useSelector((state) => {
@@ -127,7 +128,8 @@ export default function NotificationScreen({ navigation }) {
     }
     else {
         return (
-            <ScrollView backgroundColor='white' flex={1}>
+           <SafeAreaView flex={1} backgroundColor='white'>
+                <ScrollView backgroundColor='white' flex={1}>
                 <Box padding={30}>
                     <Text style={{ paddingTop: 20, fontSize: 35, fontFamily: 'NunitoExBold' }}>Hoạt động</Text>
                 </Box>
@@ -187,6 +189,7 @@ export default function NotificationScreen({ navigation }) {
 
                 </Box>
             </ScrollView>
+           </SafeAreaView>
         )
     }
 
