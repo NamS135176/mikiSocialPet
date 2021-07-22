@@ -6,6 +6,7 @@ import { Ionicons } from '@expo/vector-icons';
 import axios from 'axios';
 export default function Index({ navigation }) {
   const dataUser = useSelector((state) => state.userInfo);
+  console.log(dataUser);
   const [lChat, setLChat] = useState([]);
   useEffect(() => {
     const getR = async () => {

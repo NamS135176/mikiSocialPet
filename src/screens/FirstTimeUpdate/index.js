@@ -1,30 +1,21 @@
-import React, { useState } from 'react';
-import {
-  Button,
-  StyleSheet,
-  ActivityIndicator,
-  View,
-  Text,
-  ImageBackground,
-  Image,
-  TextInput,
-  ScrollView,
-  KeyboardAvoidingView,
-  CheckBox,
-  Alert,
-  Modal,
-  Pressable,
-} from 'react-native';
-import { NavigationContainer } from '@react-navigation/native';
-import { createStackNavigator } from '@react-navigation/stack';
-import SvgUri from 'react-native-svg-uri';
-import { useFonts } from 'expo-font';
-import AppLoading from 'expo-app-loading';
 import { Ionicons } from '@expo/vector-icons';
 import MaterialIcon from '@expo/vector-icons/MaterialIcons';
-import PetSelector from './components/PetSelector';
-import ModalSelector from 'react-native-modal-selector';
 import DateTimePicker from '@react-native-community/datetimepicker';
+import AppLoading from 'expo-app-loading';
+import { useFonts } from 'expo-font';
+import React, { useState } from 'react';
+import {
+  Image,
+  Modal,
+  Pressable,
+  ScrollView,
+  StyleSheet,
+  Text,
+  TextInput,
+  View,
+} from 'react-native';
+import ModalSelector from 'react-native-modal-selector';
+import PetSelector from './components/PetSelector';
 import XDate from './xdate';
 
 const styles = StyleSheet.create({
@@ -104,7 +95,7 @@ export default function FirstTimeUpdateScreen({ route, navigation }) {
   const [modalErrVisible, setModalErrVisible] = useState(false);
   const [modalErrText, setModalErrText] = useState('');
 
-  const { token, username } = route.params;
+  const { token, username, time } = route.params;
   const onChange = (event, selectedDate) => {
     const currentDate = selectedDate || date;
     setShowPetDate(!showPetDate);
@@ -146,6 +137,7 @@ export default function FirstTimeUpdateScreen({ route, navigation }) {
             },
             token: token,
             username: username,
+            time,
           });
         }
       } else {

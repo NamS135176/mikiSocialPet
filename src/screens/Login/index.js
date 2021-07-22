@@ -120,10 +120,10 @@ export default function LoginScreen({ navigation }) {
           password: pass,
         }),
       })
-        .then((res) => res.text())
+        .then((res) => res.json())
         .then(async (result) => {
           setModalVisible(false);
-          const data = JSON.parse(result);
+          const data = result;
           if (data.statas) {
             Alert.alert(
               'Tài khoản của bạn đã bị khóa! Vui lòng liên hệ quản trị viên.'
@@ -138,6 +138,7 @@ export default function LoginScreen({ navigation }) {
             navigation.navigate('FirstTimeUpdate', {
               token: data.token,
               username: data.user.account,
+              time: data.user.time,
             });
           } else {
             const user = data.user;

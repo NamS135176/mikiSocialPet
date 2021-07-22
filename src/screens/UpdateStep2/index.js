@@ -154,6 +154,7 @@ export default function UpdateStep2({ route, navigation }) {
               followMe: userData.followMe,
               followed: userData.followed,
               liked: userData.liked,
+              time: userData.time,
             },
           });
         });
