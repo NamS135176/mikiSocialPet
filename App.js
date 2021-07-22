@@ -47,6 +47,8 @@ import PostDetailSecondScreen from './src/screens/PostDetailSecond';
 import NewsScreen from './src/screens/NewsScreen';
 import ListChat from './src/screens/ListChat';
 import ScreenChat from './src/screens/ScreenChat';
+import SearchScreen from './src/screens/SearchScreen';
+import NewsTagScreen from './src/screens/NewsTag';
 
 const persistConfig = {
   key: 'root',
@@ -166,6 +168,16 @@ function App() {
               <Stack.Screen
                 name="ScreenChat"
                 component={ScreenChat}
+                options={{ headerShown: false }}
+              />
+              <Stack.Screen
+                name="Search"
+                component={SearchScreen}
+                options={{ headerShown: false }}
+              />
+              <Stack.Screen
+                name="NewsTag"
+                component={NewsTagScreen}
                 options={{ headerShown: false }}
               />
             </Stack.Navigator>

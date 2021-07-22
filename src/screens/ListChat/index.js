@@ -28,7 +28,7 @@ export default function Index({ navigation, route }) {
     getR();
   }, []);
   return (
-    <Box flex={1}>
+    <Box flex={1} paddingTop={5} backgroundColor='white'>
       <Pressable
         onPress={() => {
           navigation.goBack();
