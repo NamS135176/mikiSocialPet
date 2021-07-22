@@ -1,24 +1,21 @@
-import React, { useEffect } from 'react';
-import {
-  Box,
-  Flex,
-  Text,
-  Pressable,
-  ScrollView,
-  Image,
-  Center,
-  Menu,
-} from 'native-base';
-import { useFonts } from 'expo-font';
 import { Ionicons } from '@expo/vector-icons';
-import { useDispatch, useSelector } from 'react-redux';
-import Spinner from 'react-native-loading-spinner-overlay';
-import SkeletonContent from 'react-native-skeleton-content';
-import { Dimensions } from 'react-native';
-import XDate from './xdate';
-import { Alert } from 'react-native';
+import { useFonts } from 'expo-font';
 import moment from 'moment';
 import 'moment/locale/vi';
+import {
+  Box,
+  Center,
+  Flex,
+  Image,
+  Menu,
+  Pressable,
+  ScrollView,
+  Text,
+} from 'native-base';
+import React, { useEffect } from 'react';
+import { Alert, Dimensions, Share } from 'react-native';
+import SkeletonContent from 'react-native-skeleton-content';
+import { useDispatch, useSelector } from 'react-redux';
 export default function NewsScreen({ navigation }) {
   let [fontsLoaded] = useFonts({
     Gabriola: require('../../../assets/fonts/Gabriola.ttf'),
@@ -35,6 +32,7 @@ export default function NewsScreen({ navigation }) {
   const followPost = useSelector((state) => {
     return state.followPost;
   });
+
   if (!fontsLoaded) {
     return <></>;
   } else {
@@ -42,6 +40,7 @@ export default function NewsScreen({ navigation }) {
       <Box flex={1} paddingTop={45} backgroundColor="white" paddingX={5}>
         {/* <Spinner visible={followPost.loading} textStyle={{ color: '#FFF' }} /> */}
         <Flex
+          height={50}
           flexDirection="row"
           justifyContent="space-between"
           alignItems="center"
@@ -52,7 +51,11 @@ export default function NewsScreen({ navigation }) {
             alignItems="center"
             justifyContent="flex-end"
           >
-            <Pressable onPress={() => {navigation.navigate('Search')}}>
+            <Pressable
+              onPress={() => {
+                navigation.navigate('Search');
+              }}
+            >
               <Ionicons name="search" size={30} color="black"></Ionicons>
             </Pressable>
             <Pressable
@@ -331,7 +334,10 @@ export default function NewsScreen({ navigation }) {
                                       fontSize: 15,
                                     }}
                                   >
-                                    {moment(item.created_date).fromNow()}
+                                    {/* {new XDate(Date.parse(item.created_date)).toString('dd/MM/yyyy')} */}
+                                    {moment(
+                                      Date.parse(item.created_date)
+                                    ).fromNow()}
                                   </Text>
                                 </Box>
                               </Flex>
@@ -431,8 +437,67 @@ export default function NewsScreen({ navigation }) {
                                 flexDirection="row"
                               >
                                 <Flex flexDirection="row" alignItems="center">
-                                  {userData.liked.includes(item._id) ? (
-                                    <Pressable>
+                                  {item.liked.filter((item) => {
+                                    return item == userData.account;
+                                  }).length != 0 ? (
+                                    <Pressable
+                                      onPress={async () => {
+                                        const index =
+                                          followPost.listFollowPost.indexOf(
+                                            item
+                                          );
+                                        const listPost =
+                                          followPost.listFollowPost;
+
+                                        const thisLike = listPost[
+                                          index
+                                        ].liked.filter((item) => {
+                                          return (
+                                            item.account == userData.account
+                                          );
+                                        })[0];
+                                        const i =
+                                          listPost[index].liked.indexOf(
+                                            thisLike
+                                          );
+                                        listPost[index].liked.splice(i, 1);
+                                        dispatch({
+                                          type: 'UPDATE_LIKE_VIEW',
+                                          payload: {
+                                            listFollowPost: listPost,
+                                          },
+                                        });
+
+                                        const data = await fetch(
+                                          'http://obnd.me/post-api/update-like',
+                                          {
+                                            method: 'POST',
+                                            headers: {
+                                              'Content-Type':
+                                                'application/json',
+                                            },
+                                            body: JSON.stringify({
+                                              id: item._id,
+                                              account: userData.account,
+                                            }),
+                                          }
+                                        );
+                                        const res = await fetch(
+                                          'http://obnd.me/update-like',
+                                          {
+                                            method: 'POST',
+                                            headers: {
+                                              'Content-Type':
+                                                'application/json',
+                                            },
+                                            body: JSON.stringify({
+                                              account: userData.account,
+                                              idLiked: item._id,
+                                            }),
+                                          }
+                                        );
+                                      }}
+                                    >
                                       <Ionicons
                                         name="heart"
                                         color="red"
@@ -440,7 +505,54 @@ export default function NewsScreen({ navigation }) {
                                       ></Ionicons>
                                     </Pressable>
                                   ) : (
-                                    <Pressable>
+                                    <Pressable
+                                      onPress={async () => {
+                                        const index =
+                                          followPost.listFollowPost.indexOf(
+                                            item
+                                          );
+                                        const listPost =
+                                          followPost.listFollowPost;
+
+                                        listPost[index].liked.push(
+                                          userData.account
+                                        );
+                                        dispatch({
+                                          type: 'UPDATE_LIKE_VIEW',
+                                          payload: {
+                                            listFollowPost: listPost,
+                                          },
+                                        });
+                                        const data = await fetch(
+                                          'http://obnd.me/post-api/update-like',
+                                          {
+                                            method: 'POST',
+                                            headers: {
+                                              'Content-Type':
+                                                'application/json',
+                                            },
+                                            body: JSON.stringify({
+                                              id: item._id,
+                                              account: userData.account,
+                                            }),
+                                          }
+                                        );
+                                        const res = await fetch(
+                                          'http://obnd.me/update-like',
+                                          {
+                                            method: 'POST',
+                                            headers: {
+                                              'Content-Type':
+                                                'application/json',
+                                            },
+                                            body: JSON.stringify({
+                                              account: userData.account,
+                                              idLiked: item._id,
+                                            }),
+                                          }
+                                        );
+                                      }}
+                                    >
                                       <Ionicons
                                         name="heart-outline"
                                         color="black"
@@ -470,13 +582,38 @@ export default function NewsScreen({ navigation }) {
                                     </Text>
                                   </Flex>
                                 </Pressable>
-                                <Flex flexDirection="row" alignItems="center">
-                                  <Ionicons
-                                    name="share-social"
-                                    color="black"
-                                    size={30}
-                                  ></Ionicons>
-                                </Flex>
+                                <Pressable
+                                  onPress={async () => {
+                                    try {
+                                      const result = await Share.share({
+                                        message: item.textDescription,
+                                      });
+                                      if (
+                                        result.action === Share.sharedAction
+                                      ) {
+                                        if (result.activityType) {
+                                          // shared with activity type of result.activityType
+                                        } else {
+                                          // shared
+                                        }
+                                      } else if (
+                                        result.action === Share.dismissedAction
+                                      ) {
+                                        // dismissed
+                                      }
+                                    } catch (error) {
+                                      alert(error.message);
+                                    }
+                                  }}
+                                >
+                                  <Flex flexDirection="row" alignItems="center">
+                                    <Ionicons
+                                      name="share-social"
+                                      color="black"
+                                      size={30}
+                                    ></Ionicons>
+                                  </Flex>
+                                </Pressable>
                               </Flex>
                             </Box>
                           </Center>

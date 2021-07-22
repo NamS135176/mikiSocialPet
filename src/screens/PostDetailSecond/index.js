@@ -1,27 +1,22 @@
-import React, { useEffect, useState } from 'react';
+import { Ionicons } from '@expo/vector-icons';
+import { useFonts } from 'expo-font';
+import moment from 'moment';
+import 'moment/locale/vi';
 import {
-  ScrollView,
-  Flex,
   Box,
-  Text,
-  Image,
   Center,
+  Flex,
+  Image,
   Input,
   Modal,
+  ScrollView,
+  Text,
 } from 'native-base';
-import { Alert } from 'react-native';
-import { useFonts } from 'expo-font';
-import { useSelector, useDispatch } from 'react-redux';
-import { Pressable } from 'react-native';
-import { Dimensions } from 'react-native';
-import XDate from './xdate';
-import { Ionicons } from '@expo/vector-icons';
+import React, { useEffect, useState } from 'react';
+import { Alert, Dimensions, Pressable, Share } from 'react-native';
 import Spinner from 'react-native-loading-spinner-overlay';
 import SkeletonContent from 'react-native-skeleton-content';
-import { width } from 'styled-system';
-import moment from 'moment';
-import { Share } from 'react-native';
-import 'moment/locale/vi';
+import { useDispatch, useSelector } from 'react-redux';
 export default function PostDetailSecondScreen({ route, navigation }) {
   const followPost = useSelector((state) => {
     return state.followPost;
@@ -66,10 +61,25 @@ export default function PostDetailSecondScreen({ route, navigation }) {
         );
       });
   }, []);
-  // const currentPost = useSelector((state) => {
-  //     return state.currentPost;
-  // });
 
+  const onShare = async () => {
+    try {
+      const result = await Share.share({
+        message: currentPost.currentPost.textDescription,
+      });
+      if (result.action === Share.sharedAction) {
+        if (result.activityType) {
+          // shared with activity type of result.activityType
+        } else {
+          // shared
+        }
+      } else if (result.action === Share.dismissedAction) {
+        // dismissed
+      }
+    } catch (error) {
+      alert(error.message);
+    }
+  };
   const [commentText, setCommentText] = useState('');
   const handleChangeComment = (txt) => setCommentText(txt);
   const handlePostComment = async () => {
@@ -138,23 +148,6 @@ export default function PostDetailSecondScreen({ route, navigation }) {
   };
 
   const handleLike = async () => {
-    dispatch({
-      type: 'SET_USER_INFO',
-      payload: {
-        account: userData.account,
-        displayName: userData.displayName,
-        typePet: userData.typePet,
-        birthDay: userData.birthDay,
-        sex: userData.sex,
-        owner: userData.owner,
-        avatar: userData.avatar,
-        coverImage: userData.coverImage,
-        followMe: userData.followMe,
-        followed: userData.followed,
-        liked: [...userData.liked, currentPost.currentPost._id],
-      },
-    });
-
     setCurrentPost({
       ...currentPost,
       currentPost: {
@@ -162,19 +155,6 @@ export default function PostDetailSecondScreen({ route, navigation }) {
         liked: [...currentPost.currentPost.liked, userData.account],
       },
     });
-
-    // const thisPost = followPost.listFollowPost.filter(item => {
-    //     return item._id == currentPost.currentPost._id
-    // })
-    // const index = followPost.listFollowPost.indexOf(thisPost[0])
-    // thisPost[0].liked.push({ account: userData.account })
-    // const updated = followPost.listFollowPost
-    // updated[index] = thisPost[0]
-    dispatch({
-      type: 'GET_FOLLOW_POST',
-      payload: userData.account,
-    });
-
     const data = await fetch('http://obnd.me/post-api/update-like', {
       method: 'POST',
       headers: {
@@ -195,30 +175,12 @@ export default function PostDetailSecondScreen({ route, navigation }) {
         idLiked: currentPost.currentPost._id,
       }),
     });
+    dispatch({
+      type: 'GET_FOLLOW_POST',
+      payload: userData.account,
+    });
   };
   const handleDislike = async () => {
-    const newLiked = userData.liked.filter((item) => {
-      return item == currentPost.currentPost._id;
-    });
-    const index = userData.liked.indexOf(newLiked[0]);
-    const removeList = userData.liked;
-    removeList.splice(index, 1);
-    dispatch({
-      type: 'SET_USER_INFO',
-      payload: {
-        account: userData.account,
-        displayName: userData.displayName,
-        typePet: userData.typePet,
-        birthDay: userData.birthDay,
-        sex: userData.sex,
-        owner: userData.owner,
-        avatar: userData.avatar,
-        coverImage: userData.coverImage,
-        followMe: userData.followMe,
-        followed: userData.followed,
-        liked: removeList,
-      },
-    });
     const newLikedPost = currentPost.currentPost.liked.filter((item) => {
       return item == userData.account;
     });
@@ -230,23 +192,6 @@ export default function PostDetailSecondScreen({ route, navigation }) {
       currentPost: { ...currentPost.currentPost, liked: removePost },
     });
 
-    const thisPost = followPost.listFollowPost.filter((item) => {
-      return item._id == currentPost.currentPost._id;
-    });
-    const id = followPost.listFollowPost.indexOf(thisPost[0]);
-
-    // const removeTarget = thisPost[0].liked.filter(item => {
-    //     return item.account == userData.account
-    // })
-    // const idRemove = thisPost[0].liked.indexOf(removeTarget[0])
-    // thisPost[0].liked.splice(idRemove,1)
-    // const updated = followPost.listFollowPost
-    // updated[id] = thisPost[0]
-    dispatch({
-      type: 'GET_FOLLOW_POST',
-      payload: userData.account,
-    });
-
     const data = await fetch('http://obnd.me/post-api/update-like', {
       method: 'POST',
       headers: {
@@ -266,6 +211,10 @@ export default function PostDetailSecondScreen({ route, navigation }) {
         account: userData.account,
         idLiked: currentPost.currentPost._id,
       }),
+    });
+    dispatch({
+      type: 'GET_FOLLOW_POST',
+      payload: userData.account,
     });
   };
   if (!fontsLoaded) {
@@ -389,7 +338,10 @@ export default function PostDetailSecondScreen({ route, navigation }) {
                     </SkeletonContent>
                   ) : (
                     <Text style={{ fontFamily: 'Nunito', fontSize: 15 }}>
-                      {moment(currentPost.currentPost.created_date).fromNow()}
+                      {/* {new XDate(Date.parse(currentPost.currentPost.created_date)).toString('dd/MM/yyyy')} */}
+                      {moment(
+                        Date.parse(currentPost.currentPost.created_date)
+                      ).fromNow()}
                     </Text>
                   )}
                 </Box>
@@ -500,7 +452,9 @@ export default function PostDetailSecondScreen({ route, navigation }) {
                   flexDirection="row"
                 >
                   <Flex flexDirection="row" alignItems="center">
-                    {userData.liked.includes(currentPost.currentPost._id) ? (
+                    {currentPost.currentPost.liked.filter((item) => {
+                      return item == userData.account;
+                    }).length != 0 ? (
                       <Pressable onPress={handleDislike}>
                         <Ionicons name="heart" color="red" size={30}></Ionicons>
                       </Pressable>
@@ -527,13 +481,15 @@ export default function PostDetailSecondScreen({ route, navigation }) {
                       {currentPost.currentPost.comments.length}
                     </Text>
                   </Flex>
-                  <Flex flexDirection="row" alignItems="center">
-                    <Ionicons
-                      name="share-social"
-                      color="black"
-                      size={30}
-                    ></Ionicons>
-                  </Flex>
+                  <Pressable onPress={onShare}>
+                    <Flex flexDirection="row" alignItems="center">
+                      <Ionicons
+                        name="share-social"
+                        color="black"
+                        size={30}
+                      ></Ionicons>
+                    </Flex>
+                  </Pressable>
                 </Flex>
               )}
             </Box>
@@ -583,14 +539,7 @@ export default function PostDetailSecondScreen({ route, navigation }) {
                           <Text style={{ fontFamily: 'Nunito', fontSize: 15 }}>
                             {item.text}
                           </Text>
-                          <Text
-                            style={{
-                              fontFamily: 'Nunito',
-                              fontSize: 15,
-                            }}
-                          >
-                            {moment(item.created_at).fromNow()}
-                          </Text>
+                          <Text>{moment(item.created_at).fromNow()}</Text>
                         </Box>
                       </Flex>
                     </Box>
@@ -636,9 +585,7 @@ export default function PostDetailSecondScreen({ route, navigation }) {
                           <Text style={{ fontFamily: 'Nunito', fontSize: 15 }}>
                             {item.text}
                           </Text>
-                          <Text style={{ fontFamily: 'Nunito', fontSize: 15 }}>
-                            {moment(item.created_at).fromNow()}
-                          </Text>
+                          <Text>{moment(item.created_at).fromNow()}</Text>
                         </Box>
                       </Flex>
                     </Box>
@@ -684,9 +631,7 @@ export default function PostDetailSecondScreen({ route, navigation }) {
                           <Text style={{ fontFamily: 'Nunito', fontSize: 15 }}>
                             {item.text}
                           </Text>
-                          <Text style={{ fontFamily: 'Nunito', fontSize: 15 }}>
-                            {moment(item.created_at).fromNow()}
-                          </Text>
+                          <Text>{moment(item.created_at).fromNow()}</Text>
                         </Box>
                       </Flex>
                     </Box>

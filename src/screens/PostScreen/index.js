@@ -1,20 +1,21 @@
-import React, { useState, useEffect } from 'react';
+import { Ionicons } from '@expo/vector-icons';
+import { useFonts } from 'expo-font';
+import * as ImagePicker from 'expo-image-picker';
 import {
   Box,
-  Pressable,
   Flex,
-  Text,
   Image,
-  ScrollView,
-  TextArea,
   Modal,
+  Pressable,
+  ScrollView,
+  Text,
+  TextArea,
 } from 'native-base';
-import { Ionicons } from '@expo/vector-icons';
-import * as ImagePicker from 'expo-image-picker';
-import { useFonts } from 'expo-font';
-import { useSelector, useDispatch } from 'react-redux';
-import { firebaseApp, storage } from '../../commonComponents/FirebaseConfig';
+import React, { useState } from 'react';
 import Spinner from 'react-native-loading-spinner-overlay';
+import { useDispatch, useSelector } from 'react-redux';
+import { storage } from '../../commonComponents/FirebaseConfig';
+import { listTag } from '../../hashData/Tags';
 import axios from 'axios';
 export default function PostScreen({ navigation }) {
   const userData = useSelector((state) => {
@@ -34,18 +35,6 @@ export default function PostScreen({ navigation }) {
   const [modalContent, setModalContent] = useState('');
   const [textContent, setTextContent] = useState('');
   const [isLoading, setIsLoading] = useState(false);
-  const listTag = [
-    '#motngaydeptroi',
-    '#chuyenchomeo',
-    '#vuice',
-    '#meovodich',
-    '#chotungtang',
-    '#thattuyetvoi',
-    '#chamsoc',
-    '#chiase',
-    '#tips',
-    '#canhbao',
-  ];
   const pickImage = async () => {
     let result = await ImagePicker.launchImageLibraryAsync({
       mediaTypes: ImagePicker.MediaTypeOptions.All,
@@ -53,7 +42,6 @@ export default function PostScreen({ navigation }) {
       aspect: [1, 1],
       quality: 0.3,
     });
-
 
     if (!result.cancelled) {
       setImage(result.uri);
@@ -80,8 +68,6 @@ export default function PostScreen({ navigation }) {
     } else {
       const gen = Date.now();
       setIsLoading(true);
-      // const data = await uploadImage(image, userData.account + "-post-" + gen)
-      // const ref = storage.ref('posts/' + userData.account + "-post-" + gen);
       const form = new FormData();
       form.append('avatar', {
         uri: image,
@@ -93,8 +79,8 @@ export default function PostScreen({ navigation }) {
           'Content-Type': 'multipart/form-data',
         },
       });
-
       const url = 'http://obnd.me:8000/get/' + postA.data;
+      console.log(url);
       const res = await fetch('http://obnd.me/post-api/create-post', {
         method: 'POST',
         headers: {
@@ -229,10 +215,16 @@ export default function PostScreen({ navigation }) {
               <Text style={{ fontFamily: 'Nunito' }}>{displayTag}</Text>
             </Box>
           </Box>
-          <ScrollView padding={5} horizontal={true}>
-            {listTag.map((item) => {
+          <Flex
+            padding={5}
+            paddingRight={5}
+            flexDirection="row"
+            flexWrap="wrap"
+          >
+            {listTag.map((item, index) => {
               return (
                 <Pressable
+                  key={index}
                   onPress={() => {
                     if (!tags.includes(item)) {
                       setTags([...tags, item]);
@@ -241,18 +233,20 @@ export default function PostScreen({ navigation }) {
                   }}
                 >
                   <Box
-                    marginRight={2}
-                    paddingY={2}
+                    marginRight={3}
+                    marginBottom={3}
                     paddingX={3}
+                    paddingY={2}
+                    backgroundColor="#ccc"
                     borderRadius={10}
-                    backgroundColor="#ddd"
+                    key={index}
                   >
-                    <Text style={{ fontFamily: 'Nunito' }}>{item}</Text>
+                    <Text>{item}</Text>
                   </Box>
                 </Pressable>
               );
             })}
-          </ScrollView>
+          </Flex>
         </ScrollView>
       </Box>
     );

@@ -49,6 +49,7 @@ import ListChat from './src/screens/ListChat';
 import ScreenChat from './src/screens/ScreenChat';
 import SearchScreen from './src/screens/SearchScreen';
 import NewsTagScreen from './src/screens/NewsTag';
+import EditPostScreen from './src/screens/EditPost';
 
 const persistConfig = {
   key: 'root',
@@ -161,13 +162,8 @@ function App() {
                 options={{ headerShown: false }}
               />
               <Stack.Screen
-                name="ListChat"
-                component={ListChat}
-                options={{ headerShown: false }}
-              />
-              <Stack.Screen
-                name="ScreenChat"
-                component={ScreenChat}
+                name="EditPost"
+                component={EditPostScreen}
                 options={{ headerShown: false }}
               />
               <Stack.Screen
@@ -178,6 +174,16 @@ function App() {
               <Stack.Screen
                 name="NewsTag"
                 component={NewsTagScreen}
+                options={{ headerShown: false }}
+              />
+              <Stack.Screen
+                name="ListChat"
+                component={ListChat}
+                options={{ headerShown: false }}
+              />
+              <Stack.Screen
+                name="ScreenChat"
+                component={ScreenChat}
                 options={{ headerShown: false }}
               />
             </Stack.Navigator>

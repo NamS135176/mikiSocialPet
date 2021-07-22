@@ -13,13 +13,13 @@ import * as MediaLibrary from 'expo-media-library';
 import { useSelector } from 'react-redux';
 import { Image, TouchableOpacity, Alert } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
-import { SafeAreaView } from 'react-native-safe-area-context';
 export default function Index({ navigation, route }) {
   const user = useSelector((state) => {
     return state.userInfo;
   });
 
   const { displayName: name, avatar, account, time } = user;
+  console.log(user);
   const room = route.params.user;
 
   const [receiveMessage, setReceiveMessage] = useState([]);
@@ -69,7 +69,7 @@ export default function Index({ navigation, route }) {
   }, [toggle]);
 
   return (
-    <Box paddingTop={5} backgroundColor={toggle ? '#FFA788' : 'black'} flex={1}>
+    <Box backgroundColor={toggle ? '#FFA788' : 'black'} flex={1} paddingTop={10}>
       <Spinner
         //visibility of Overlay Loading Spinner
         visible={isLoading}
@@ -91,7 +91,6 @@ export default function Index({ navigation, route }) {
       >
         <Pressable
           onPress={() => {
-            console.log('abc');
             navigation.goBack();
           }}
         >

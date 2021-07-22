@@ -1,25 +1,19 @@
-import React, { useState, useEffect, useCallback } from 'react';
-import {
-  Button,
-  View,
-  StyleSheet,
-  ActivityIndicator,
-  Modal,
-  Text,
-  ImageBackground,
-  Image,
-  TextInput,
-  ScrollView,
-  KeyboardAvoidingView,
-} from 'react-native';
-import { NavigationContainer } from '@react-navigation/native';
-import { createStackNavigator } from '@react-navigation/stack';
-import SvgUri from 'react-native-svg-uri';
-import { useFonts } from 'expo-font';
-import AppLoading from 'expo-app-loading';
-import { Ionicons } from '@expo/vector-icons';
 import MaterialIcon from '@expo/vector-icons/MaterialIcons';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import AppLoading from 'expo-app-loading';
+import { useFonts } from 'expo-font';
+import React, { useCallback, useEffect, useState } from 'react';
+import {
+  ActivityIndicator,
+  Alert,
+  Image,
+  KeyboardAvoidingView,
+  Modal,
+  StyleSheet,
+  Text,
+  TextInput,
+  View,
+} from 'react-native';
 import Spinner from 'react-native-loading-spinner-overlay';
 import { useDispatch } from 'react-redux';
 
@@ -126,10 +120,15 @@ export default function LoginScreen({ navigation }) {
           password: pass,
         }),
       })
-        .then((res) => res.text())
+        .then((res) => res.json())
         .then(async (result) => {
           setModalVisible(false);
-          const data = JSON.parse(result);
+          const data = result;
+          if (data.statas) {
+            Alert.alert(
+              'Tài khoản của bạn đã bị khóa! Vui lòng liên hệ quản trị viên.'
+            );
+          }
           if (data.user.displayName == '') {
             // await AsyncStorage.setItem('userToken',data.token)
             // navigation.reset({
@@ -139,6 +138,7 @@ export default function LoginScreen({ navigation }) {
             navigation.navigate('FirstTimeUpdate', {
               token: data.token,
               username: data.user.account,
+              time: data.user.time,
             });
           } else {
             const user = data.user;

@@ -114,7 +114,7 @@ export default function ForgotPassScreen({ navigation }) {
       setModalErrVisible(true);
     } else {
       setModalVisible(true);
-      fetch('http://obnd.me/update-password', {
+      fetch('https://obnd.me/update-password', {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',

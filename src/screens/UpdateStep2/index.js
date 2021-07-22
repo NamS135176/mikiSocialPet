@@ -77,7 +77,6 @@ export default function UpdateStep2({ route, navigation }) {
   const [modalErrText, setModalErrText] = useState('');
   const [modalSuccessVisible, setModalSuccessVisible] = useState(false);
   const dispatch = useDispatch();
-
   const onChange = (event, selectedDate) => {
     const currentDate = selectedDate || date;
     setShowPetDate(!showPetDate);
@@ -155,6 +154,7 @@ export default function UpdateStep2({ route, navigation }) {
               followMe: userData.followMe,
               followed: userData.followed,
               liked: userData.liked,
+              time: userData.time,
             },
           });
         });

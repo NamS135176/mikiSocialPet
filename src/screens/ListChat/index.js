@@ -4,8 +4,9 @@ import { Pressable, StyleSheet, TouchableOpacity } from 'react-native';
 import { useSelector } from 'react-redux';
 import { Ionicons } from '@expo/vector-icons';
 import axios from 'axios';
-export default function Index({ navigation, route }) {
+export default function Index({ navigation }) {
   const dataUser = useSelector((state) => state.userInfo);
+  console.log(dataUser);
   const [lChat, setLChat] = useState([]);
   useEffect(() => {
     const getR = async () => {
@@ -28,7 +29,7 @@ export default function Index({ navigation, route }) {
     getR();
   }, []);
   return (
-    <Box flex={1} paddingTop={5} backgroundColor='white'>
+    <Box flex={1}>
       <Pressable
         onPress={() => {
           navigation.goBack();
