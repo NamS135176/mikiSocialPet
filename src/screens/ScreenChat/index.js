@@ -3,6 +3,7 @@ import { Box, Text, Flex, Pressable } from 'native-base';
 import io from 'socket.io-client';
 import { GiftedChat, Send } from 'react-native-gifted-chat';
 import Spinner from 'react-native-loading-spinner-overlay';
+import ToggleSwitch from 'toggle-switch-react-native';
 import Modal from 'react-native-modal';
 
 import * as FileSystem from 'expo-file-system';
@@ -23,6 +24,7 @@ export default function Index({ navigation, route }) {
 
   const [receiveMessage, setReceiveMessage] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
+  const [toggle, setToggle] = useState(false);
   const [isModalVisible, setModalVisible] = useState(false);
   const [showImage, setShowImage] = useState('');
   const socket = useRef(null);
@@ -68,10 +70,13 @@ export default function Index({ navigation, route }) {
 
   return (
     <SafeAreaView style={{ flex: 1 }}>
-      <Box backgroundColor="#FFA788" flex={1}>
+      <Box backgroundColor={toggle ? '#FFA788' : 'black'} flex={1}>
         <Spinner
+          //visibility of Overlay Loading Spinner
           visible={isLoading}
+          //Text with the Spinner
           textContent={'Loading...'}
+          //Text style of the Spinner Text
           textStyle={{ color: '#FFF' }}
         />
         <Flex
@@ -92,6 +97,19 @@ export default function Index({ navigation, route }) {
           >
             <Ionicons name="chevron-back" size={32} color="black" />
           </Pressable>
+          <Box>
+            <ToggleSwitch
+              isOn={toggle}
+              onColor="white"
+              offColor="black"
+              label="Switch mode"
+              labelStyle={{ color: 'black', fontWeight: '900' }}
+              size="medium"
+              onToggle={(isOn) => {
+                setToggle((toggle) => !toggle);
+              }}
+            />
+          </Box>
         </Flex>
         <GiftedChat
           isTyping={true}
