@@ -86,12 +86,12 @@ export default function SettingScreen({ navigation }) {
               Giao diện
             </Text>
             <Flex
-              marginTop={2}
+              marginTop={3}
               flexDirection="row"
               alignItems="center"
               justifyContent="flex-start"
             >
-              <Box padding={3} backgroundColor="black" borderRadius={30}>
+              <Box style={{padding:10}} backgroundColor="black" borderRadius={30}>
                 <Ionicons name="moon" size={23} color="white"></Ionicons>
               </Box>
               <Text
@@ -113,7 +113,7 @@ export default function SettingScreen({ navigation }) {
             </Text>
             <Pressable onPress={handleToUpdate}>
               <Flex
-                marginTop={2}
+                marginTop={3}
                 flexDirection="row"
                 alignItems="center"
                 justifyContent="flex-start"
@@ -134,7 +134,7 @@ export default function SettingScreen({ navigation }) {
             </Pressable>
             <Pressable onPress={handleToForgot}>
               <Flex
-                marginTop={2}
+                marginTop={3}
                 flexDirection="row"
                 alignItems="center"
                 justifyContent="flex-start"
@@ -161,14 +161,14 @@ export default function SettingScreen({ navigation }) {
               Khác
             </Text>
             <Flex
-              marginTop={2}
+              marginTop={3}
               flexDirection="row"
               alignItems="center"
               justifyContent="flex-start"
             >
               <Box
                 paddingY={3}
-                paddingX={5}
+                paddingX={3}
                 backgroundColor="#48be8b"
                 borderRadius={35}
               >
@@ -189,7 +189,7 @@ export default function SettingScreen({ navigation }) {
               </Text>
             </Flex>
             <Flex
-              marginTop={2}
+              marginTop={3}
               flexDirection="row"
               alignItems="center"
               justifyContent="flex-start"
@@ -208,7 +208,7 @@ export default function SettingScreen({ navigation }) {
               </Text>
             </Flex>
             <Flex
-              marginTop={2}
+              marginTop={3}
               flexDirection="row"
               alignItems="center"
               justifyContent="flex-start"
@@ -232,12 +232,12 @@ export default function SettingScreen({ navigation }) {
                   marginLeft: 20,
                 }}
               >
-                Trợ giúp
+               1.0.0
               </Text>
             </Flex>
             <Pressable onPress={handleSignOut}>
               <Flex
-                marginTop={2}
+                marginTop={3}
                 flexDirection="row"
                 alignItems="center"
                 justifyContent="flex-start"
