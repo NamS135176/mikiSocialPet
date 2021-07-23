@@ -3,13 +3,12 @@ import { Box, Text, Flex, Pressable } from 'native-base';
 import io from 'socket.io-client';
 import { GiftedChat, Send } from 'react-native-gifted-chat';
 import Spinner from 'react-native-loading-spinner-overlay';
-import ToggleSwitch from 'toggle-switch-react-native';
 import Modal from 'react-native-modal';
 
 import * as FileSystem from 'expo-file-system';
 import * as Permissions from 'expo-permissions';
 import * as MediaLibrary from 'expo-media-library';
-
+import SafeAreaView from 'react-native-safe-area-view';
 import { useSelector } from 'react-redux';
 import { Image, TouchableOpacity, Alert } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
@@ -24,7 +23,6 @@ export default function Index({ navigation, route }) {
 
   const [receiveMessage, setReceiveMessage] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
-  const [toggle, setToggle] = useState(false);
   const [isModalVisible, setModalVisible] = useState(false);
   const [showImage, setShowImage] = useState('');
   const socket = useRef(null);
@@ -66,102 +64,88 @@ export default function Index({ navigation, route }) {
         setReceiveMessage((pre) => GiftedChat.append(pre, res));
         setIsLoading(false);
       });
-  }, [toggle]);
+  }, []);
 
   return (
-    <Box backgroundColor={toggle ? '#FFA788' : 'black'} flex={1} paddingTop={10}>
-      <Spinner
-        //visibility of Overlay Loading Spinner
-        visible={isLoading}
-        //Text with the Spinner
-        textContent={'Loading...'}
-        //Text style of the Spinner Text
-        textStyle={{ color: '#FFF' }}
-      />
-      <Flex
-        direction="row"
-        alignItems="center"
-        justify="space-between"
-        style={{
-          marginTop: 20,
-          height: 50,
-          backgroundColor: 'white',
-          paddingHorizontal: 20,
-        }}
-      >
-        <Pressable
-          onPress={() => {
-            navigation.goBack();
+    <SafeAreaView style={{ flex: 1 }}>
+      <Box backgroundColor="#FFA788" flex={1}>
+        <Spinner
+          visible={isLoading}
+          textContent={'Loading...'}
+          textStyle={{ color: '#FFF' }}
+        />
+        <Flex
+          direction="row"
+          alignItems="center"
+          justify="space-between"
+          style={{
+            marginTop: 20,
+            height: 50,
+            backgroundColor: 'white',
+            paddingHorizontal: 20,
           }}
         >
-          <Ionicons name="chevron-back" size={32} color="black" />
-        </Pressable>
-        <Box>
-          <ToggleSwitch
-            isOn={toggle}
-            onColor="white"
-            offColor="black"
-            label="Switch mode"
-            labelStyle={{ color: 'black', fontWeight: '900' }}
-            size="medium"
-            onToggle={(isOn) => {
-              setToggle((toggle) => !toggle);
+          <Pressable
+            onPress={() => {
+              navigation.goBack();
             }}
-          />
-        </Box>
-      </Flex>
-      <GiftedChat
-        isTyping={true}
-        renderUsernameOnMessage
-        messages={receiveMessage}
-        placeholder="Send something"
-        onSend={(messages) => onSend(messages)}
-        isAnimated={true}
-        user={{
-          _id: time,
-        }}
-        onPressAvatar={(user) => {
-          setShowImage(user.avatar);
-          setModalVisible(true);
-        }}
-        scrollToBottom={true}
-        renderSend={(props) => {
-          return (
-            <Send
-              {...props}
-              containerStyle={{
-                justifyContent: 'center',
-                alignItems: 'center',
-                alignSelf: 'center',
-                marginRight: 15,
-              }}
-            ></Send>
-          );
-        }}
-      />
-      <Modal
-        style={{
-          justifyContent: 'center',
-          alignItems: 'center',
-        }}
-        animationIn="slideInUp"
-        coverScreen={true}
-        animationInTiming={2000}
-        backdropOpacity={0.5}
-        onBackdropPress={() => setModalVisible(false)}
-        onSwipeComplete={() => setModalVisible(false)}
-        onBackButtonPress={() => {
-          setModalVisible(false);
-        }}
-        isVisible={isModalVisible}
-      >
-        <TouchableOpacity onPress={downloadImage}>
-          <Image
-            source={{ uri: showImage }}
-            style={{ width: 120, height: 120 }}
-          />
-        </TouchableOpacity>
-      </Modal>
-    </Box>
+          >
+            <Ionicons name="chevron-back" size={32} color="black" />
+          </Pressable>
+        </Flex>
+        <GiftedChat
+          isTyping={true}
+          renderUsernameOnMessage
+          messages={receiveMessage}
+          placeholder="Send something"
+          onSend={(messages) => onSend(messages)}
+          isAnimated={true}
+          user={{
+            _id: time,
+          }}
+          onPressAvatar={(user) => {
+            setShowImage(user.avatar);
+            setModalVisible(true);
+          }}
+          scrollToBottom={true}
+          renderSend={(props) => {
+            return (
+              <Send
+                {...props}
+                containerStyle={{
+                  justifyContent: 'center',
+                  alignItems: 'center',
+                  alignSelf: 'center',
+                  marginRight: 15,
+                }}
+              ></Send>
+            );
+          }}
+        />
+        <Modal
+          style={{
+            justifyContent: 'center',
+            alignItems: 'center',
+          }}
+          animationIn="slideInUp"
+          coverScreen={true}
+          animationInTiming={2000}
+          backdropOpacity={0.5}
+          onBackdropPress={() => setModalVisible(false)}
+          onSwipeComplete={() => setModalVisible(false)}
+          onBackButtonPress={() => {
+            setModalVisible(false);
+          }}
+          isVisible={isModalVisible}
+        >
+          <TouchableOpacity onPress={downloadImage}>
+            <Image
+              source={{ uri: showImage }}
+              style={{ width: 120, height: 120 }}
+            />
+          </TouchableOpacity>
+        </Modal>
+      </Box>
+    </SafeAreaView>
   );
 }
