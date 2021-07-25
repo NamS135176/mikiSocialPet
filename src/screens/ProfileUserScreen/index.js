@@ -12,10 +12,14 @@ import {
   Text,
 } from 'native-base';
 import React, { useEffect, useState } from 'react';
-import { Alert, Dimensions } from 'react-native';
+import { Alert, Dimensions, TouchableOpacity } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import SkeletonContent from 'react-native-skeleton-content';
 import { useDispatch, useSelector } from 'react-redux';
+import * as FileSystem from 'expo-file-system';
+import * as Permissions from 'expo-permissions';
+import * as MediaLibrary from 'expo-media-library';
+import Modal from 'react-native-modal';
 import { api } from '../../api';
 export default function ProfileUserScreen({ route, navigation }) {
   const { account } = route.params;
@@ -28,6 +32,28 @@ export default function ProfileUserScreen({ route, navigation }) {
   const [user, setUser] = useState(null);
   const [listPost, setListPost] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
+  const [isModalVisible, setModalVisible] = useState(false);
+  const [showImage, setShowImage] = useState('');
+  const saveFile = async (fileUri) => {
+    const { status } = await Permissions.askAsync(Permissions.MEDIA_LIBRARY);
+    if (status === 'granted') {
+      const asset = await MediaLibrary.createAssetAsync(fileUri);
+      await MediaLibrary.createAlbumAsync('Download', asset);
+      Alert.alert('Save Image Successfully');
+    }
+  };
+
+  const downloadImage = () => {
+    let fileUri = FileSystem.documentDirectory + 'robo.jpg';
+    FileSystem.downloadAsync(showImage, fileUri)
+      .then(({ uri }) => {
+        saveFile(uri);
+      })
+      .catch((error) => {
+        console.error(error);
+      });
+  };
+
   useEffect(() => {
     setIsLoading(true);
 
@@ -97,15 +123,15 @@ export default function ProfileUserScreen({ route, navigation }) {
       },
     });
     fetch('http://obnd.me/update-followed', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          account: userData.account,
-          accountFollowed: account,
-        }),
-      });
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        account: userData.account,
+        accountFollowed: account,
+      }),
+    });
   };
   const handleUnFollow = () => {
     console.log('ahjafhabfkjf');
@@ -141,21 +167,44 @@ export default function ProfileUserScreen({ route, navigation }) {
       },
     });
     fetch('http://obnd.me/update-followed', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          account: userData.account,
-          accountFollowed: account,
-        }),
-      });
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        account: userData.account,
+        accountFollowed: account,
+      }),
+    });
   };
   if (!fontsLoaded) {
     return <></>;
   } else {
     return (
       <SafeAreaView>
+        <Modal
+          style={{
+            justifyContent: 'center',
+            alignItems: 'center',
+          }}
+          animationIn="slideInUp"
+          coverScreen={true}
+          animationInTiming={2000}
+          backdropOpacity={0.5}
+          onBackdropPress={() => setModalVisible(false)}
+          onSwipeComplete={() => setModalVisible(false)}
+          onBackButtonPress={() => {
+            setModalVisible(false);
+          }}
+          isVisible={isModalVisible}
+        >
+          <TouchableOpacity onPress={downloadImage}>
+            <Image
+              source={{ uri: showImage }}
+              style={{ width: 300, height: 300 }}
+            />
+          </TouchableOpacity>
+        </Modal>
         <ScrollView backgroundColor="white">
           {isLoading ? (
             <Box backgroundColor="white" position="relative">
@@ -355,16 +404,23 @@ export default function ProfileUserScreen({ route, navigation }) {
                     </Box>
                   </Pressable>
                 )}
-                <Image
-                  borderRadius={75}
-                  borderWidth={10}
-                  borderColor="white"
-                  alt="cover"
-                  width={150}
-                  height={150}
-                  resizeMode="cover"
-                  source={{ uri: user.avatar }}
-                ></Image>
+                <TouchableOpacity
+                  onPress={() => {
+                    setShowImage(user.avatar);
+                    setModalVisible(true);
+                  }}
+                >
+                  <Image
+                    borderRadius={75}
+                    borderWidth={10}
+                    borderColor="white"
+                    alt="cover"
+                    width={150}
+                    height={150}
+                    resizeMode="cover"
+                    source={{ uri: user.avatar }}
+                  ></Image>
+                </TouchableOpacity>
                 <Box
                   width={100}
                   paddingX={2}

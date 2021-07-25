@@ -9,6 +9,7 @@ import Modal from 'react-native-modal';
 import * as FileSystem from 'expo-file-system';
 import * as Permissions from 'expo-permissions';
 import * as MediaLibrary from 'expo-media-library';
+
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useSelector } from 'react-redux';
 import { Image, TouchableOpacity, Alert } from 'react-native';
@@ -19,7 +20,7 @@ export default function Index({ navigation, route }) {
   });
 
   const { displayName: name, avatar, account, time } = user;
-  console.log(user);
+  // console.log(user);
   const room = route.params.user;
 
   const [receiveMessage, setReceiveMessage] = useState([]);
@@ -69,8 +70,8 @@ export default function Index({ navigation, route }) {
   }, []);
 
   return (
-    <SafeAreaView style={{ flex: 1, backgroundColor:'white'}}>
-      <Box backgroundColor={toggle ?'black' :'#FFA788' } flex={1}>
+    <SafeAreaView style={{ flex: 1, backgroundColor: 'white' }}>
+      <Box backgroundColor={toggle ? 'black' : '#FFA788'} flex={1}>
         <Spinner
           //visibility of Overlay Loading Spinner
           visible={isLoading}
@@ -123,6 +124,10 @@ export default function Index({ navigation, route }) {
           onPressAvatar={(user) => {
             setShowImage(user.avatar);
             setModalVisible(true);
+            console.log(user);
+            navigation.navigate('ProfileUser', {
+              account: room,
+            });
           }}
           scrollToBottom={true}
           renderSend={(props) => {
