@@ -125,6 +125,7 @@ export default function Profile({ navigation }) {
               followMe: userData.followMe,
               followed: userData.followed,
               liked: userData.liked,
+              time: userData.time,
             },
           });
         });
@@ -176,6 +177,7 @@ export default function Profile({ navigation }) {
               followMe: userData.followMe,
               followed: userData.followed,
               liked: userData.liked,
+              time: userData.time,
             },
           });
         });
