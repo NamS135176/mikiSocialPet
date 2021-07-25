@@ -45,7 +45,7 @@ export const listTag = [
 '#animal',
 '#pets_of_miki',
 '#couple',
-'miki-love',
+'#miki-love',
 '#goodnight',
 '#nighttime',
 '#sleeptime',

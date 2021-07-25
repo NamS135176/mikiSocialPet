@@ -142,6 +142,7 @@ export default function LoginScreen({ navigation }) {
             });
           } else {
             const user = data.user;
+            console.log(user);
             await AsyncStorage.setItem('userToken', data.token);
             dispatch({
               type: 'SET_USER_INFO',
@@ -168,6 +169,9 @@ export default function LoginScreen({ navigation }) {
           }
         })
         .catch((err) => {
+            setModalVisible(false)
+            setModalErrText('Sai tài khoản hoặc mật khẩu, vui lòng thử lại!');
+            setModalErrVisible(true);
           console.log(err);
         });
     }

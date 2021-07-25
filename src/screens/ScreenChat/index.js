@@ -9,7 +9,7 @@ import Modal from 'react-native-modal';
 import * as FileSystem from 'expo-file-system';
 import * as Permissions from 'expo-permissions';
 import * as MediaLibrary from 'expo-media-library';
-import SafeAreaView from 'react-native-safe-area-view';
+import { SafeAreaView } from 'react-native-safe-area-context';
 import { useSelector } from 'react-redux';
 import { Image, TouchableOpacity, Alert } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
@@ -69,8 +69,8 @@ export default function Index({ navigation, route }) {
   }, []);
 
   return (
-    <SafeAreaView style={{ flex: 1 }}>
-      <Box backgroundColor={toggle ? '#FFA788' : 'black'} flex={1}>
+    <SafeAreaView style={{ flex: 1, backgroundColor:'white'}}>
+      <Box backgroundColor={toggle ?'black' :'#FFA788' } flex={1}>
         <Spinner
           //visibility of Overlay Loading Spinner
           visible={isLoading}
@@ -84,7 +84,6 @@ export default function Index({ navigation, route }) {
           alignItems="center"
           justify="space-between"
           style={{
-            marginTop: 20,
             height: 50,
             backgroundColor: 'white',
             paddingHorizontal: 20,

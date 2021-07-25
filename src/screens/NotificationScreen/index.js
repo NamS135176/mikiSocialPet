@@ -1,14 +1,40 @@
 import { useFonts } from 'expo-font';
 import { Box, Flex, Image, ScrollView, Text } from 'native-base';
-import React from 'react';
+import React,{useEffect} from 'react';
 import { Pressable } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import SkeletonContent from 'react-native-skeleton-content';
-import { useSelector } from 'react-redux';
+import { useSelector , useDispatch} from 'react-redux';
 export default function NotificationScreen({ navigation }) {
   const userData = useSelector((state) => {
     return state.currentUser;
   });
+  const userLocal = useSelector((state) => {
+    return state.userInfo;
+  });
+  const dispatch = useDispatch()
+//   useEffect(() => {
+//     if(JSON.stringify(userData.followMe) != JSON.stringify(userLocal.followMe) || JSON.stringify(userData.followed) != JSON.stringify(userLocal.followed)){
+//         dispatch({
+//             type: 'SET_USER_INFO',
+//             payload: {
+//               account: userData.account,
+//               displayName: userData.displayName,
+//               typePet: userData.typePet,
+//               birthDay: userData.birthDay,
+//               sex: userData.sex,
+//               owner: userData.owner,
+//               avatar: userData.avatar,
+//               coverImage: userData.coverImage,
+//               followMe: userData.followMe,
+//               followed: userData.followed,
+//               liked: userData.liked,
+//               time: userData.time,
+//               roomChat: userData.roomChat,
+//             },
+//           });
+//     }
+//   },[])
   let [fontsLoaded] = useFonts({
     Gabriola: require('../../../assets/fonts/Gabriola.ttf'),
     Nunito: require('../../../assets/fonts/Nunito-Regular.ttf'),

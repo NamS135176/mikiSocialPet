@@ -125,9 +125,9 @@ export default function FirstTimeStep2Screen({ route, navigation }) {
             birthDay: new XDate(date).toString('dd/MM/yyyy'),
           },
           avatar:
-            'https://cdn.pixabay.com/photo/2016/08/08/09/17/avatar-1577909_1280.png',
+            'https://i.pinimg.com/564x/24/b8/b1/24b8b148bccd7180e851bbb1889423aa.jpg',
           coverImage:
-            'https://i.pinimg.com/originals/95/56/f0/9556f0d55126e028a9b63a0bd2909c7d.jpg',
+            'https://i.pinimg.com/564x/42/52/d6/4252d67ce24473045f2a20a2e81e710f.jpg',
         }),
       })
         .then((result) => result.text())
@@ -150,9 +150,9 @@ export default function FirstTimeStep2Screen({ route, navigation }) {
                 birthDay: new XDate(date).toString('dd/MM/yyyy'),
               },
               avatar:
-                'https://cdn.pixabay.com/photo/2016/08/08/09/17/avatar-1577909_1280.png',
+                'https://i.pinimg.com/564x/24/b8/b1/24b8b148bccd7180e851bbb1889423aa.jpg',
               coverImage:
-                'https://i.pinimg.com/originals/95/56/f0/9556f0d55126e028a9b63a0bd2909c7d.jpg',
+                'https://i.pinimg.com/564x/42/52/d6/4252d67ce24473045f2a20a2e81e710f.jpg',
               followMe: [],
               followed: [],
               liked: [],

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState } from "react";
 import {
   Button,
   StyleSheet,
@@ -14,29 +14,29 @@ import {
   Alert,
   Modal,
   Pressable,
-} from 'react-native';
-import { NavigationContainer } from '@react-navigation/native';
-import { createStackNavigator } from '@react-navigation/stack';
-import SvgUri from 'react-native-svg-uri';
-import { useFonts } from 'expo-font';
-import AppLoading from 'expo-app-loading';
-import { Ionicons } from '@expo/vector-icons';
-import MaterialIcon from '@expo/vector-icons/MaterialIcons';
+} from "react-native";
+import { NavigationContainer } from "@react-navigation/native";
+import { createStackNavigator } from "@react-navigation/stack";
+import SvgUri from "react-native-svg-uri";
+import { useFonts } from "expo-font";
+import AppLoading from "expo-app-loading";
+import { Ionicons } from "@expo/vector-icons";
+import MaterialIcon from "@expo/vector-icons/MaterialIcons";
 
 const styles = StyleSheet.create({
   centeredView: {
     flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
+    justifyContent: "center",
+    alignItems: "center",
     marginTop: 22,
   },
   modalView: {
     margin: 20,
-    backgroundColor: 'white',
+    backgroundColor: "white",
     borderRadius: 20,
     padding: 50,
-    alignItems: 'center',
-    shadowColor: '#000',
+    alignItems: "center",
+    shadowColor: "#000",
     shadowOffset: {
       width: 0,
       height: 2,
@@ -51,30 +51,30 @@ const styles = StyleSheet.create({
     elevation: 2,
   },
   buttonOpen: {
-    backgroundColor: '#F194FF',
+    backgroundColor: "#F194FF",
   },
   buttonClose: {
-    backgroundColor: '#2196F3',
+    backgroundColor: "#2196F3",
   },
   textStyle: {
-    color: 'white',
-    fontWeight: 'bold',
-    textAlign: 'center',
+    color: "white",
+    fontWeight: "bold",
+    textAlign: "center",
   },
   modalText: {
     marginBottom: 15,
-    textAlign: 'center',
+    textAlign: "center",
   },
 });
 
 export default function ForgotPassScreen({ navigation }) {
   const [isSelected, setSelection] = useState(false);
-  const [accountName, setAccountName] = useState('');
-  const [pass, setPass] = useState('');
-  const [cfPass, setCfPass] = useState('');
+  const [accountName, setAccountName] = useState("");
+  const [pass, setPass] = useState("");
+  const [cfPass, setCfPass] = useState("");
   const [modalVisible, setModalVisible] = useState(false);
   const [modalErrVisible, setModalErrVisible] = useState(false);
-  const [modalErrText, setModalErrText] = useState('');
+  const [modalErrText, setModalErrText] = useState("");
   const [modalSuccessVisible, setModalSuccessVisible] = useState(false);
 
   function validateEmail(email) {
@@ -100,26 +100,26 @@ export default function ForgotPassScreen({ navigation }) {
   };
 
   const handleChangeNewPass = () => {
-    if (accountName == '' || pass == '' || cfPass == '') {
-      setModalErrText('Không được để trống thông tin tài khoản');
+    if (accountName == "" || pass == "" || cfPass == "") {
+      setModalErrText("Không được để trống thông tin tài khoản");
       setModalErrVisible(true);
-    } else if (accountName.includes(' ')) {
-      setModalErrText('Tên đăng nhập không được chứa khoảng trống');
+    } else if (accountName.includes(" ")) {
+      setModalErrText("Tên đăng nhập không được chứa khoảng trống");
       setModalErrVisible(true);
     } else if (pass.length < 6) {
-      setModalErrText('Mật khẩu phải có tối thiểu 6 ký tự');
+      setModalErrText("Mật khẩu phải có tối thiểu 6 ký tự");
       setModalErrVisible(true);
     } else if (cfPass != pass) {
-      setModalErrText('Mật khẩu xác nhận không khớp');
+      setModalErrText("Mật khẩu xác nhận không khớp");
       setModalErrVisible(true);
     } else {
       setModalVisible(true);
-      fetch('https://obnd.me/update-password', {
-        method: 'PUT',
+      fetch("http://obnd.me/update-password", {
+        method: "PUT",
         headers: {
-          'Content-Type': 'application/json',
+          "Content-Type": "application/json",
         },
-        redirect: 'follow',
+        redirect: "follow",
         body: JSON.stringify({
           password: pass,
           account: accountName,
@@ -128,19 +128,28 @@ export default function ForgotPassScreen({ navigation }) {
         .then((res) => res.text())
         .then((result) => {
           setModalVisible(false);
-          if (result == 'we sent to your e-mail') {
+          if (result == "we sent to your e-mail") {
             setModalSuccessVisible(true);
+          }
+          else{
+            // setModalVisible(false);
+            setModalErrText("Không tìm thấy tài khoản, vui lòng thử lại.");
+            setModalErrVisible(true);
           }
         })
         .catch((err) => {
-          console.log(err);
+          console.log("dfsfsdfsfdsdfsdfs");
+          setModalVisible(false);
+          setModalErrText("Không tìm thấy tài khoản, vui lòng thử lại.");
+          setModalErrVisible(true);
+          // console.log(err);
         });
     }
   };
 
   let [fontsLoaded] = useFonts({
-    Gabriola: require('../../../assets/fonts/Gabriola.ttf'),
-    UTMGodWord: require('../../../assets/fonts/UTMGodWord.ttf'),
+    Gabriola: require("../../../assets/fonts/Gabriola.ttf"),
+    UTMGodWord: require("../../../assets/fonts/UTMGodWord.ttf"),
   });
   if (!fontsLoaded) {
     return <AppLoading />;
@@ -172,17 +181,17 @@ export default function ForgotPassScreen({ navigation }) {
                 onPress={() => {
                   setModalErrVisible(false);
                 }}
-                style={{ position: 'absolute', top: 0, right: 0, padding: 10 }}
+                style={{ position: "absolute", top: 0, right: 0, padding: 10 }}
                 name="close"
                 size={30}
                 color="black"
               />
               <Image
                 style={{ width: 100, height: 100 }}
-                source={require('../../../src/images/Login/ic_warning-01.png')}
+                source={require("../../../src/images/Login/ic_warning-01.png")}
               ></Image>
               <Text
-                style={{ fontSize: 20, textAlign: 'center', paddingTop: 20 }}
+                style={{ fontSize: 20, textAlign: "center", paddingTop: 20 }}
               >
                 {modalErrText}
               </Text>
@@ -200,19 +209,19 @@ export default function ForgotPassScreen({ navigation }) {
               <MaterialIcon
                 onPress={() => {
                   setModalSuccessVisible(false);
-                  navigation.navigate('Login');
+                  navigation.navigate("Login");
                 }}
-                style={{ position: 'absolute', top: 0, right: 0, padding: 10 }}
+                style={{ position: "absolute", top: 0, right: 0, padding: 10 }}
                 name="close"
                 size={30}
                 color="black"
               />
               <Image
                 style={{ width: 100, height: 100 }}
-                source={require('../../../src/images/Login/ic_success.png')}
+                source={require("../../../src/images/Login/ic_success.png")}
               ></Image>
               <Text
-                style={{ fontSize: 20, textAlign: 'center', paddingTop: 20 }}
+                style={{ fontSize: 20, textAlign: "center", paddingTop: 20 }}
               >
                 Xác nhận email để hoàn tất thay đổi mật khẩu!
               </Text>
@@ -221,21 +230,21 @@ export default function ForgotPassScreen({ navigation }) {
         </Modal>
         <Image
           style={{
-            width: '100%',
-            height: '100%',
-            position: 'absolute',
+            width: "100%",
+            height: "100%",
+            position: "absolute",
             top: 0,
             left: 0,
           }}
-          source={require('../../../src/images/SignUp/bg_login.png')}
+          source={require("../../../src/images/SignUp/bg_login.png")}
         ></Image>
         <KeyboardAvoidingView behavior="position">
-          <View style={{ marginTop: 50, position: 'relative' }}>
+          <View style={{ marginTop: 50, position: "relative" }}>
             <Text
               style={{
-                color: '#4F292C',
+                color: "#4F292C",
                 fontSize: 25,
-                textAlign: 'center',
+                textAlign: "center",
                 // fontFamily: 'UTMGodWord',
               }}
             >
@@ -243,7 +252,7 @@ export default function ForgotPassScreen({ navigation }) {
             </Text>
             <MaterialIcon
               onPress={handleBack}
-              style={{ position: 'absolute', top: 5, left: 0, paddingLeft: 10 }}
+              style={{ position: "absolute", top: 5, left: 0, paddingLeft: 10 }}
               name="arrow-back"
               size={30}
               color="black"
@@ -254,19 +263,19 @@ export default function ForgotPassScreen({ navigation }) {
               <View
                 style={{
                   paddingHorizontal: 20,
-                  backgroundColor: '#e1e1e1',
-                  alignSelf: 'center',
+                  backgroundColor: "#e1e1e1",
+                  alignSelf: "center",
                   borderRadius: 50,
-                  width: '80%',
+                  width: "80%",
                   flex: 1,
-                  flexDirection: 'row',
-                  alignItems: 'center',
+                  flexDirection: "row",
+                  alignItems: "center",
                 }}
               >
                 <MaterialIcon name="person" size={30} color="#ff9a7b" />
                 <TextInput
                   onChangeText={handleChangeAccountName}
-                  style={{ marginLeft: 20, width: '100%' }}
+                  style={{ marginLeft: 20, width: "100%" }}
                   placeholder="Tên đăng nhập"
                 ></TextInput>
               </View>
@@ -275,20 +284,20 @@ export default function ForgotPassScreen({ navigation }) {
               <View
                 style={{
                   paddingHorizontal: 20,
-                  backgroundColor: '#e1e1e1',
-                  alignSelf: 'center',
+                  backgroundColor: "#e1e1e1",
+                  alignSelf: "center",
                   borderRadius: 50,
-                  width: '80%',
+                  width: "80%",
                   flex: 1,
-                  flexDirection: 'row',
-                  alignItems: 'center',
+                  flexDirection: "row",
+                  alignItems: "center",
                 }}
               >
                 <MaterialIcon name="lock" size={30} color="#ff9a7b" />
                 <TextInput
                   onChangeText={handleChangePass}
                   secureTextEntry={true}
-                  style={{ marginLeft: 20, width: '100%' }}
+                  style={{ marginLeft: 20, width: "100%" }}
                   placeholder="Nhập mật khẩu mới"
                 ></TextInput>
               </View>
@@ -297,20 +306,20 @@ export default function ForgotPassScreen({ navigation }) {
               <View
                 style={{
                   paddingHorizontal: 20,
-                  backgroundColor: '#e1e1e1',
-                  alignSelf: 'center',
+                  backgroundColor: "#e1e1e1",
+                  alignSelf: "center",
                   borderRadius: 50,
-                  width: '80%',
+                  width: "80%",
                   flex: 1,
-                  flexDirection: 'row',
-                  alignItems: 'center',
+                  flexDirection: "row",
+                  alignItems: "center",
                 }}
               >
                 <MaterialIcon name="lock" size={30} color="#ff9a7b" />
                 <TextInput
                   onChangeText={handleChangeCfPass}
                   secureTextEntry={true}
-                  style={{ marginLeft: 20, width: '100%' }}
+                  style={{ marginLeft: 20, width: "100%" }}
                   placeholder="Xác nhận mật khẩu mới"
                 ></TextInput>
               </View>
@@ -318,9 +327,9 @@ export default function ForgotPassScreen({ navigation }) {
           </View>
           <View
             style={{
-              width: '70%',
-              alignSelf: 'center',
-              backgroundColor: '#ff9a7b',
+              width: "70%",
+              alignSelf: "center",
+              backgroundColor: "#ff9a7b",
               height: 60,
               borderRadius: 50,
               marginTop: 30,
@@ -329,25 +338,25 @@ export default function ForgotPassScreen({ navigation }) {
             <View
               style={{
                 flex: 1,
-                alignItems: 'center',
-                flexDirection: 'row',
-                justifyContent: 'center',
+                alignItems: "center",
+                flexDirection: "row",
+                justifyContent: "center",
               }}
             >
               <Text
                 onPress={handleChangeNewPass}
-                style={{ color: 'white', fontSize: 25 }}
+                style={{ color: "white", fontSize: 25 }}
               >
                 Thay đổi mật khẩu
               </Text>
             </View>
           </View>
           <View style={{ marginTop: 10 }}>
-            <Text style={{ textAlign: 'center', color: '#7B7B7B' }}>
-              Quay trở lại{' '}
+            <Text style={{ textAlign: "center", color: "#7B7B7B" }}>
+              Quay trở lại{" "}
               <Text
                 onPress={handleBack}
-                style={{ color: '#FFA788', textDecorationLine: 'underline' }}
+                style={{ color: "#FFA788", textDecorationLine: "underline" }}
               >
                 Đăng nhập
               </Text>

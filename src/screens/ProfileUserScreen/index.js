@@ -92,6 +92,8 @@ export default function ProfileUserScreen({ route, navigation }) {
           },
         ],
         liked: userData.liked,
+        time: userData.time,
+        roomChat: userData.roomChat,
       },
     });
     fetch('http://obnd.me/update-followed', {
@@ -134,6 +136,8 @@ export default function ProfileUserScreen({ route, navigation }) {
         followMe: userData.followMe,
         followed: removeCurrentList,
         liked: userData.liked,
+        time: userData.time,
+        roomChat: userData.roomChat,
       },
     });
     fetch('http://obnd.me/update-followed', {
@@ -637,7 +641,7 @@ export default function ProfileUserScreen({ route, navigation }) {
                           columns={3}
                           spacing={3}
                         >
-                          {listPost.reverse().map((_item, index) => {
+                          {listPost.map((_item, index) => {
                             return (
                               <Pressable
                                 key={index}
