@@ -12,7 +12,7 @@ import {
   ScrollView,
   Text,
 } from "native-base";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import { Alert, Dimensions, Pressable, Share } from "react-native";
 import Spinner from "react-native-loading-spinner-overlay";
 import SkeletonContent from "react-native-skeleton-content";
@@ -21,6 +21,7 @@ import { SafeAreaView } from "react-native-safe-area-context";
 export default function PostDetailScreen({ route, navigation }) {
   const w = Dimensions.get("window").width;
   const [isLoading, setIsLoading] = useState(false);
+  const commentRef = useRef()
   let [fontsLoaded] = useFonts({
     Gabriola: require("../../../assets/fonts/Gabriola.ttf"),
     Nunito: require("../../../assets/fonts/Nunito-Regular.ttf"),
@@ -62,6 +63,7 @@ export default function PostDetailScreen({ route, navigation }) {
       })
         .then((res) => res.text())
         .then((result) => {
+          commentRef.current.clear();
           setIsLoading(false);
           dispatch({
             type: "GET_POST",
@@ -771,6 +773,7 @@ export default function PostDetailScreen({ route, navigation }) {
               _focus={{
                 borderColor: "blue",
               }}
+              ref={commentRef}
               onChangeText={handleChangeComment}
               borderWidth={2}
               backgroundColor={"#f5f5f5"}

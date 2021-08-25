@@ -335,7 +335,8 @@ export default function ForgotPassScreen({ navigation }) {
               marginTop: 30,
             }}
           >
-            <View
+            <Pressable
+              onPress={handleChangeNewPass}
               style={{
                 flex: 1,
                 alignItems: "center",
@@ -344,12 +345,12 @@ export default function ForgotPassScreen({ navigation }) {
               }}
             >
               <Text
-                onPress={handleChangeNewPass}
+              
                 style={{ color: "white", fontSize: 25 }}
               >
                 Thay đổi mật khẩu
               </Text>
-            </View>
+            </Pressable>
           </View>
           <View style={{ marginTop: 10 }}>
             <Text style={{ textAlign: "center", color: "#7B7B7B" }}>

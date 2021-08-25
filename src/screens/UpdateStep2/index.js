@@ -394,7 +394,8 @@ export default function UpdateStep2({ route, navigation }) {
           marginTop: 30,
         }}
       >
-        <View
+        <Pressable
+         onPress={submitRegister}
           style={{
             flex: 1,
             alignItems: 'center',
@@ -403,12 +404,12 @@ export default function UpdateStep2({ route, navigation }) {
           }}
         >
           <Text
-            onPress={submitRegister}
+           
             style={{ color: 'white', fontSize: 25 }}
           >
             Hoàn tất
           </Text>
-        </View>
+        </Pressable>
       </View>
     </View>
   );

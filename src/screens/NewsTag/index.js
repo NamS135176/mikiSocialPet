@@ -11,6 +11,7 @@ import {
   ScrollView,
   Text,
 } from 'native-base';
+import { Alert } from 'react-native';
 import React, { useEffect, useState } from 'react';
 import { Dimensions } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';

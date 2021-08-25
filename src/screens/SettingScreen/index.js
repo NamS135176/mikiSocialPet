@@ -1,4 +1,4 @@
-import React from 'react';
+import React from "react";
 import {
   Box,
   Pressable,
@@ -7,38 +7,51 @@ import {
   Text,
   ScrollView,
   Center,
-} from 'native-base';
-import { useSelector } from 'react-redux';
-import { useFonts } from 'expo-font';
-import { Ionicons } from '@expo/vector-icons';
-import AsyncStorage from '@react-native-async-storage/async-storage';
+} from "native-base";
+import { useSelector } from "react-redux";
+import { useFonts } from "expo-font";
+import { Ionicons } from "@expo/vector-icons";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import { Alert } from "react-native";
 
 export default function SettingScreen({ navigation }) {
   let [fontsLoaded] = useFonts({
-    Gabriola: require('../../../assets/fonts/Gabriola.ttf'),
-    Nunito: require('../../../assets/fonts/Nunito-Regular.ttf'),
-    NunitoExBold: require('../../../assets/fonts/Nunito-ExtraBold.ttf'),
-    NunitoSemi: require('../../../assets/fonts/Nunito-SemiBold.ttf'),
+    Gabriola: require("../../../assets/fonts/Gabriola.ttf"),
+    Nunito: require("../../../assets/fonts/Nunito-Regular.ttf"),
+    NunitoExBold: require("../../../assets/fonts/Nunito-ExtraBold.ttf"),
+    NunitoSemi: require("../../../assets/fonts/Nunito-SemiBold.ttf"),
   });
 
   const handleSignOut = async () => {
-    await AsyncStorage.setItem('userToken', '');
-    navigation.reset({
-      index: 0,
-      routes: [{ name: 'Login' }],
-    });
+    Alert.alert("Đăng xuất", "Bạn có muốn đăng xuất?", [
+      {
+        text: "Hủy",
+        onPress: () => console.log("Cancel Pressed"),
+        style: "cancel",
+      },
+      {
+        text: "OK",
+        onPress: async () => {
+          await AsyncStorage.setItem("userToken", "");
+          navigation.reset({
+            index: 0,
+            routes: [{ name: "Login" }],
+          });
+        },
+      },
+    ]);
   };
   const userData = useSelector((state) => {
     return state.userInfo;
   });
 
   const handleToUpdate = async () => {
-    const token = await AsyncStorage.getItem('userToken');
-    navigation.navigate('Step1', { token: token, username: userData.account });
+    const token = await AsyncStorage.getItem("userToken");
+    navigation.navigate("Step1", { token: token, username: userData.account });
   };
 
   const handleToForgot = () => {
-    navigation.navigate('ForgotPass');
+    navigation.navigate("ForgotPass");
   };
 
   if (!fontsLoaded) {
@@ -55,7 +68,7 @@ export default function SettingScreen({ navigation }) {
             <Flex paddingX={5} flexDirection="row" alignItems="center">
               <Image
                 alt="back"
-                source={require('../../images/Utilities/ic_back_circle.png')}
+                source={require("../../images/Utilities/ic_back_circle.png")}
                 width={45}
                 height={45}
               ></Image>
@@ -73,7 +86,7 @@ export default function SettingScreen({ navigation }) {
               style={{
                 paddingTop: 20,
                 fontSize: 30,
-                fontFamily: 'NunitoExBold',
+                fontFamily: "NunitoExBold",
               }}
             >
               {userData.account}
@@ -81,33 +94,43 @@ export default function SettingScreen({ navigation }) {
           </Center>
           <Box paddingLeft={10} paddingTop={2}>
             <Text
-              style={{ fontFamily: 'NunitoSemi', fontSize: 20, color: '#aaa' }}
+              style={{ fontFamily: "NunitoSemi", fontSize: 20, color: "#aaa" }}
             >
               Giao diện
             </Text>
-            <Flex
-              marginTop={3}
-              flexDirection="row"
-              alignItems="center"
-              justifyContent="flex-start"
+            <Pressable
+              onPress={() => {
+                Alert.alert("Tính năng đang được phát triển!");
+              }}
             >
-              <Box style={{padding:10}} backgroundColor="black" borderRadius={30}>
-                <Ionicons name="moon" size={23} color="white"></Ionicons>
-              </Box>
-              <Text
-                style={{
-                  fontSize: 20,
-                  fontFamily: 'NunitoSemi',
-                  marginLeft: 20,
-                }}
+              <Flex
+                marginTop={3}
+                flexDirection="row"
+                alignItems="center"
+                justifyContent="flex-start"
               >
-                Giao diện tối
-              </Text>
-            </Flex>
+                <Box
+                  style={{ padding: 10 }}
+                  backgroundColor="black"
+                  borderRadius={30}
+                >
+                  <Ionicons name="moon" size={23} color="white"></Ionicons>
+                </Box>
+                <Text
+                  style={{
+                    fontSize: 20,
+                    fontFamily: "NunitoSemi",
+                    marginLeft: 20,
+                  }}
+                >
+                  Giao diện tối
+                </Text>
+              </Flex>
+            </Pressable>
           </Box>
           <Box paddingLeft={10} paddingTop={2}>
             <Text
-              style={{ fontFamily: 'NunitoSemi', fontSize: 20, color: '#aaa' }}
+              style={{ fontFamily: "NunitoSemi", fontSize: 20, color: "#aaa" }}
             >
               Tài khoản
             </Text>
@@ -124,7 +147,7 @@ export default function SettingScreen({ navigation }) {
                 <Text
                   style={{
                     fontSize: 20,
-                    fontFamily: 'NunitoSemi',
+                    fontFamily: "NunitoSemi",
                     marginLeft: 20,
                   }}
                 >
@@ -145,7 +168,7 @@ export default function SettingScreen({ navigation }) {
                 <Text
                   style={{
                     fontSize: 20,
-                    fontFamily: 'NunitoSemi',
+                    fontFamily: "NunitoSemi",
                     marginLeft: 20,
                   }}
                 >
@@ -156,57 +179,65 @@ export default function SettingScreen({ navigation }) {
           </Box>
           <Box paddingLeft={10} paddingTop={2}>
             <Text
-              style={{ fontFamily: 'NunitoSemi', fontSize: 20, color: '#aaa' }}
+              style={{ fontFamily: "NunitoSemi", fontSize: 20, color: "#aaa" }}
             >
               Khác
             </Text>
-            <Flex
-              marginTop={3}
-              flexDirection="row"
-              alignItems="center"
-              justifyContent="flex-start"
+            <Pressable
+              onPress={() => {
+                Alert.alert("Tính năng đang được phát triển!");
+              }}
             >
-              <Box
-                paddingY={3}
-                paddingX={3}
-                backgroundColor="#48be8b"
-                borderRadius={35}
+              <Flex
+                marginTop={3}
+                flexDirection="row"
+                alignItems="center"
+                justifyContent="flex-start"
               >
-                <Ionicons
-                  name="help-outline"
-                  size={23}
-                  color="white"
-                ></Ionicons>
-              </Box>
-              <Text
-                style={{
-                  fontSize: 20,
-                  fontFamily: 'NunitoSemi',
-                  marginLeft: 20,
-                }}
+                <Box
+                  paddingY={3}
+                  paddingX={3}
+                  backgroundColor="#48be8b"
+                  borderRadius={35}
+                >
+                  <Ionicons
+                    name="help-outline"
+                    size={23}
+                    color="white"
+                  ></Ionicons>
+                </Box>
+                <Text
+                  style={{
+                    fontSize: 20,
+                    fontFamily: "NunitoSemi",
+                    marginLeft: 20,
+                  }}
+                >
+                  Trợ giúp
+                </Text>
+              </Flex>
+            </Pressable>
+            <Pressable onPress={() => {navigation.navigate('Policy')}}>
+              <Flex
+                marginTop={3}
+                flexDirection="row"
+                alignItems="center"
+                justifyContent="flex-start"
               >
-                Trợ giúp
-              </Text>
-            </Flex>
-            <Flex
-              marginTop={3}
-              flexDirection="row"
-              alignItems="center"
-              justifyContent="flex-start"
-            >
-              <Box padding={3} backgroundColor="#bf87ff" borderRadius={35}>
-                <Ionicons name="book" size={23} color="white"></Ionicons>
-              </Box>
-              <Text
-                style={{
-                  fontSize: 20,
-                  fontFamily: 'NunitoSemi',
-                  marginLeft: 20,
-                }}
-              >
-                Chính sách
-              </Text>
-            </Flex>
+                <Box padding={3} backgroundColor="#bf87ff" borderRadius={35}>
+                  <Ionicons name="book" size={23} color="white"></Ionicons>
+                </Box>
+                <Text
+                  style={{
+                    fontSize: 20,
+                    fontFamily: "NunitoSemi",
+                    marginLeft: 20,
+                  }}
+                >
+                  Chính sách
+                </Text>
+              </Flex>
+            </Pressable>
             <Flex
               marginTop={3}
               flexDirection="row"
@@ -222,17 +253,17 @@ export default function SettingScreen({ navigation }) {
                 <Image
                   width={1}
                   height={5}
-                  source={require('../../images/Setting/ic_version.png')}
+                  source={require("../../images/Setting/ic_version.png")}
                 ></Image>
               </Box>
               <Text
                 style={{
                   fontSize: 20,
-                  fontFamily: 'NunitoSemi',
+                  fontFamily: "NunitoSemi",
                   marginLeft: 20,
                 }}
               >
-               1.0.0
+                1.0.0
               </Text>
             </Flex>
             <Pressable onPress={handleSignOut}>
@@ -246,13 +277,13 @@ export default function SettingScreen({ navigation }) {
                   <Image
                     width={23}
                     height={23}
-                    source={require('../../images/Setting/ic_logout.png')}
+                    source={require("../../images/Setting/ic_logout.png")}
                   ></Image>
                 </Box>
                 <Text
                   style={{
                     fontSize: 20,
-                    fontFamily: 'NunitoSemi',
+                    fontFamily: "NunitoSemi",
                     marginLeft: 20,
                   }}
                 >

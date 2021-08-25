@@ -1,4 +1,4 @@
-import * as React from 'react';
+import * as React from "react";
 import {
   Button,
   View,
@@ -8,51 +8,52 @@ import {
   TextInput,
   ScrollView,
   KeyboardAvoidingView,
-} from 'react-native';
-import { NavigationContainer } from '@react-navigation/native';
-import { createStackNavigator } from '@react-navigation/stack';
-import SvgUri from 'react-native-svg-uri';
-import { useFonts } from 'expo-font';
-import AppLoading from 'expo-app-loading';
-import { Ionicons } from '@expo/vector-icons';
-import MaterialIcon from '@expo/vector-icons/MaterialIcons';
-import { Provider } from 'react-redux';
-import createSagaMiddleware from 'redux-saga';
-import { persistStore, persistReducer } from 'redux-persist';
-import { PersistGate } from 'redux-persist/integration/react';
-import { createStore, applyMiddleware } from 'redux';
-import AsyncStorage from '@react-native-async-storage/async-storage';
-import { NativeBaseProvider, Box } from 'native-base';
-import { enableScreens } from 'react-native-screens';
+} from "react-native";
+import { NavigationContainer } from "@react-navigation/native";
+import { createStackNavigator } from "@react-navigation/stack";
+import SvgUri from "react-native-svg-uri";
+import { useFonts } from "expo-font";
+import AppLoading from "expo-app-loading";
+import { Ionicons } from "@expo/vector-icons";
+import MaterialIcon from "@expo/vector-icons/MaterialIcons";
+import { Provider } from "react-redux";
+import createSagaMiddleware from "redux-saga";
+import { persistStore, persistReducer } from "redux-persist";
+import { PersistGate } from "redux-persist/integration/react";
+import { createStore, applyMiddleware } from "redux";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import { NativeBaseProvider, Box } from "native-base";
+import { enableScreens } from "react-native-screens";
 
-import LoginScreen from './src/screens/Login';
-import SignUpScreen from './src/screens/Signup';
-import ForgotPassScreen from './src/screens/ForgotPass';
-import TestUpload from './src/screens/TestUpload';
-import FirstTimeUpdateScreen from './src/screens/FirstTimeUpdate';
-import MainScreen from './src/screens/Main';
-import FirstTimeStep2Screen from './src/screens/FirstTimeStep2Screen';
-import rootSaga from './src/sagas/rootSaga';
-import allReducer from './src/reducers/allReducer';
-import TipsScreen from './src/screens/TipsScreen';
-import MapsScreen from './src/screens/MapsScreen';
-import ListLocScreen from './src/screens/ListLocScreen';
-import TipsDetailScreen from './src/screens/TipsDetailScreen';
-import SettingScreen from './src/screens/SettingScreen';
-import UpdateStep1 from './src/screens/UpdateStep1';
-import UpdateStep2 from './src/screens/UpdateStep2';
-import PostDetailScreen from './src/screens/PostDetail';
-import ProfileUserScreen from './src/screens/ProfileUserScreen';
-import PostDetailSecondScreen from './src/screens/PostDetailSecond';
-import NewsScreen from './src/screens/NewsScreen';
-import ListChat from './src/screens/ListChat';
-import ScreenChat from './src/screens/ScreenChat';
-import SearchScreen from './src/screens/SearchScreen';
-import NewsTagScreen from './src/screens/NewsTag';
-import EditPostScreen from './src/screens/EditPost';
+import LoginScreen from "./src/screens/Login";
+import SignUpScreen from "./src/screens/Signup";
+import ForgotPassScreen from "./src/screens/ForgotPass";
+import TestUpload from "./src/screens/TestUpload";
+import FirstTimeUpdateScreen from "./src/screens/FirstTimeUpdate";
+import MainScreen from "./src/screens/Main";
+import FirstTimeStep2Screen from "./src/screens/FirstTimeStep2Screen";
+import rootSaga from "./src/sagas/rootSaga";
+import allReducer from "./src/reducers/allReducer";
+import TipsScreen from "./src/screens/TipsScreen";
+import MapsScreen from "./src/screens/MapsScreen";
+import ListLocScreen from "./src/screens/ListLocScreen";
+import TipsDetailScreen from "./src/screens/TipsDetailScreen";
+import SettingScreen from "./src/screens/SettingScreen";
+import UpdateStep1 from "./src/screens/UpdateStep1";
+import UpdateStep2 from "./src/screens/UpdateStep2";
+import PostDetailScreen from "./src/screens/PostDetail";
+import ProfileUserScreen from "./src/screens/ProfileUserScreen";
+import PostDetailSecondScreen from "./src/screens/PostDetailSecond";
+import NewsScreen from "./src/screens/NewsScreen";
+import ListChat from "./src/screens/ListChat";
+import ScreenChat from "./src/screens/ScreenChat";
+import SearchScreen from "./src/screens/SearchScreen";
+import NewsTagScreen from "./src/screens/NewsTag";
+import EditPostScreen from "./src/screens/EditPost";
+import PolicyScreen from "./src/screens/PolicyScreen";
 
 const persistConfig = {
-  key: 'root',
+  key: "root",
   storage: AsyncStorage,
 };
 
@@ -184,6 +185,11 @@ function App() {
               <Stack.Screen
                 name="ScreenChat"
                 component={ScreenChat}
+                options={{ headerShown: false }}
+              />
+              <Stack.Screen
+                name="Policy"
+                component={PolicyScreen}
                 options={{ headerShown: false }}
               />
             </Stack.Navigator>

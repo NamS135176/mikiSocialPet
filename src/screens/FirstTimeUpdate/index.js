@@ -448,7 +448,8 @@ export default function FirstTimeUpdateScreen({ route, navigation }) {
               marginTop: 30,
             }}
           >
-            <View
+            <Pressable
+             onPress={handleNext}
               style={{
                 flex: 1,
                 alignItems: 'center',
@@ -457,12 +458,12 @@ export default function FirstTimeUpdateScreen({ route, navigation }) {
               }}
             >
               <Text
-                onPress={handleNext}
+               
                 style={{ color: 'white', fontSize: 25 }}
               >
                 Tiếp theo
               </Text>
-            </View>
+            </Pressable>
           </View>
           {/* </KeyboardAvoidingView> */}
         </View>

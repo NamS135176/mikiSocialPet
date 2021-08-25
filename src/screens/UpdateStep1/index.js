@@ -257,11 +257,11 @@ export default function UpdateStep1({ route, navigation }) {
                         </View>
                     </View>
 
-                    <View style={{ width: "50%", alignSelf: 'center', backgroundColor: '#ff9a7b', height: 60, borderRadius: 50, marginTop: 30 }}>
+                    <Pressable onPress={handleNext} style={{ width: "50%", alignSelf: 'center', backgroundColor: '#ff9a7b', height: 60, borderRadius: 50, marginTop: 30 }}>
                         <View style={{ flex: 1, alignItems: 'center', flexDirection: 'row', justifyContent: 'center' }}>
-                            <Text onPress={handleNext} style={{ color: 'white', fontSize: 25 }}>Tiếp theo</Text>
+                            <Text  style={{ color: 'white', fontSize: 25 }}>Tiếp theo</Text>
                         </View>
-                    </View>
+                    </Pressable>
                     {/* </KeyboardAvoidingView> */}
                 </View>
             </ScrollView>

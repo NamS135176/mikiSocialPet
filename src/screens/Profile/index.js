@@ -741,57 +741,7 @@ export default function Profile({ navigation }) {
                     </Text>
                   </Box>
                 </Flex>
-                <Flex
-                  marginX={5}
-                  borderBottomWidth={1}
-                  borderColor="#ddd"
-                  paddingY={3}
-                  alignItems="center"
-                  flexDirection="row"
-                  justifyContent="space-between"
-                >
-                  <Flex flexDirection="row" alignItems="center">
-                    <Ionicons
-                      size={30}
-                      name="transgender"
-                      color="#ccc"
-                    ></Ionicons>
-                    <Text
-                      style={{
-                        textAlign: 'center',
-                        paddingLeft: 10,
-                        color: '#ccc',
-                        fontFamily: 'NunitoSemi',
-                        fontSize: 18,
-                      }}
-                    >
-                      Giới tính :
-                    </Text>
-                  </Flex>
-                  <Box flex={1} paddingLeft={5}>
-                    {userData.sex ? (
-                      <Text
-                        style={{
-                          fontSize: 20,
-                          fontFamily: 'NunitoExBold',
-                          textAlign: 'right',
-                        }}
-                      >
-                        Nam
-                      </Text>
-                    ) : (
-                      <Text
-                        style={{
-                          fontSize: 20,
-                          fontFamily: 'NunitoExBold',
-                          textAlign: 'right',
-                        }}
-                      >
-                        Nữ
-                      </Text>
-                    )}
-                  </Box>
-                </Flex>
+ 
                 <Flex
                   marginX={5}
                   borderBottomWidth={1}

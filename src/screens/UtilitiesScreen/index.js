@@ -76,7 +76,7 @@ export default function UtilitiesScreen({ navigation }) {
                                     <Center flex={1}>
                                         <Text style={{ color: 'white', fontFamily: "NunitoSemi", fontSize: 15 }}>Thú y</Text>
                                     </Center>
-                                    <Box borderBottomLeftRadius={20} width='40%' height='100%' backgroundColor='#99d2ff'>
+                                    <Box borderBottomLeftRadius={20} width='40%' height='100%' backgroundColor='#bf87ff'>
                                         <Center flex={1} >
                                             <Image alt='search' source={require('../../images/Utilities/ic_location_pet_hospital.png')} width='47%' height="50%"></Image>
                                         </Center>

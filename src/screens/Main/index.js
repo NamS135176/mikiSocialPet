@@ -44,7 +44,7 @@ export default function MainScreen({ navigation }) {
                 name="News"
                 component={NewsScreen}
                 options={{
-                    tabBarLabel:"News",
+                    tabBarLabel:"Bảng tin",
                     tabBarIcon: ({ color, size }) => {
                       
                             return (
@@ -101,7 +101,7 @@ export default function MainScreen({ navigation }) {
                 name="Profile"
                 component={Profile}
                 options={{
-                    tabBarLabel:"Profile",
+                    tabBarLabel:"Cá nhân",
                     tabBarIcon: ({ color, size }) => {
                        
                             return (

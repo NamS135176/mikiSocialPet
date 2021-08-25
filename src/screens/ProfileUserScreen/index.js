@@ -1,6 +1,6 @@
-import { Ionicons } from '@expo/vector-icons';
-import axios from 'axios';
-import { useFonts } from 'expo-font';
+import { Ionicons } from "@expo/vector-icons";
+import axios from "axios";
+import { useFonts } from "expo-font";
 import {
   Box,
   Center,
@@ -10,41 +10,41 @@ import {
   ScrollView,
   SimpleGrid,
   Text,
-} from 'native-base';
-import React, { useEffect, useState } from 'react';
-import { Alert, Dimensions, TouchableOpacity } from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
-import SkeletonContent from 'react-native-skeleton-content';
-import { useDispatch, useSelector } from 'react-redux';
-import * as FileSystem from 'expo-file-system';
-import * as Permissions from 'expo-permissions';
-import * as MediaLibrary from 'expo-media-library';
-import Modal from 'react-native-modal';
-import { api } from '../../api';
+} from "native-base";
+import React, { useEffect, useState } from "react";
+import { Alert, Dimensions, TouchableOpacity } from "react-native";
+import { SafeAreaView } from "react-native-safe-area-context";
+import SkeletonContent from "react-native-skeleton-content";
+import { useDispatch, useSelector } from "react-redux";
+import * as FileSystem from "expo-file-system";
+import * as Permissions from "expo-permissions";
+import * as MediaLibrary from "expo-media-library";
+import Modal from "react-native-modal";
+import { api } from "../../api";
 export default function ProfileUserScreen({ route, navigation }) {
   const { account } = route.params;
   let [fontsLoaded] = useFonts({
-    Gabriola: require('../../../assets/fonts/Gabriola.ttf'),
-    Nunito: require('../../../assets/fonts/Nunito-Regular.ttf'),
-    NunitoExBold: require('../../../assets/fonts/Nunito-ExtraBold.ttf'),
-    NunitoSemi: require('../../../assets/fonts/Nunito-SemiBold.ttf'),
+    Gabriola: require("../../../assets/fonts/Gabriola.ttf"),
+    Nunito: require("../../../assets/fonts/Nunito-Regular.ttf"),
+    NunitoExBold: require("../../../assets/fonts/Nunito-ExtraBold.ttf"),
+    NunitoSemi: require("../../../assets/fonts/Nunito-SemiBold.ttf"),
   });
   const [user, setUser] = useState(null);
   const [listPost, setListPost] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [isModalVisible, setModalVisible] = useState(false);
-  const [showImage, setShowImage] = useState('');
+  const [showImage, setShowImage] = useState("");
   const saveFile = async (fileUri) => {
     const { status } = await Permissions.askAsync(Permissions.MEDIA_LIBRARY);
-    if (status === 'granted') {
+    if (status === "granted") {
       const asset = await MediaLibrary.createAssetAsync(fileUri);
-      await MediaLibrary.createAlbumAsync('Download', asset);
-      Alert.alert('Save Image Successfully');
+      await MediaLibrary.createAlbumAsync("Download", asset);
+      Alert.alert("Save Image Successfully");
     }
   };
 
   const downloadImage = () => {
-    let fileUri = FileSystem.documentDirectory + 'robo.jpg';
+    let fileUri = FileSystem.documentDirectory + "robo.jpg";
     FileSystem.downloadAsync(showImage, fileUri)
       .then(({ uri }) => {
         saveFile(uri);
@@ -58,13 +58,13 @@ export default function ProfileUserScreen({ route, navigation }) {
     setIsLoading(true);
 
     const promise1 = api.post(
-      'get-account',
+      "get-account",
       {
         account: account,
       },
       {
         headers: {
-          'Content-Type': 'application/json',
+          "Content-Type": "application/json",
         },
       }
     );
@@ -76,9 +76,9 @@ export default function ProfileUserScreen({ route, navigation }) {
         setIsLoading(false);
       } else {
         Alert.alert(
-          'Xin lỗi bạn',
-          'Người dùng này không tồn tại hoặc đã bị khóa!',
-          [{ text: 'OK', onPress: () => navigation.goBack() }]
+          "Xin lỗi bạn",
+          "Người dùng này không tồn tại hoặc đã bị khóa!",
+          [{ text: "OK", onPress: () => navigation.goBack() }]
         );
       }
     });
@@ -91,13 +91,13 @@ export default function ProfileUserScreen({ route, navigation }) {
   });
 
   const handleFollow = () => {
-    console.log('ahfgjhfgj');
+    console.log("ahfgjhfgj");
     setUser({
       ...user,
       followMe: [...user.followMe, { account: userData.account }],
     });
     dispatch({
-      type: 'SET_USER_INFO',
+      type: "SET_USER_INFO",
       payload: {
         account: userData.account,
         displayName: userData.displayName,
@@ -122,10 +122,10 @@ export default function ProfileUserScreen({ route, navigation }) {
         roomChat: userData.roomChat,
       },
     });
-    fetch('http://obnd.me/update-followed', {
-      method: 'POST',
+    fetch("http://obnd.me/update-followed", {
+      method: "POST",
       headers: {
-        'Content-Type': 'application/json',
+        "Content-Type": "application/json",
       },
       body: JSON.stringify({
         account: userData.account,
@@ -133,8 +133,23 @@ export default function ProfileUserScreen({ route, navigation }) {
       }),
     });
   };
+
+  const handleReport = async () => {
+    Alert.alert("Chúng tôi sẽ xem xét báo cáo của bạn. Cảm ơn bạn đã báo cáo!")
+    fetch("http://obnd.me/update-reported", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        account: userData.account,
+        accountReported: account,
+      }),
+    });
+  };
+
   const handleUnFollow = () => {
-    console.log('ahjafhabfkjf');
+    console.log("ahjafhabfkjf");
     const newList = user.followMe.filter((item) => {
       return item.account == userData.account;
     });
@@ -149,7 +164,7 @@ export default function ProfileUserScreen({ route, navigation }) {
     const removeCurrentList = userData.followed;
     removeCurrentList.splice(i, 1);
     dispatch({
-      type: 'SET_USER_INFO',
+      type: "SET_USER_INFO",
       payload: {
         account: userData.account,
         displayName: userData.displayName,
@@ -166,10 +181,10 @@ export default function ProfileUserScreen({ route, navigation }) {
         roomChat: userData.roomChat,
       },
     });
-    fetch('http://obnd.me/update-followed', {
-      method: 'POST',
+    fetch("http://obnd.me/update-followed", {
+      method: "POST",
       headers: {
-        'Content-Type': 'application/json',
+        "Content-Type": "application/json",
       },
       body: JSON.stringify({
         account: userData.account,
@@ -184,8 +199,8 @@ export default function ProfileUserScreen({ route, navigation }) {
       <SafeAreaView>
         <Modal
           style={{
-            justifyContent: 'center',
-            alignItems: 'center',
+            justifyContent: "center",
+            alignItems: "center",
           }}
           animationIn="slideInUp"
           coverScreen={true}
@@ -209,10 +224,10 @@ export default function ProfileUserScreen({ route, navigation }) {
           {isLoading ? (
             <Box backgroundColor="white" position="relative">
               <SkeletonContent
-                containerStyle={{ width: '100%' }}
+                containerStyle={{ width: "100%" }}
                 isLoading={true}
               >
-                <Text style={{ width: '100%', height: 250 }}> </Text>
+                <Text style={{ width: "100%", height: 250 }}> </Text>
               </SkeletonContent>
               <Center marginTop={-75} zIndex={3}>
                 <SkeletonContent
@@ -225,10 +240,10 @@ export default function ProfileUserScreen({ route, navigation }) {
                       height: 150,
                       borderRadius: 75,
                       borderWidth: 10,
-                      borderColor: 'white',
+                      borderColor: "white",
                     }}
                   >
-                    {' '}
+                    {" "}
                   </Text>
                 </SkeletonContent>
               </Center>
@@ -251,7 +266,7 @@ export default function ProfileUserScreen({ route, navigation }) {
                     isLoading={true}
                   >
                     <Text style={{ width: 70, height: 13, marginTop: 5 }}>
-                      {' '}
+                      {" "}
                     </Text>
                   </SkeletonContent>
                 </Center>
@@ -267,7 +282,7 @@ export default function ProfileUserScreen({ route, navigation }) {
                     isLoading={true}
                   >
                     <Text style={{ width: 70, height: 13, marginTop: 5 }}>
-                      {' '}
+                      {" "}
                     </Text>
                   </SkeletonContent>
                 </Center>
@@ -331,15 +346,15 @@ export default function ProfileUserScreen({ route, navigation }) {
                     marginLeft: 15,
                   }}
                 >
-                  {' '}
+                  {" "}
                 </Text>
               </SkeletonContent>
               <SkeletonContent
-                containerStyle={{ width: '100%' }}
+                containerStyle={{ width: "100%" }}
                 isLoading={true}
               >
-                <Text style={{ width: '100%', height: 300, margin: 15 }}>
-                  {' '}
+                <Text style={{ width: "100%", height: 300, margin: 15 }}>
+                  {" "}
                 </Text>
               </SkeletonContent>
             </Box>
@@ -372,10 +387,10 @@ export default function ProfileUserScreen({ route, navigation }) {
                     >
                       <Text
                         style={{
-                          color: 'white',
-                          textAlign: 'center',
+                          color: "white",
+                          textAlign: "center",
                           fontSize: 15,
-                          fontFamily: 'NunitoSemi',
+                          fontFamily: "NunitoSemi",
                         }}
                       >
                         Hủy
@@ -393,10 +408,10 @@ export default function ProfileUserScreen({ route, navigation }) {
                     >
                       <Text
                         style={{
-                          color: 'white',
-                          textAlign: 'center',
+                          color: "white",
+                          textAlign: "center",
                           fontSize: 15,
-                          fontFamily: 'NunitoSemi',
+                          fontFamily: "NunitoSemi",
                         }}
                       >
                         Theo dõi
@@ -421,24 +436,27 @@ export default function ProfileUserScreen({ route, navigation }) {
                     source={{ uri: user.avatar }}
                   ></Image>
                 </TouchableOpacity>
-                <Box
-                  width={100}
-                  paddingX={2}
-                  borderRadius={20}
-                  paddingY={1}
-                  backgroundColor="#FFA788"
-                >
-                  <Text
-                    style={{
-                      color: 'white',
-                      textAlign: 'center',
-                      fontSize: 15,
-                      fontFamily: 'NunitoSemi',
-                    }}
+                <Pressable >
+                  <Box
+                    width={100}
+                    paddingX={2}
+                    borderRadius={20}
+                    paddingY={1}
+                    backgroundColor="#FFA788"
                   >
-                    Báo cáo
-                  </Text>
-                </Box>
+                    <Text
+                    onPress={handleReport}
+                      style={{
+                        color: "white",
+                        textAlign: "center",
+                        fontSize: 15,
+                        fontFamily: "NunitoSemi",
+                      }}
+                    >
+                      Báo cáo
+                    </Text>
+                  </Box>
+                </Pressable>
               </Flex>
               <Flex
                 zIndex={1}
@@ -447,18 +465,18 @@ export default function ProfileUserScreen({ route, navigation }) {
                 justifyContent="space-between"
               >
                 <Center marginLeft={-10} flex={1} paddingTop={10}>
-                  <Text style={{ fontSize: 25, fontFamily: 'NunitoExBold' }}>
+                  <Text style={{ fontSize: 25, fontFamily: "NunitoExBold" }}>
                     {user.followMe.length}
                   </Text>
-                  <Text style={{ fontFamily: 'Nunito', fontSize: 13 }}>
+                  <Text style={{ fontFamily: "Nunito", fontSize: 13 }}>
                     Theo dõi
                   </Text>
                 </Center>
                 <Center marginRight={-10} flex={1} paddingTop={10}>
-                  <Text style={{ fontSize: 25, fontFamily: 'NunitoExBold' }}>
+                  <Text style={{ fontSize: 25, fontFamily: "NunitoExBold" }}>
                     {user.followed.length}
                   </Text>
-                  <Text style={{ fontFamily: 'Nunito', fontSize: 13 }}>
+                  <Text style={{ fontFamily: "Nunito", fontSize: 13 }}>
                     Đang Theo dõi
                   </Text>
                 </Center>
@@ -476,7 +494,7 @@ export default function ProfileUserScreen({ route, navigation }) {
                   flex={1}
                   paddingTop={5}
                 >
-                  <Text style={{ fontSize: 25, fontFamily: 'NunitoExBold' }}>
+                  <Text style={{ fontSize: 25, fontFamily: "NunitoExBold" }}>
                     {user.account}
                   </Text>
                 </Center>
@@ -488,13 +506,13 @@ export default function ProfileUserScreen({ route, navigation }) {
                   flex={1}
                   paddingTop={5}
                 >
-                  <Text style={{ fontSize: 25, fontFamily: 'NunitoExBold' }}>
+                  <Text style={{ fontSize: 25, fontFamily: "NunitoExBold" }}>
                     {user.displayName}
                   </Text>
                 </Center>
               </Flex>
               <Center paddingX={10} paddingTop={5}>
-                <Text style={{ textAlign: 'center' }}>
+                <Text style={{ textAlign: "center" }}>
                   {user.owner.description}
                 </Text>
               </Center>
@@ -511,7 +529,7 @@ export default function ProfileUserScreen({ route, navigation }) {
                       alt="icon"
                       width={26}
                       height={22}
-                      source={require('../../images/Profile/ic_paw_pet_wwhite.png')}
+                      source={require("../../images/Profile/ic_paw_pet_wwhite.png")}
                     ></Image>
                   </Center>
                 ) : (
@@ -531,7 +549,7 @@ export default function ProfileUserScreen({ route, navigation }) {
                         alt="icon"
                         width={26}
                         height={22}
-                        source={require('../../images/Profile/ic_paw_pet_gray.png')}
+                        source={require("../../images/Profile/ic_paw_pet_gray.png")}
                       ></Image>
                     </Center>
                   </Pressable>
@@ -548,7 +566,7 @@ export default function ProfileUserScreen({ route, navigation }) {
                       alt="icon"
                       width={18}
                       height={22}
-                      source={require('../../images/Profile/ic_account_profile_white.png')}
+                      source={require("../../images/Profile/ic_account_profile_white.png")}
                     ></Image>
                   </Center>
                 ) : (
@@ -568,7 +586,7 @@ export default function ProfileUserScreen({ route, navigation }) {
                         alt="icon"
                         width={18}
                         height={22}
-                        source={require('../../images/Profile/ic_account_profile_gray.png')}
+                        source={require("../../images/Profile/ic_account_profile_gray.png")}
                       ></Image>
                     </Center>
                   </Pressable>
@@ -582,7 +600,7 @@ export default function ProfileUserScreen({ route, navigation }) {
                         user2: user.account,
                       }
                     );
-                    navigation.navigate('ScreenChat', { user: user.account });
+                    navigation.navigate("ScreenChat", { user: user.account });
                   }}
                 >
                   <Center
@@ -613,8 +631,8 @@ export default function ProfileUserScreen({ route, navigation }) {
                         <Text
                           style={{
                             fontSize: 20,
-                            color: '#FFA788',
-                            fontFamily: 'NunitoExBold',
+                            color: "#FFA788",
+                            fontFamily: "NunitoExBold",
                           }}
                         >
                           Ảnh
@@ -630,8 +648,8 @@ export default function ProfileUserScreen({ route, navigation }) {
                           <Text
                             style={{
                               fontSize: 20,
-                              color: '#ddd',
-                              fontFamily: 'NunitoExBold',
+                              color: "#ddd",
+                              fontFamily: "NunitoExBold",
                             }}
                           >
                             Ảnh
@@ -649,8 +667,8 @@ export default function ProfileUserScreen({ route, navigation }) {
                         <Text
                           style={{
                             fontSize: 20,
-                            color: '#FFA788',
-                            fontFamily: 'NunitoExBold',
+                            color: "#FFA788",
+                            fontFamily: "NunitoExBold",
                           }}
                         >
                           Thông tin
@@ -666,8 +684,8 @@ export default function ProfileUserScreen({ route, navigation }) {
                           <Text
                             style={{
                               fontSize: 20,
-                              color: '#ddd',
-                              fontFamily: 'NunitoExBold',
+                              color: "#ddd",
+                              fontFamily: "NunitoExBold",
                             }}
                           >
                             Thông tin
@@ -681,10 +699,10 @@ export default function ProfileUserScreen({ route, navigation }) {
                       {listPost.length == 0 ? (
                         <Text
                           style={{
-                            fontFamily: 'Nunito',
+                            fontFamily: "Nunito",
                             padding: 25,
                             fontSize: 20,
-                            textAlign: 'center',
+                            textAlign: "center",
                           }}
                         >
                           Bạn chưa đăng gì, hãy tích cực tham gia các hoạt động
@@ -702,12 +720,12 @@ export default function ProfileUserScreen({ route, navigation }) {
                               <Pressable
                                 key={index}
                                 onPress={() => {
-                                  navigation.navigate('PostDetailSecond', {
+                                  navigation.navigate("PostDetailSecond", {
                                     item: _item._id,
                                   });
                                 }}
-                                width={Dimensions.get('window').width / 4}
-                                height={Dimensions.get('window').width / 4}
+                                width={Dimensions.get("window").width / 4}
+                                height={Dimensions.get("window").width / 4}
                                 margin={2}
                               >
                                 <Image
@@ -743,7 +761,7 @@ export default function ProfileUserScreen({ route, navigation }) {
                           name="people-circle"
                           color="black"
                         ></Ionicons>
-                        <Text flex={1} style={{ textAlign: 'center' }}>
+                        <Text flex={1} style={{ textAlign: "center" }}>
                           {user.displayName}
                         </Text>
                       </Flex>
@@ -770,11 +788,11 @@ export default function ProfileUserScreen({ route, navigation }) {
                             color="black"
                           ></Ionicons>
                           {user.sex ? (
-                            <Text flex={1} style={{ textAlign: 'center' }}>
+                            <Text flex={1} style={{ textAlign: "center" }}>
                               Đực
                             </Text>
                           ) : (
-                            <Text flex={1} style={{ textAlign: 'center' }}>
+                            <Text flex={1} style={{ textAlign: "center" }}>
                               Cái
                             </Text>
                           )}
@@ -795,7 +813,7 @@ export default function ProfileUserScreen({ route, navigation }) {
                             name="calendar"
                             color="black"
                           ></Ionicons>
-                          <Text flex={1} style={{ textAlign: 'center' }}>
+                          <Text flex={1} style={{ textAlign: "center" }}>
                             {user.birthDay}
                           </Text>
                         </Flex>
@@ -822,7 +840,7 @@ export default function ProfileUserScreen({ route, navigation }) {
                             name="paw"
                             color="black"
                           ></Ionicons>
-                          <Text flex={1} style={{ textAlign: 'center' }}>
+                          <Text flex={1} style={{ textAlign: "center" }}>
                             {user.typePet}
                           </Text>
                         </Flex>
@@ -842,7 +860,7 @@ export default function ProfileUserScreen({ route, navigation }) {
                             name="heart"
                             color="black"
                           ></Ionicons>
-                          <Text flex={1} style={{ textAlign: 'center' }}>
+                          <Text flex={1} style={{ textAlign: "center" }}>
                             Độc thân
                           </Text>
                         </Flex>
@@ -863,7 +881,7 @@ export default function ProfileUserScreen({ route, navigation }) {
                           name="people-circle"
                           color="black"
                         ></Ionicons>
-                        <Text flex={1} style={{ textAlign: 'center' }}>
+                        <Text flex={1} style={{ textAlign: "center" }}>
                           {user.owner.name}
                         </Text>
                       </Flex>
@@ -886,8 +904,8 @@ export default function ProfileUserScreen({ route, navigation }) {
                       <Text
                         style={{
                           fontSize: 20,
-                          color: '#FFA788',
-                          fontFamily: 'NunitoExBold',
+                          color: "#FFA788",
+                          fontFamily: "NunitoExBold",
                         }}
                       >
                         Thông tin
@@ -911,10 +929,10 @@ export default function ProfileUserScreen({ route, navigation }) {
                       ></Ionicons>
                       <Text
                         style={{
-                          textAlign: 'center',
+                          textAlign: "center",
                           paddingLeft: 10,
-                          color: '#ccc',
-                          fontFamily: 'NunitoSemi',
+                          color: "#ccc",
+                          fontFamily: "NunitoSemi",
                           fontSize: 18,
                         }}
                       >
@@ -925,8 +943,8 @@ export default function ProfileUserScreen({ route, navigation }) {
                       <Text
                         style={{
                           fontSize: 20,
-                          fontFamily: 'NunitoExBold',
-                          textAlign: 'right',
+                          fontFamily: "NunitoExBold",
+                          textAlign: "right",
                         }}
                       >
                         {user.owner.name}
@@ -950,10 +968,10 @@ export default function ProfileUserScreen({ route, navigation }) {
                       ></Ionicons>
                       <Text
                         style={{
-                          textAlign: 'center',
+                          textAlign: "center",
                           paddingLeft: 10,
-                          color: '#ccc',
-                          fontFamily: 'NunitoSemi',
+                          color: "#ccc",
+                          fontFamily: "NunitoSemi",
                           fontSize: 18,
                         }}
                       >
@@ -964,65 +982,15 @@ export default function ProfileUserScreen({ route, navigation }) {
                       <Text
                         style={{
                           fontSize: 20,
-                          fontFamily: 'NunitoExBold',
-                          textAlign: 'right',
+                          fontFamily: "NunitoExBold",
+                          textAlign: "right",
                         }}
                       >
                         {user.owner.birthDay}
                       </Text>
                     </Box>
                   </Flex>
-                  <Flex
-                    marginX={5}
-                    borderBottomWidth={1}
-                    borderColor="#ddd"
-                    paddingY={3}
-                    alignItems="center"
-                    flexDirection="row"
-                    justifyContent="space-between"
-                  >
-                    <Flex flexDirection="row" alignItems="center">
-                      <Ionicons
-                        size={30}
-                        name="transgender"
-                        color="#ccc"
-                      ></Ionicons>
-                      <Text
-                        style={{
-                          textAlign: 'center',
-                          paddingLeft: 10,
-                          color: '#ccc',
-                          fontFamily: 'NunitoSemi',
-                          fontSize: 18,
-                        }}
-                      >
-                        Giới tính :
-                      </Text>
-                    </Flex>
-                    <Box flex={1} paddingLeft={5}>
-                      {user.sex ? (
-                        <Text
-                          style={{
-                            fontSize: 20,
-                            fontFamily: 'NunitoExBold',
-                            textAlign: 'right',
-                          }}
-                        >
-                          Nam
-                        </Text>
-                      ) : (
-                        <Text
-                          style={{
-                            fontSize: 20,
-                            fontFamily: 'NunitoExBold',
-                            textAlign: 'right',
-                          }}
-                        >
-                          Nữ
-                        </Text>
-                      )}
-                    </Box>
-                  </Flex>
+
                   <Flex
                     marginX={5}
                     borderBottomWidth={1}
@@ -1040,10 +1008,10 @@ export default function ProfileUserScreen({ route, navigation }) {
                       ></Ionicons>
                       <Text
                         style={{
-                          textAlign: 'center',
+                          textAlign: "center",
                           paddingLeft: 10,
-                          color: '#ccc',
-                          fontFamily: 'NunitoSemi',
+                          color: "#ccc",
+                          fontFamily: "NunitoSemi",
                           fontSize: 18,
                         }}
                       >
@@ -1054,8 +1022,8 @@ export default function ProfileUserScreen({ route, navigation }) {
                       <Text
                         style={{
                           fontSize: 20,
-                          fontFamily: 'NunitoExBold',
-                          textAlign: 'right',
+                          fontFamily: "NunitoExBold",
+                          textAlign: "right",
                         }}
                       >
                         {user.owner.hobby}
@@ -1075,10 +1043,10 @@ export default function ProfileUserScreen({ route, navigation }) {
                       <Ionicons size={30} name="paw" color="#ccc"></Ionicons>
                       <Text
                         style={{
-                          textAlign: 'center',
+                          textAlign: "center",
                           paddingLeft: 10,
-                          color: '#ccc',
-                          fontFamily: 'NunitoSemi',
+                          color: "#ccc",
+                          fontFamily: "NunitoSemi",
                           fontSize: 18,
                         }}
                       >
@@ -1089,8 +1057,8 @@ export default function ProfileUserScreen({ route, navigation }) {
                       <Text
                         style={{
                           fontSize: 20,
-                          fontFamily: 'NunitoExBold',
-                          textAlign: 'right',
+                          fontFamily: "NunitoExBold",
+                          textAlign: "right",
                         }}
                       >
                         {user.displayName}

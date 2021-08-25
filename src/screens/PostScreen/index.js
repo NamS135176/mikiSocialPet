@@ -1,6 +1,6 @@
-import { Ionicons } from '@expo/vector-icons';
-import { useFonts } from 'expo-font';
-import * as ImagePicker from 'expo-image-picker';
+import { Ionicons } from "@expo/vector-icons";
+import { useFonts } from "expo-font";
+import * as ImagePicker from "expo-image-picker";
 import {
   Box,
   Flex,
@@ -10,30 +10,30 @@ import {
   ScrollView,
   Text,
   TextArea,
-} from 'native-base';
-import React, { useState } from 'react';
-import Spinner from 'react-native-loading-spinner-overlay';
-import { useDispatch, useSelector } from 'react-redux';
-import { storage } from '../../commonComponents/FirebaseConfig';
-import { listTag } from '../../hashData/Tags';
-import axios from 'axios';
+} from "native-base";
+import React, { useState } from "react";
+import Spinner from "react-native-loading-spinner-overlay";
+import { useDispatch, useSelector } from "react-redux";
+import { storage } from "../../commonComponents/FirebaseConfig";
+import { listTag } from "../../hashData/Tags";
+import axios from "axios";
 export default function PostScreen({ navigation }) {
   const userData = useSelector((state) => {
     return state.userInfo;
   });
   let [fontsLoaded] = useFonts({
-    Gabriola: require('../../../assets/fonts/Gabriola.ttf'),
-    Nunito: require('../../../assets/fonts/Nunito-Regular.ttf'),
-    NunitoExBold: require('../../../assets/fonts/Nunito-ExtraBold.ttf'),
-    NunitoSemi: require('../../../assets/fonts/Nunito-SemiBold.ttf'),
+    Gabriola: require("../../../assets/fonts/Gabriola.ttf"),
+    Nunito: require("../../../assets/fonts/Nunito-Regular.ttf"),
+    NunitoExBold: require("../../../assets/fonts/Nunito-ExtraBold.ttf"),
+    NunitoSemi: require("../../../assets/fonts/Nunito-SemiBold.ttf"),
   });
   const dispatch = useDispatch();
   const [image, setImage] = useState(null);
   const [tags, setTags] = useState([]);
-  const [displayTag, setDisplayTag] = useState('');
+  const [displayTag, setDisplayTag] = useState("");
   const [showModal, setShowModal] = useState(false);
-  const [modalContent, setModalContent] = useState('');
-  const [textContent, setTextContent] = useState('');
+  const [modalContent, setModalContent] = useState("");
+  const [textContent, setTextContent] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const pickImage = async () => {
     let result = await ImagePicker.launchImageLibraryAsync({
@@ -52,39 +52,39 @@ export default function PostScreen({ navigation }) {
   const uploadImage = async (uri, imageName) => {
     const res = await fetch(uri);
     const blob = await res.blob();
-    let ref = storage.ref().child('posts/' + imageName);
+    let ref = storage.ref().child("posts/" + imageName);
     return ref.put(blob);
   };
 
   const handleCreatePost = async () => {
     if (image == null) {
-      setModalContent('Bạn quên chọn một bức ảnh rồi này!');
+      setModalContent("Bạn quên chọn một bức ảnh rồi này!");
       setShowModal(true);
     } else if (tags.length == 0) {
       setModalContent(
-        'Hãy chọn cho mình những thẻ thú vị để mọi người dễ dàng theo dõi hơn nhé!'
+        "Hãy chọn cho mình những thẻ thú vị để mọi người dễ dàng theo dõi hơn nhé!"
       );
       setShowModal(true);
     } else {
       const gen = Date.now();
       setIsLoading(true);
       const form = new FormData();
-      form.append('avatar', {
+      form.append("avatar", {
         uri: image,
-        type: 'image/jpeg',
-        name: 'popo.jpg',
+        type: "image/jpeg",
+        name: "popo.jpg",
       });
-      const postA = await axios.post('http://obnd.me:8000/profile', form, {
+      const postA = await axios.post("http://obnd.me:8000/profile", form, {
         headers: {
-          'Content-Type': 'multipart/form-data',
+          "Content-Type": "multipart/form-data",
         },
       });
-      const url = 'http://obnd.me:8000/get/' + postA.data;
+      const url = "http://obnd.me:8000/get/" + postA.data;
       console.log(url);
-      const res = await fetch('http://obnd.me/post-api/create-post', {
-        method: 'POST',
+      const res = await fetch("http://obnd.me/post-api/create-post", {
+        method: "POST",
         headers: {
-          'Content-Type': 'application/json',
+          "Content-Type": "application/json",
         },
         body: JSON.stringify({
           account: userData.account,
@@ -95,12 +95,12 @@ export default function PostScreen({ navigation }) {
       });
       setIsLoading(false);
       dispatch({
-        type: 'GET_MY_POST',
+        type: "GET_MY_POST",
         payload: userData.account,
       });
       navigation.reset({
         index: 0,
-        routes: [{ name: 'Main' }],
+        routes: [{ name: "Main" }],
       });
     }
   };
@@ -110,7 +110,7 @@ export default function PostScreen({ navigation }) {
   } else {
     return (
       <Box flex={1} backgroundColor="white" paddingTop={45}>
-        <Spinner visible={isLoading} textStyle={{ color: '#FFF' }} />
+        <Spinner visible={isLoading} textStyle={{ color: "#FFF" }} />
         <Modal isOpen={showModal} onClose={() => setShowModal(false)}>
           <Modal.Content maxWidth="80%">
             <Text style={{ fontSize: 20 }}>Ôi bạn ơi!</Text>
@@ -124,10 +124,10 @@ export default function PostScreen({ navigation }) {
                 setShowModal(false);
               }}
               style={{
-                textAlign: 'right',
+                textAlign: "right",
                 paddingHorizontal: 15,
                 paddingVertical: 20,
-                color: '#2097f3',
+                color: "#2097f3",
               }}
             >
               OK
@@ -143,9 +143,9 @@ export default function PostScreen({ navigation }) {
           <Text
             style={{
               fontSize: 20,
-              fontFamily: 'NunitoSemi',
+              fontFamily: "NunitoSemi",
               flex: 1,
-              textAlign: 'left',
+              textAlign: "left",
             }}
           >
             Bài viết mới
@@ -154,17 +154,17 @@ export default function PostScreen({ navigation }) {
             onPress={handleCreatePost}
             style={{
               fontSize: 20,
-              fontFamily: 'NunitoSemi',
+              fontFamily: "NunitoSemi",
               flex: 1,
-              textAlign: 'right',
-              color: 'blue',
+              textAlign: "right",
+              color: "blue",
             }}
           >
             Chia sẻ
           </Text>
         </Flex>
         <Box paddingX={5} paddingY={5}>
-          <Text style={{ fontFamily: 'Nunito' }}>Chọn ảnh</Text>
+          <Text style={{ fontFamily: "Nunito" }}>Chọn ảnh</Text>
           <Box paddingY={3}>
             {image == null ? (
               <Pressable onPress={pickImage}>
@@ -212,7 +212,7 @@ export default function PostScreen({ navigation }) {
               borderBottomLeftRadius={20}
               borderBottomRightRadius={20}
             >
-              <Text style={{ fontFamily: 'Nunito' }}>{displayTag}</Text>
+              <Text style={{ fontFamily: "Nunito" }}>{tags.toString()}</Text>
             </Box>
           </Box>
           <Flex
@@ -228,21 +228,42 @@ export default function PostScreen({ navigation }) {
                   onPress={() => {
                     if (!tags.includes(item)) {
                       setTags([...tags, item]);
-                      setDisplayTag(`${displayTag} ${item}`);
+                      // setDisplayTag(`${displayTag} ${item}`);
+                    }
+                    else{
+                      const index = tags.indexOf(item)
+                      const newTags = tags
+                      newTags.splice(index, 1)
+                      console.log(newTags);
+                      setTags([...newTags])
                     }
                   }}
                 >
-                  <Box
-                    marginRight={3}
-                    marginBottom={3}
-                    paddingX={3}
-                    paddingY={2}
-                    backgroundColor="#ccc"
-                    borderRadius={10}
-                    key={index}
-                  >
-                    <Text>{item}</Text>
-                  </Box>
+                  {tags.includes(item) ? (
+                    <Box
+                      marginRight={3}
+                      marginBottom={3}
+                      paddingX={3}
+                      paddingY={2}
+                      backgroundColor="orange"
+                      borderRadius={10}
+                      key={index}
+                    >
+                      <Text style={{ color: "white" }}>{item}</Text>
+                    </Box>
+                  ) : (
+                    <Box
+                      marginRight={3}
+                      marginBottom={3}
+                      paddingX={3}
+                      paddingY={2}
+                      backgroundColor="#ccc"
+                      borderRadius={10}
+                      key={index}
+                    >
+                      <Text>{item}</Text>
+                    </Box>
+                  )}
                 </Pressable>
               );
             })}

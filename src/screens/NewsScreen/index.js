@@ -1,7 +1,7 @@
-import { Ionicons } from '@expo/vector-icons';
-import { useFonts } from 'expo-font';
-import moment from 'moment';
-import 'moment/locale/vi';
+import { Ionicons } from "@expo/vector-icons";
+import { useFonts } from "expo-font";
+import moment from "moment";
+import "moment/locale/vi";
 import {
   Box,
   Center,
@@ -11,28 +11,38 @@ import {
   Pressable,
   ScrollView,
   Text,
-} from 'native-base';
-import React, { useEffect } from 'react';
-import { Alert, Dimensions, Share } from 'react-native';
-import SkeletonContent from 'react-native-skeleton-content';
-import { useDispatch, useSelector } from 'react-redux';
+  Button,
+  Spinner,
+} from "native-base";
+import React, { useEffect, useState } from "react";
+import { Alert, Dimensions, Share } from "react-native";
+import SkeletonContent from "react-native-skeleton-content";
+import { useDispatch, useSelector } from "react-redux";
 export default function NewsScreen({ navigation }) {
   let [fontsLoaded] = useFonts({
-    Gabriola: require('../../../assets/fonts/Gabriola.ttf'),
-    Nunito: require('../../../assets/fonts/Nunito-Regular.ttf'),
-    NunitoExBold: require('../../../assets/fonts/Nunito-ExtraBold.ttf'),
-    NunitoSemi: require('../../../assets/fonts/Nunito-SemiBold.ttf'),
+    Gabriola: require("../../../assets/fonts/Gabriola.ttf"),
+    Nunito: require("../../../assets/fonts/Nunito-Regular.ttf"),
+    NunitoExBold: require("../../../assets/fonts/Nunito-ExtraBold.ttf"),
+    NunitoSemi: require("../../../assets/fonts/Nunito-SemiBold.ttf"),
   });
   const userData = useSelector((state) => {
     return state.userInfo;
   });
   const dispatch = useDispatch();
-  useEffect(() => {}, []);
 
+  const [list, setList] = useState([]);
+  const [count, setCount] = useState(10);
+  const [loadmore, setLoadmore] = useState(false);
   const followPost = useSelector((state) => {
     return state.followPost;
   });
-
+  useEffect(() => {
+    if (followPost.listFollowPost.length <= 10) {
+      setList(followPost.listFollowPost);
+    } else {
+      setList(followPost.listFollowPost.slice(0, count));
+    }
+  }, []);
   if (!fontsLoaded) {
     return <></>;
   } else {
@@ -45,7 +55,7 @@ export default function NewsScreen({ navigation }) {
           justifyContent="space-between"
           alignItems="center"
         >
-          <Text style={{ fontSize: 35, fontFamily: 'Gabriola' }}>Miki</Text>
+          <Text style={{ fontSize: 35, fontFamily: "Gabriola" }}>Miki</Text>
           <Flex
             flexDirection="row"
             alignItems="center"
@@ -53,14 +63,14 @@ export default function NewsScreen({ navigation }) {
           >
             <Pressable
               onPress={() => {
-                navigation.navigate('Search');
+                navigation.navigate("Search");
               }}
             >
               <Ionicons name="search" size={30} color="black"></Ionicons>
             </Pressable>
             <Pressable
               onPress={() => {
-                navigation.navigate('ListChat');
+                navigation.navigate("ListChat");
               }}
               marginLeft={5}
             >
@@ -83,7 +93,7 @@ export default function NewsScreen({ navigation }) {
                   >
                     <Text style={{ width: 100, height: 100 }}> </Text>
                     <Text style={{ width: 100, height: 20, marginTop: 10 }}>
-                      {' '}
+                      {" "}
                     </Text>
                   </SkeletonContent>
                   <SkeletonContent
@@ -91,7 +101,7 @@ export default function NewsScreen({ navigation }) {
                     isLoading={true}
                   >
                     <Text style={{ width: 100, height: 100, marginLeft: 20 }}>
-                      {' '}
+                      {" "}
                     </Text>
                     <Text
                       style={{
@@ -101,7 +111,7 @@ export default function NewsScreen({ navigation }) {
                         marginLeft: 20,
                       }}
                     >
-                      {' '}
+                      {" "}
                     </Text>
                   </SkeletonContent>
                   <SkeletonContent
@@ -109,7 +119,7 @@ export default function NewsScreen({ navigation }) {
                     isLoading={true}
                   >
                     <Text style={{ width: 100, height: 100, marginLeft: 40 }}>
-                      {' '}
+                      {" "}
                     </Text>
                     <Text
                       style={{
@@ -119,7 +129,7 @@ export default function NewsScreen({ navigation }) {
                         marginLeft: 40,
                       }}
                     >
-                      {' '}
+                      {" "}
                     </Text>
                   </SkeletonContent>
                 </ScrollView>
@@ -156,7 +166,7 @@ export default function NewsScreen({ navigation }) {
                           isLoading={true}
                         >
                           <Text style={{ width: 70, height: 15, marginTop: 5 }}>
-                            {' '}
+                            {" "}
                           </Text>
                         </SkeletonContent>
                       </Box>
@@ -170,7 +180,7 @@ export default function NewsScreen({ navigation }) {
                         alt="option"
                         width={19}
                         height={17}
-                        source={require('../../images/PostDetail/ic_options.png')}
+                        source={require("../../images/PostDetail/ic_options.png")}
                       ></Image>
                     </Pressable>
                   </Flex>
@@ -183,34 +193,34 @@ export default function NewsScreen({ navigation }) {
                     marginTop={0}
                   >
                     <SkeletonContent
-                      containerStyle={{ width: '100%' }}
+                      containerStyle={{ width: "100%" }}
                       isLoading={true}
                     >
                       <Text
                         style={{
-                          width: '100%',
-                          height: Dimensions.get('window').width - 50,
+                          width: "100%",
+                          height: Dimensions.get("window").width - 50,
                         }}
                       >
-                        {' '}
+                        {" "}
                       </Text>
                     </SkeletonContent>
                     <Center marginTop={5} paddingBottom={30}>
                       <SkeletonContent
-                        containerStyle={{ width: '100%' }}
+                        containerStyle={{ width: "100%" }}
                         isLoading={true}
                       >
-                        <Text style={{ width: '100%', height: 20 }}> </Text>
+                        <Text style={{ width: "100%", height: 20 }}> </Text>
                       </SkeletonContent>
 
                       <SkeletonContent
-                        containerStyle={{ width: '100%' }}
+                        containerStyle={{ width: "100%" }}
                         isLoading={true}
                       >
                         <Text
-                          style={{ width: '100%', height: 15, marginTop: 10 }}
+                          style={{ width: "100%", height: 15, marginTop: 10 }}
                         >
-                          {' '}
+                          {" "}
                         </Text>
                       </SkeletonContent>
                     </Center>
@@ -226,10 +236,10 @@ export default function NewsScreen({ navigation }) {
                     borderWidth={1}
                   >
                     <SkeletonContent
-                      containerStyle={{ width: '100%' }}
+                      containerStyle={{ width: "100%" }}
                       isLoading={true}
                     >
-                      <Text style={{ width: '100%', height: 20 }}> </Text>
+                      <Text style={{ width: "100%", height: 20 }}> </Text>
                     </SkeletonContent>
                   </Box>
                 </Center>
@@ -240,8 +250,8 @@ export default function NewsScreen({ navigation }) {
                   <Center>
                     <Text
                       style={{
-                        textAlign: 'center',
-                        fontFamily: 'NunitoSemi',
+                        textAlign: "center",
+                        fontFamily: "NunitoSemi",
                         fontSize: 20,
                       }}
                     >
@@ -258,7 +268,7 @@ export default function NewsScreen({ navigation }) {
                             key={index}
                             marginRight={5}
                             onPress={() => {
-                              navigation.navigate('ProfileUser', {
+                              navigation.navigate("ProfileUser", {
                                 account: item.account,
                               });
                             }}
@@ -273,10 +283,10 @@ export default function NewsScreen({ navigation }) {
                               ></Image>
                               <Text
                                 style={{
-                                  textAlign: 'center',
+                                  textAlign: "center",
                                   width: 100,
                                   paddingTop: 10,
-                                  fontFamily: 'NunitoExBold',
+                                  fontFamily: "NunitoExBold",
                                 }}
                               >
                                 {item.account}
@@ -286,7 +296,7 @@ export default function NewsScreen({ navigation }) {
                         );
                       })}
                     </ScrollView>
-                    {followPost.listFollowPost.map((item, index) => {
+                    {list.map((item, index) => {
                       return (
                         <Box key={index} marginBottom={5}>
                           <Box
@@ -308,9 +318,9 @@ export default function NewsScreen({ navigation }) {
                                     if (
                                       item.ownerId.account == userData.account
                                     ) {
-                                      navigation.navigate('Profile');
+                                      navigation.navigate("Profile");
                                     } else {
-                                      navigation.navigate('ProfileUser', {
+                                      navigation.navigate("ProfileUser", {
                                         account: item.ownerId.account,
                                       });
                                     }
@@ -325,12 +335,12 @@ export default function NewsScreen({ navigation }) {
                                   ></Image>
                                 </Pressable>
                                 <Box marginLeft={3}>
-                                  <Text style={{ fontFamily: 'NunitoExBold' }}>
+                                  <Text style={{ fontFamily: "NunitoExBold" }}>
                                     {item.ownerId.account}
                                   </Text>
                                   <Text
                                     style={{
-                                      fontFamily: 'Nunito',
+                                      fontFamily: "Nunito",
                                       fontSize: 15,
                                     }}
                                   >
@@ -344,7 +354,7 @@ export default function NewsScreen({ navigation }) {
                               {/* <Pressable onPress={() => { setShowModal(true) }}> */}
                               <Menu
                                 shouldOverlapWithTrigger={false} // @ts-ignore
-                                placement={'bottom left'}
+                                placement={"bottom left"}
                                 trigger={(triggerProps) => {
                                   return (
                                     <Pressable {...triggerProps}>
@@ -352,7 +362,7 @@ export default function NewsScreen({ navigation }) {
                                         alt="option"
                                         width={19}
                                         height={17}
-                                        source={require('../../images/PostDetail/ic_options.png')}
+                                        source={require("../../images/PostDetail/ic_options.png")}
                                       ></Image>
                                     </Pressable>
                                   );
@@ -361,16 +371,16 @@ export default function NewsScreen({ navigation }) {
                                 <Menu.Item
                                   onPress={() => {
                                     Alert.alert(
-                                      'Cảm ơn bạn! Chúng tôi sẽ xem xét báo cáo của bạn.'
+                                      "Cảm ơn bạn! Chúng tôi sẽ xem xét báo cáo của bạn."
                                     );
                                     fetch(
-                                      'http://obnd.me/post-api/update-report',
+                                      "http://obnd.me/post-api/update-report",
                                       {
-                                        method: 'POST',
+                                        method: "POST",
                                         headers: {
-                                          'Content-Type': 'application/json',
+                                          "Content-Type": "application/json",
                                         },
-                                        redirect: 'follow',
+                                        redirect: "follow",
                                         body: JSON.stringify({
                                           id: item._id,
                                           account: userData.account,
@@ -397,13 +407,13 @@ export default function NewsScreen({ navigation }) {
                                 alt="anh"
                                 borderRadius={20}
                                 width="100%"
-                                height={Dimensions.get('window').width - 50}
+                                height={Dimensions.get("window").width - 50}
                                 source={{ uri: item.imgUrl }}
                               ></Image>
                               <Center marginTop={5} paddingBottom={30}>
                                 <Text
                                   style={{
-                                    fontFamily: 'NunitoSemi',
+                                    fontFamily: "NunitoSemi",
                                     fontSize: 20,
                                   }}
                                 >
@@ -411,10 +421,10 @@ export default function NewsScreen({ navigation }) {
                                 </Text>
                                 <Text
                                   style={{
-                                    fontFamily: 'Nunito',
+                                    fontFamily: "Nunito",
                                     fontSize: 15,
-                                    color: '#86bdfd',
-                                    textAlign: 'center',
+                                    color: "#86bdfd",
+                                    textAlign: "center",
                                   }}
                                 >
                                   {item.tags.toString()}
@@ -462,19 +472,19 @@ export default function NewsScreen({ navigation }) {
                                           );
                                         listPost[index].liked.splice(i, 1);
                                         dispatch({
-                                          type: 'UPDATE_LIKE_VIEW',
+                                          type: "UPDATE_LIKE_VIEW",
                                           payload: {
                                             listFollowPost: listPost,
                                           },
                                         });
 
                                         const data = await fetch(
-                                          'http://obnd.me/post-api/update-like',
+                                          "http://obnd.me/post-api/update-like",
                                           {
-                                            method: 'POST',
+                                            method: "POST",
                                             headers: {
-                                              'Content-Type':
-                                                'application/json',
+                                              "Content-Type":
+                                                "application/json",
                                             },
                                             body: JSON.stringify({
                                               id: item._id,
@@ -483,12 +493,12 @@ export default function NewsScreen({ navigation }) {
                                           }
                                         );
                                         const res = await fetch(
-                                          'http://obnd.me/update-like',
+                                          "http://obnd.me/update-like",
                                           {
-                                            method: 'POST',
+                                            method: "POST",
                                             headers: {
-                                              'Content-Type':
-                                                'application/json',
+                                              "Content-Type":
+                                                "application/json",
                                             },
                                             body: JSON.stringify({
                                               account: userData.account,
@@ -518,18 +528,18 @@ export default function NewsScreen({ navigation }) {
                                           userData.account
                                         );
                                         dispatch({
-                                          type: 'UPDATE_LIKE_VIEW',
+                                          type: "UPDATE_LIKE_VIEW",
                                           payload: {
                                             listFollowPost: listPost,
                                           },
                                         });
                                         const data = await fetch(
-                                          'http://obnd.me/post-api/update-like',
+                                          "http://obnd.me/post-api/update-like",
                                           {
-                                            method: 'POST',
+                                            method: "POST",
                                             headers: {
-                                              'Content-Type':
-                                                'application/json',
+                                              "Content-Type":
+                                                "application/json",
                                             },
                                             body: JSON.stringify({
                                               id: item._id,
@@ -538,12 +548,12 @@ export default function NewsScreen({ navigation }) {
                                           }
                                         );
                                         const res = await fetch(
-                                          'http://obnd.me/update-like',
+                                          "http://obnd.me/update-like",
                                           {
-                                            method: 'POST',
+                                            method: "POST",
                                             headers: {
-                                              'Content-Type':
-                                                'application/json',
+                                              "Content-Type":
+                                                "application/json",
                                             },
                                             body: JSON.stringify({
                                               account: userData.account,
@@ -560,13 +570,13 @@ export default function NewsScreen({ navigation }) {
                                       ></Ionicons>
                                     </Pressable>
                                   )}
-                                  <Text style={{ fontFamily: 'NunitoSemi' }}>
+                                  <Text style={{ fontFamily: "NunitoSemi" }}>
                                     {item.liked.length}
                                   </Text>
                                 </Flex>
                                 <Pressable
                                   onPress={() => {
-                                    navigation.navigate('PostDetailSecond', {
+                                    navigation.navigate("PostDetailSecond", {
                                       item: item._id,
                                     });
                                   }}
@@ -577,7 +587,7 @@ export default function NewsScreen({ navigation }) {
                                       color="black"
                                       size={30}
                                     ></Ionicons>
-                                    <Text style={{ fontFamily: 'NunitoSemi' }}>
+                                    <Text style={{ fontFamily: "NunitoSemi" }}>
                                       {item.comments.length}
                                     </Text>
                                   </Flex>
@@ -620,6 +630,43 @@ export default function NewsScreen({ navigation }) {
                         </Box>
                       );
                     })}
+                    <Button
+                      style={{ marginBottom: 20 }}
+                      onPress={() => {
+                        if (followPost.listFollowPost.length - count <= 10) {
+                          // Alert.alert('sdfsdf')
+                          setLoadmore(true)
+                          setTimeout(() => {
+                            setLoadmore(false)
+                            setList(
+                              followPost.listFollowPost.slice(
+                                0,
+                                count + (followPost.listFollowPost.length - count)
+                              )
+                            );
+                            setCount(followPost.listFollowPost.length);
+                          },300)
+                         
+                        } else {
+                         setLoadmore(true)
+                         setTimeout(() => {
+                           setLoadmore(false)
+                          setList(
+                            followPost.listFollowPost.slice(0, count + 10)
+                          );
+                          setCount(count + 10);
+                         },300)
+                        }
+                      }}
+                    >
+                      {loadmore ? (
+                        <Spinner size="sm" accessibilityLabel="Loading posts" />
+                      ) : (
+                        <Text style={{ color: "white" }}>
+                          Tải thêm bài viết
+                        </Text>
+                      )}
+                    </Button>
                   </Box>
                 )}
               </Box>

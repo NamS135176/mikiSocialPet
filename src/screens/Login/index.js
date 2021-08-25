@@ -324,7 +324,6 @@ export default function LoginScreen({ navigation }) {
               Quên mật khẩu?
             </Text>
           </View>
-          <Pressable onPress={handleSignIn}>
             <View
               style={{
                 width: "50%",
@@ -335,7 +334,8 @@ export default function LoginScreen({ navigation }) {
                 marginTop: 10,
               }}
             >
-              <View
+              <Pressable
+               onPress={handleSignIn}
                 style={{
                   flex: 1,
                   alignItems: "center",
@@ -344,9 +344,8 @@ export default function LoginScreen({ navigation }) {
                 }}
               >
                 <Text style={{ color: "white", fontSize: 25 }}>Bắt Đầu</Text>
-              </View>
+              </Pressable>
             </View>
-          </Pressable>
           <View style={{ marginTop: 10 }}>
             <Text style={{ textAlign: "center", color: "#7B7B7B" }}>
               Nếu chưa có tài khoản hãy{" "}
