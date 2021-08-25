@@ -38,9 +38,9 @@ export default function NewsScreen({ navigation }) {
   });
   useEffect(() => {
     if (followPost.listFollowPost.length <= 10) {
-      setList(followPost.listFollowPost);
+     setCount(followPost.listFollowPost.length)
     } else {
-      setList(followPost.listFollowPost.slice(0, count));
+      setCount(10)
     }
   }, []);
   if (!fontsLoaded) {
@@ -295,10 +295,11 @@ export default function NewsScreen({ navigation }) {
                           </Pressable>
                         );
                       })}
-                    </ScrollView>
-                    {list.map((item, index) => {
-                      return (
-                        <Box key={index} marginBottom={5}>
+                    </ScrollView>  
+                    {followPost.listFollowPost.map((item, index) => {
+                      if(index < count){
+                        return (
+                          <Box key={index} marginBottom={5}>
                           <Box
                             borderRadius={20}
                             marginBottom={5}
@@ -392,7 +393,7 @@ export default function NewsScreen({ navigation }) {
                                   Báo cáo bài viết
                                 </Menu.Item>
                               </Menu>
-
+  
                               {/* </Pressable> */}
                             </Flex>
                             <Box
@@ -458,7 +459,7 @@ export default function NewsScreen({ navigation }) {
                                           );
                                         const listPost =
                                           followPost.listFollowPost;
-
+  
                                         const thisLike = listPost[
                                           index
                                         ].liked.filter((item) => {
@@ -477,7 +478,7 @@ export default function NewsScreen({ navigation }) {
                                             listFollowPost: listPost,
                                           },
                                         });
-
+  
                                         const data = await fetch(
                                           "http://obnd.me/post-api/update-like",
                                           {
@@ -523,7 +524,7 @@ export default function NewsScreen({ navigation }) {
                                           );
                                         const listPost =
                                           followPost.listFollowPost;
-
+  
                                         listPost[index].liked.push(
                                           userData.account
                                         );
@@ -629,47 +630,43 @@ export default function NewsScreen({ navigation }) {
                           </Center>
                         </Box>
                       );
-                    })}
-                    <Button
-                      style={{ marginBottom: 20 }}
-                      onPress={() => {
-                        if (followPost.listFollowPost.length - count <= 10) {
-                          // Alert.alert('sdfsdf')
-                          setLoadmore(true)
-                          setTimeout(() => {
-                            setLoadmore(false)
-                            setList(
-                              followPost.listFollowPost.slice(
-                                0,
-                                count + (followPost.listFollowPost.length - count)
-                              )
-                            );
-                            setCount(followPost.listFollowPost.length);
-                          },300)
-                         
-                        } else {
-                         setLoadmore(true)
-                         setTimeout(() => {
-                           setLoadmore(false)
-                          setList(
-                            followPost.listFollowPost.slice(0, count + 10)
-                          );
-                          setCount(count + 10);
-                         },300)
-                        }
-                      }}
-                    >
-                      {loadmore ? (
-                        <Spinner size="sm" accessibilityLabel="Loading posts" />
-                      ) : (
-                        <Text style={{ color: "white" }}>
-                          Tải thêm bài viết
-                        </Text>
-                      )}
-                    </Button>
-                  </Box>
-                )}
-              </Box>
+                      }
+                      else{
+                        return <></>
+                      }
+
+                  })}
+                  <Button
+                    style={{ marginBottom: 20 }}
+                    onPress={() => {
+                      if (followPost.listFollowPost.length - count <= 10) {
+                        // Alert.alert('sdfsdf')
+                        setLoadmore(true)
+                        setTimeout(() => {
+                          setLoadmore(false)
+                          setCount(followPost.listFollowPost.length);
+                        },300)
+                       
+                      } else {
+                       setLoadmore(true)
+                       setTimeout(() => {
+                         setLoadmore(false)
+                        setCount(count + 10);
+                       },300)
+                      }
+                    }}
+                  >
+                    {loadmore ? (
+                      <Spinner size="sm" accessibilityLabel="Loading posts" />
+                    ) : (
+                      <Text style={{ color: "white" }}>
+                        Tải thêm bài viết
+                      </Text>
+                    )}
+                  </Button>
+                </Box>
+              )}
+            </Box>
             )}
           </Box>
         </ScrollView>
